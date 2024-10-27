@@ -18,8 +18,8 @@ spec:
   targetNamespace: kube-system
   values:
     k8sClientRateLimit:
-      burst: "100"
-      qps: "50"
+      burst: 100
+      qps: 50
     k8sServiceHost: cluster-endpoint
     k8sServicePort: "8443"
     kubeProxyReplacement: "true"
