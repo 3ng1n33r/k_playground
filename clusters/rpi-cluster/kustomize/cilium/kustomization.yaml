@@ -1,4 +1,8 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
-resources:
-  - loadbalancer.yaml
+metadata:
+  name: cilium-kustomize
+spec:
+  resources:
+    - ../../helm/releases/cilium-v1.16.3.yaml
+    - loadbalancer.yaml
