@@ -17,7 +17,7 @@ spec:
     createNamespace: true
   dependsOn:
     - name: cilium
-  interval: 1m0s
+  interval: 1h0m0s
   releaseName: ingress-nginx
   targetNamespace: ingress-nginx
   values:

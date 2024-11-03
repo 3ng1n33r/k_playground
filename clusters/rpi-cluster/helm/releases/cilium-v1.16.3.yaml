@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: cilium
       version: 1.16.3
-  interval: 1m0s
+  interval: 1h0m0s
   releaseName: cilium
   targetNamespace: kube-system
   values:
