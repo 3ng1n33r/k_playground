@@ -6,7 +6,9 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cilium
+    - kind: HelmRelease  
+      name: cilium
+      namespace: kube-system
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -15,4 +17,3 @@ spec:
   timeout: 5m
   prune: true
   wait: true
-  force: true
