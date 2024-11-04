@@ -6,9 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - kind: HelmRelease  
-      name: cilium
-      namespace: kube-system
+    - name: cilium
   sourceRef:
     kind: GitRepository
     name: flux-system
