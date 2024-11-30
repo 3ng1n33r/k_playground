@@ -53,7 +53,7 @@ spec:
             telegram_configs:
             - api_url: https://api.telegram.org
               bot_token_file: /etc/secrets/telegram-bot-token
-              chat_id: -880628191
+              chat_id: "-880628191"
               disable_notifications: false
               send_resolved: true
               parse_mode: HTML

@@ -24,9 +24,9 @@ cloud_init() {
 
 cat <<'EOF' | sudo tee ${UBUNTU_BOOT_DIR}/user-data
 #cloud-config
-#package_update: true
-#package_upgrade: true
-#package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
 preserve_hostname: true
 timezone: Asia/Yekaterinburg
 ssh_pwauth: false
@@ -40,6 +40,7 @@ users:
 write_files:
   - path: /boot/firmware/config.txt
     content: |
+      dtparam=pciex1_gen=3
       dtoverlay=disable-wifi
       dtoverlay=disable-bt
     append: true

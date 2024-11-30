@@ -1,12 +1,4 @@
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: alertmanager-address
-  namespace: flux-system
-stringData:
-    address: "http://prometheus-alertmanager.monitoring.svc.cluster.local:9093/api/v2/alerts/"
----
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
@@ -14,8 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   type: alertmanager
-  secretRef:
-    name: alertmanager-address
+  address: "http://prometheus-alertmanager.monitoring.svc.cluster.local:9093/api/v2/alerts/"
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
