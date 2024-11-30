@@ -1,0 +1,185 @@
+---
+- name: Install dependencies on all hosts.
+  hosts: all
+  become: true
+  tasks:
+    # Upgrade the OS
+
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Upgrade the OS (apt-get dist-upgrade).
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Check if a reboot is needed.
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+
+    - name: Reboot, if needed.
+      ansible.builtin.reboot:
+      when: reboot_required_file.stat.exists
+
+    # Disable SWAP
+
+    - name: Disable SWAP.
+      ansible.builtin.shell: swapoff -a
+
+    - name: Disable SWAP in fstab.
+      ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+        replace: '# \1'
+
+    # Install modules and add kernel settings
+
+    - name: Load kernel modules.
+      community.general.modprobe:
+        name: "{{ item }}"
+        state: present
+        persistent: present
+      with_items:
+        - br_netfilter
+        - overlay
+
+    - name: Create file /etc/sysctl.d/kubernetes.conf.
+      ansible.posix.sysctl:
+        name: "{{ item }}"
+        value: '1'
+        sysctl_file: /etc/sysctl.d/kubernetes.conf
+        reload: true
+      with_items:
+        - net.bridge.bridge-nf-call-ip6tables
+        - net.bridge.bridge-nf-call-iptables
+        - net.ipv4.ip_forward
+
+    # Install Containerd
+
+    - name: Install required packages.
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+        state: present
+
+    - name: Add Docker apt-key.
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker-apt-keyring.asc
+        mode: '0644'
+        force: true
+
+    - name: Add Docker's APT repo.
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/docker-apt-keyring.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        update_cache: true
+
+    - name: Install Containerd.
+      ansible.builtin.apt:
+        name: containerd.io
+        state: present
+
+    - name: Add Containerd configuration.
+      ansible.builtin.shell: /usr/bin/containerd config default > /etc/containerd/config.toml
+
+    - name: Configuring Systemd cgroup driver for Containerd.
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '            SystemdCgroup = false'
+        line: '            SystemdCgroup = true'
+
+    - name: Configuring Pause image version.
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^    sandbox_image'
+        line: '    sandbox_image = "registry.k8s.io/pause:3.9"'
+
+    - name: Enable and start the Containerd service.
+      ansible.builtin.systemd:
+        name: containerd
+        state: restarted
+        enabled: true
+
+    # Install kubeadm, kubelet
+
+    - name: Add Kubernetes apt-key.
+      ansible.builtin.get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
+        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+        mode: '0644'
+        force: true
+
+    - name: Add Kubernetes APT repository.
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /"
+        state: present
+        update_cache: true
+
+    - name: Install Kubeadm, Kubelet packages.
+      ansible.builtin.apt:
+        name:
+          - kubelet=1.30.*
+          - kubeadm=1.30.*
+        state: present
+
+    - name: Hold Kubeadm, Kubelet packages.
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      with_items:
+        - kubelet
+        - kubeadm
+
+    # Install Haproxy
+
+    - name: Add external cluster lb bootstrap ip.
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ groups['master'][0] }}        {{ loadbalancer_apiserver_fqdn }}"
+      when: "groups['master'] | length > 1"
+
+    - name: Include haproxy tasks.
+      ansible.builtin.include_tasks: tasks_install_haproxy.yaml
+      when: "groups['master'] | length > 1"
+
+- name: Install dependencies on master hosts.
+  hosts: master
+  become: true
+  tasks:
+
+  # Install Kubectl
+
+    - name: Install Kubectl.
+      ansible.builtin.apt:
+        name: kubectl=1.30.*
+        state: present
+
+    - name: Hold Kubectl.
+      ansible.builtin.dpkg_selections:
+        name: kubectl
+        selection: hold
+
+  # Install Helm
+
+    - name: Add Helm apt-key.
+      ansible.builtin.get_url:
+        url: https://baltocdn.com/helm/signing.asc
+        dest: /etc/apt/keyrings/helm-apt-keyring.asc
+        mode: '0644'
+        force: true
+
+    - name: Add Helm's APT repo.
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/helm-apt-keyring.asc] https://baltocdn.com/helm/stable/debian/ all main"
+        state: present
+        update_cache: true
+
+    - name: Install Helm.
+      ansible.builtin.apt:
+        name: helm
+        state: present

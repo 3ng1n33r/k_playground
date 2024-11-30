@@ -5,6 +5,10 @@ metadata:
   name: l2-announcement-policy
   namespace: kube-system
 spec:
+#  nodeSelector:
+#    matchExpressions:
+#      - key: node-role.kubernetes.io/control-plane
+#        operator: Exists
   interfaces:
     - ^eth[0-9]+
   externalIPs: true
