@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: base-deploy
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cilium-post-deploy
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: "./infra/deploy/base"
+  interval: 60m
+  timeout: 5m
+  prune: true
+  wait: true

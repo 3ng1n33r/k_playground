@@ -1,0 +1,42 @@
+---
+- name: Playbook to install Flux.
+  hosts: master[0]
+  become: true
+  tasks:
+    - name: Download Flux cli.
+      ansible.builtin.unarchive:
+        src: https://github.com/fluxcd/flux2/releases/download/v{{ flux_version }}/flux_{{ flux_version }}_linux_{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}.tar.gz
+        dest: /tmp
+        remote_src: true
+        mode: '0755'
+
+    - name: Copy Flux binary to /usr/local/bin.
+      ansible.builtin.copy:
+        src: /tmp/flux
+        dest: /usr/local/bin
+        remote_src: true
+        mode: '0755'
+
+    - name: Initialize Flux.
+      ansible.builtin.shell: flux bootstrap gitlab --deploy-token-auth --owner={{ gitlab_user }} --repository={{ gitlab_repository }} --branch={{ gitlab_branch }} --path={{ gitlab_path }} --personal > flux_initialized.log 2>&1
+      environment:
+        GITLAB_TOKEN: "{{ gitlab_pat }}"
+        GITLAB_USER: "{{ gitlab_user }}"
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      args:
+        chdir: /home/{{ ansible_user }}
+        creates: flux_initialized.log
+
+    - name: Download Kubeseal.
+      ansible.builtin.unarchive:
+        src: https://github.com/bitnami-labs/sealed-secrets/releases/download/v{{ kubeseal_version }}/kubeseal-{{ kubeseal_version }}-linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}.tar.gz
+        dest: /tmp
+        remote_src: true
+        mode: '0755'
+
+    - name: Copy Kubeseal binary to /usr/local/bin.
+      ansible.builtin.copy:
+        src: /tmp/kubeseal
+        dest: /usr/local/bin
+        remote_src: true
+        mode: '0755'
