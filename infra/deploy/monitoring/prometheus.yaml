@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus
-      version: 25.29.0
+      version: 26.0.0
   interval: 30m
   releaseName: prometheus
   targetNamespace: monitoring
