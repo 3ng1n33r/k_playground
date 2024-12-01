@@ -31,6 +31,7 @@ spec:
     sidecar:
       dashboards:
         enabled: true
+        searchNamespace: ALL
         label: grafana_dashboard
         labelValue: "1"
       resources:
