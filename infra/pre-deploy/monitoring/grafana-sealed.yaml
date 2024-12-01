@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: grafana-credentials
+  namespace: flux-system
+spec:
+  encryptedData:
+    grafana_admin_password: AgCMZBiCCPPYUE6g7ZFuTEHIYCNk8vipE20I18yBpFf/T1nKN7tUxD2yGo0E/c5DsxVwPZBcRDizVHM9SncDyK0jz7/X8oBfJpHd7mGIgkdr3VY91uGp4ozXWYo/3DG23IfVjjW5GDGL4zfPmCfhASJtZ5t69QluAOoKB7lyqAYDDgdU7srntw3TfGJJvwLm3qQtVpHt+Cr+OFmFgpnpAOw5ILeKhyc4Kip0mZ2YZIiRO2ASNdXgS/PU3GMyFYqWcKtF0EJoxMjj04nci229kQRvG5CRVigXcwwpexY2Emd45yFqw2omurLJThEP3MhWha7ontPLZoSF8tYKCjf1E+pYZScFnKhhOUr4QwGdQZ0OZIjDFNUMrZLKZvGpZYWqferKMnNPOUUqswajBNohHdqM6bKHS9XhNCT+g7/6KqlxrPQJv9S3RQSzREFmjbuAeMENCx424oRVzvIBeu2N8Cpm6Cdu4psz6s3XzhVAcUG6BcG7vQAT1hH22OZSkK8mxztj5Hctn7jUSBxy7wM2Mldl8prXBdyBGJGobXSizmHKX3F8rRzOfDzYFp4XKYyER0/TzrCjUHmqCfywkfrbhtuGeNf3Cd0qLlEfRvVOLSFgBWeixXmb5ETJkntIhapVk0eEVbCVCg/SqAUwib23EJv0bbBwEyPCyY4KzFbKfHx2lseLbQCojh87gDAnrAxDE8VG5vG+YQBZbGtICkEuB0k6
+  template:
+    metadata:
+      creationTimestamp: null
+      name: grafana-credentials
+      namespace: flux-system
