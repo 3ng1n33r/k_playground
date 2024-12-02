@@ -22,15 +22,18 @@ spec:
         kind: HelmRepository
         name: prometheus
       version: 26.0.0
+  dependsOn:
+    - name: sealed-secrets-controller
   interval: 30m
   releaseName: prometheus
   targetNamespace: monitoring
   values:
     alertmanager:
-      enabled: true
+      replicaCount: 1
       persistence:
-        size: 100Mi
-      replicaCount: 3
+        enabled: true
+        size: 50Mi
+        storageClass: "local-path"
       resources:
         limits:
           cpu: 500m
@@ -93,7 +96,8 @@ spec:
       persistentVolume:
         enabled: true
         size: 5Gi
-      replicaCount: 2
+        storageClass: "local-path"
+      replicaCount: 1
       resources:
         limits:
           cpu: 500m
