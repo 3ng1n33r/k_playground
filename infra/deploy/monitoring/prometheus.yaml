@@ -107,15 +107,15 @@ spec:
           receiver: default-receiver
           repeat_interval: 3h
         receivers:
-          - name: default-receiver
-            telegram_configs:
-            - api_url: https://api.telegram.org
-              bot_token_file: /etc/secrets/telegram-bot-token
-              chat_id: -880628191
-              disable_notifications: false
-              send_resolved: true
-              parse_mode: HTML
-              template: |-
+        - name: default-receiver
+          telegram_configs:
+          - api_url: https://api.telegram.org
+            bot_token_file: /etc/secrets/telegram-bot-token
+            chat_id: -880628191
+            disable_notifications: false
+            send_resolved: true
+            parse_mode: "HTML"
+            template: |-
               {{ define "telegram.default" }}
               {{ range .Alerts }}
               {{ if eq .Status "firing"}}&#x1F525<b>{{ .Status | toUpper }}</b>&#x1F525{{ else }}&#x2705<b>{{ .Status | toUpper }}</b>&#x2705{{ end }}
