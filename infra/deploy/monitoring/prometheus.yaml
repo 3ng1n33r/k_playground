@@ -117,24 +117,4 @@ spec:
             disable_notifications: false
             send_resolved: true
             parse_mode: 'HTML'
-            message: '{{ template "telegram.message". }}' 
-      templates:
-        alertmanager.tmpl: |-
-          {{ define "telegram.message" }}
-          {{ range .Alerts }}
-          {{ if eq .Status "firing"}}&#x1F525<b>{{ .Status | toUpper }}</b>&#x1F525{{ else }}&#x2705<b>{{ .Status | toUpper }}</b>&#x2705{{ end }}
-          <b>{{ .Labels.alertname }}</b>
-          {{- if .Labels.severity }}
-          <b>Severity:</b> {{ .Labels.severity }}
-          {{- end }}
-          {{- if .Labels.cluster }}
-          <b>Cluster:</b> {{ .Labels.cluster }}
-          {{- end }}
-          {{- if .Labels.service }}
-          <b>Service:</b> {{ .Labels.service }}
-          {{- end }}
-          {{- if .Labels.instance}}
-          <b>Instance:</b> {{ .Labels.instance }}
-          {{- end }}
-          <b>Description:</b> {{ .Annotations.description }}
-          {{- end }}
+            message: '{{ template "telegram.default.message" .}}'
