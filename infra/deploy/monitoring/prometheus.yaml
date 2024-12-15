@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus
-      version: 26.0.0
+      version: 26.0.1
   dependsOn:
     - name: sealed-secrets-controller
   interval: 30m
@@ -51,6 +51,11 @@ spec:
         enabled: true
         global:
           resolve_timeout: 5m
+        route:
+          group_interval: 5m
+          group_wait: 10s
+          receiver: default-receiver
+          repeat_interval: 3h
         receivers:
           - name: default-receiver
             telegram_configs:
@@ -60,13 +65,25 @@ spec:
               disable_notifications: false
               send_resolved: true
               parse_mode: HTML
-        route:
-          group_interval: 5m
-          group_wait: 30s
-          receiver: default-receiver
-          repeat_interval: 3h
-        templates:
-          - /etc/alertmanager/*.tmpl
+              template: |-
+              {{ define "telegram.default" }}
+              {{ range .Alerts }}
+              {{ if eq .Status "firing"}}&#x1F525<b>{{ .Status | toUpper }}</b>&#x1F525{{ else }}&#x2705<b>{{ .Status | toUpper }}</b>&#x2705{{ end }}
+              <b>{{ .Labels.alertname }}</b>
+              {{- if .Labels.severity }}
+              <b>Severity:</b> {{ .Labels.severity }}
+              {{- end }}
+              {{- if .Labels.cluster }}
+              <b>Cluster:</b> {{ .Labels.cluster }}
+              {{- end }}
+              {{- if .Labels.service }}
+              <b>Service:</b> {{ .Labels.service }}
+              {{- end }}
+              {{- if .Labels.instance}}
+              <b>Instance:</b> {{ .Labels.instance }}
+              {{- end }}
+              <b>Description:</b> {{ .Annotations.description }}
+              {{- end }}    
     kube-state-metrics:
       enabled: true
       resources:
