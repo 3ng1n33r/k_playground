@@ -28,6 +28,56 @@ spec:
   releaseName: prometheus
   targetNamespace: monitoring
   values:
+    kube-state-metrics:
+      enabled: true
+      resources:
+        limits:
+          cpu: 50m
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    prometheus-node-exporter:
+      enabled: true
+      resources:
+        limits:
+          cpu: 200m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+    prometheus-pushgateway:
+      enabled: false
+    server:
+      ingress:
+        enabled: true
+        hosts:
+        - prometheus.192.168.31.8.sslip.io
+        ingressClassName: nginx
+      persistentVolume:
+        enabled: true
+        size: 5Gi
+        storageClass: "local-path"
+      replicaCount: 1
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 256Mi
+      retention: 7d
+      retentionSize: 5GB
+      extraConfigmapMounts:
+        - name: prometheus-alerts
+          mountPath: /etc/alerts.d
+          subPath: ""
+          configMap: prometheus-alerts
+          readOnly: true
+    serverFiles:
+      prometheus.yml:
+        rule_files:
+          - /etc/alerts.d/alerting_rules.yml
     alertmanager:
       replicaCount: 1
       persistence:
@@ -83,54 +133,4 @@ spec:
               <b>Instance:</b> {{ .Labels.instance }}
               {{- end }}
               <b>Description:</b> {{ .Annotations.description }}
-              {{- end }}    
-    kube-state-metrics:
-      enabled: true
-      resources:
-        limits:
-          cpu: 50m
-          memory: 256Mi
-        requests:
-          cpu: 10m
-          memory: 128Mi
-    prometheus-node-exporter:
-      enabled: true
-      resources:
-        limits:
-          cpu: 200m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
-    prometheus-pushgateway:
-      enabled: false
-    server:
-      ingress:
-        enabled: true
-        hosts:
-        - prometheus.192.168.31.8.sslip.io
-        ingressClassName: nginx
-      persistentVolume:
-        enabled: true
-        size: 5Gi
-        storageClass: "local-path"
-      replicaCount: 1
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 250m
-          memory: 256Mi
-      retention: 7d
-      retentionSize: 5GB
-      extraConfigmapMounts:
-        - name: prometheus-alerts
-          mountPath: /etc/alerts.d
-          subPath: ""
-          configMap: prometheus-alerts
-          readOnly: true
-    serverFiles:
-      prometheus.yml:
-        rule_files:
-          - /etc/alerts.d/alerting_rules.yml
+              {{- end }}
