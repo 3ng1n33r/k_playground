@@ -108,7 +108,7 @@ spec:
           receiver: 'telegram'
           repeat_interval: 3h
         templates:
-          - '/etc/alertmanager/telegram.tmpl'
+          - '/etc/alertmanager/*.tmpl'
         receivers:
         - name: 'telegram'
           telegram_configs:
@@ -121,12 +121,26 @@ spec:
             message: '{{ template "telegram.message" .}}'
       templates:
           telegram.tmpl: |-
+            {{ define "__tg_text_alert_list" }}{{ range . }}
+            ---
+            <b>{{ .Labels.alertname }}</b>
+            {{- if .Annotations.summary }}
+            {{ .Annotations.summary }}{{ end }}
+            {{- if .Annotations.description }}
+            {{ .Annotations.description }}{{ end }}
+            Labels:
+            {{ range .Labels.SortedPairs }}  <i>{{ .Name }}</i>: <code>{{ .Value }}</code>
+            {{ end }}{{ end }}
+            <a href="http://prometheus.192.168.31.8.sslip.io/alerts">View active alerts</a>
+            {{ end }}
+
             {{ define "telegram.message" }}
-            {{ range .Alerts }}
-            {{ if eq .Status "firing" }}🔥 {{ end }}{{ if eq .Status "resolved" }}✅ {{ end }}[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}
-            <b>Alert:</b> {{ .Annotations.title }}{{ if .Labels.severity }} - {{ .Labels.severity }}{{ end }}
-            <b>Description:</b> {{ .Annotations.description }}
-            <b>Details:</b>
-            {{ range .Labels.SortedPairs }}- {{ .Name }}: <i>{{ .Value }}</i>
+            {{ if gt (len .Alerts.Firing) 0 }}
+            Alerts Firing:
+            {{ template "__tg_text_alert_list" .Alerts.Firing }}
+            {{ end }}
+            {{ if gt (len .Alerts.Resolved) 0 }}
+            Alerts Resolved:
+            {{ template "__tg_text_alert_list" .Alerts.Resolved }}
             {{ end }}
             {{ end }}
