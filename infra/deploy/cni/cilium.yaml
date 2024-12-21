@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cilium
-      version: 1.16.4
+      version: 1.16.5
   interval: 30m
   releaseName: cilium
   targetNamespace: kube-system
@@ -38,8 +38,6 @@ spec:
         enabled: true
         label: grafana_dashboard
         labelValue: "1"
-        annotations:
-          grafana_folder: Cilium
     k8sClientRateLimit:
       burst: 100
       qps: 50
@@ -62,8 +60,6 @@ spec:
       enabled: true
       label: grafana_dashboard
       labelValue: "1"
-      annotations:
-        grafana_folder: Cilium
     hubble:
       enabled: true
       metrics:
@@ -79,5 +75,3 @@ spec:
           enabled: true
           label: grafana_dashboard
           labelValue: "1"
-          annotations:
-            grafana_folder: Cilium
