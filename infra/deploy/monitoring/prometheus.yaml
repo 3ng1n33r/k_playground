@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus
-      version: 26.1.0
+      version: 27.1.0
   dependsOn:
     - name: sealed-secrets-controller
   interval: 30m
