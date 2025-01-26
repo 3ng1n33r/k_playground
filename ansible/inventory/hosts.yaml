@@ -9,6 +9,8 @@ all:
         loadbalancer_apiserver_port: 8443
         loadbalancer_apiserver_fqdn: 'cluster-endpoint'
         flux_version: '2.4.0'
+        cilium_version: '1.16.5'
+        kubeseal_version: '0.27.2'
         gitlab_repository: orchestration
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
