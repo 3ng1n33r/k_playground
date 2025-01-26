@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cilium
-      version: 1.16.5
+      version: 1.16.6
   interval: 30m
   releaseName: cilium
   targetNamespace: kube-system
@@ -63,6 +63,7 @@ spec:
     hubble:
       enabled: true
       metrics:
+        enableOpenMetrics: true
         enabled:
           - dns
           - drop
