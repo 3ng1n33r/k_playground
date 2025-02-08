@@ -1,0 +1,107 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+      version: 68.3.2
+  dependsOn:
+    - name: sealed-secrets-controller
+  install:
+    crds: Create
+    createNamespace: true
+  upgrade:
+    crds: CreateReplace
+  interval: 30m
+  releaseName: kube-prometheus-stack
+  targetNamespace: monitoring
+  values:
+    grafana:
+      enabled: true
+      defaultDashboardsEnabled: true
+      ingress:
+        enabled: true
+        hosts:
+        - grafana.192.168.31.8.sslip.io
+        ingressClassName: nginx
+      sidecar:
+        dashboards:
+          enabled: true
+          searchNamespace: ALL
+          label: grafana_dashboard
+          labelValue: "1"
+        datasources:
+          enabled: true
+          defaultDatasourceEnabled: true
+          isDefaultDatasource: true
+          name: Prometheus
+          uid: prometheus
+    alertmanager:
+      enabled: true
+      ingress:
+        enabled: true
+        hosts:
+        - prometheus.192.168.31.8.sslip.io
+        ingressClassName: nginx
+      alertmanagerSpec:
+        replicas: 1
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: "local-path"
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 50Mi
+        resources:
+          limits:
+            cpu: 500m
+            memory: 400Mi
+          requests:
+            cpu: 250m
+            memory: 200Mi
+    prometheus:
+      prometheusSpec:
+        replicas: 1
+        retention: 7d
+        retentionSize: 5GB
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: "local-path"
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+    prometheusOperator:
+      enabled: true
+  valuesFrom:
+    - kind: Secret
+      name: prometheus-stack-credentials
+      valuesKey: grafana_admin_password
+      targetPath: grafana.adminPassword
+      optional: false
