@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 68.3.2
+      version: 69.6.0
   dependsOn:
     - name: sealed-secrets-controller
   install:
@@ -52,7 +52,7 @@ spec:
       ingress:
         enabled: true
         hosts:
-        - prometheus.192.168.31.8.sslip.io
+        - alertmanager.192.168.31.8.sslip.io
         ingressClassName: nginx
       alertmanagerSpec:
         replicas: 1
@@ -72,6 +72,11 @@ spec:
             cpu: 250m
             memory: 200Mi
     prometheus:
+      ingress:
+        enabled: true
+        hosts:
+        - prometheus.192.168.31.8.sslip.io
+        ingressClassName: nginx
       prometheusSpec:
         replicas: 1
         retention: 7d
