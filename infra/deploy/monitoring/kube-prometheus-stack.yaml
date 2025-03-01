@@ -47,12 +47,6 @@ spec:
           searchNamespace: ALL
           label: grafana_dashboard
           labelValue: "1"
-        datasources:
-          enabled: true
-          defaultDatasourceEnabled: true
-          isDefaultDatasource: true
-          name: Prometheus
-          uid: prometheus
     alertmanager:
       enabled: true
       ingress:
