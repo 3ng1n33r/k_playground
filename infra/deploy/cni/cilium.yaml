@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cilium
-      version: 1.17.0
+      version: 1.17.1
   interval: 30m
   releaseName: cilium
   targetNamespace: kube-system
@@ -34,6 +34,8 @@ spec:
       replicas: 2
       prometheus:
         enabled: true
+        serviceMonitor:
+          enabled: true   
       dashboards:
         enabled: true
         label: grafana_dashboard
@@ -56,12 +58,16 @@ spec:
       enabled: true
     prometheus:
       enabled: true
+      serviceMonitor:
+        enabled: true
     dashboards:
       enabled: true
       label: grafana_dashboard
       labelValue: "1"
     hubble:
       enabled: true
+      ui:
+        enabled: false
       metrics:
         enableOpenMetrics: true
         enabled:
@@ -72,6 +78,8 @@ spec:
           - port-distribution
           - icmp
           - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+        serviceMonitor:
+          enabled: true
         dashboards:
           enabled: true
           label: grafana_dashboard
