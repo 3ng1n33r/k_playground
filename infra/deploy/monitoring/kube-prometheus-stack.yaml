@@ -81,6 +81,7 @@ spec:
         replicas: 1
         retention: 7d
         retentionSize: 5GB
+        serviceMonitorSelectorNilUsesHelmValues: false
         resources:
           limits:
             cpu: 500m
