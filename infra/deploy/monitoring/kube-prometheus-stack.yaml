@@ -56,16 +56,35 @@ spec:
           labelValue: "1"
     alertmanager:
       enabled: true
+      config:
+        global:
+          resolve_timeout: 5m
+          telegram_api_url: https://api.telegram.org
+        route:
+          group_by:
+          - alertname
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 12h
+          routes:
+          - match:
+            severity: critical
+          receiver: "telegram"
+          continue: true
+        receivers:
+        - name: "telegram"
+          telegram_configs:
+          - api_url: https://api.telegram.org
+            bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
+            chat_id: -880628191
+            send_resolved: true
+            parse_mode: 'MarkdownV2'
       ingress:
         enabled: true
         hosts:
         - alertmanager.192.168.31.8.sslip.io
         ingressClassName: nginx
       alertmanagerSpec:
-        alertmanagerConfigNamespaceSelector:
-        alertmanagerConfigSelector:
-        alertmanagerConfigMatcherStrategy:
-          type: None
         secrets:
           - alertmanager-secret-files
         replicas: 1
