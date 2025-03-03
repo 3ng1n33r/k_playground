@@ -77,6 +77,30 @@ spec:
                 chat_id: -880628191
                 send_resolved: true
                 parse_mode: 'MarkdownV2'
+                template: |-
+                  {{ define "telegram.default.message" }}
+                  {{ if eq .Status "firing" }}
+                  {{ if eq .CommonLabels.severity "critical" }}🔴 *Alert:* {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}🟠 *Alert:* {{ .CommonLabels.alertname }}
+                  {{ else }}⚪️ *Alert:* {{ .CommonLabels.alertname }}
+                  {{ end }}
+                  *Status:* 🔥 FIRING
+                  *Severity:* {{ if eq .CommonLabels.severity "critical" }}🔴 **{{ .CommonLabels.severity | title }}**{{ else if eq .CommonLabels.severity "warning" }}🟠 **{{ .CommonLabels.severity | title }}**{{ else }}⚪️ **{{ .CommonLabels.severity | title }}**{{ end }}
+                  {{ else if eq .Status "resolved" }}
+                  {{ if eq .CommonLabels.severity "critical" }}🟢 *🚌 TRANSPORT Alert:* {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}🟢 *🚌 TRANSPORT 
+                  Alert:* {{ .CommonLabels.alertname }}
+                  {{ else }}⚪️ *Alert:* {{ .CommonLabels.alertname }}
+                  {{ end }}
+                  *Status:* ✅ RESOLVED
+                  *Severity:* {{ if eq .CommonLabels.severity "critical" }}🟢 **{{ .CommonLabels.severity | title }}**{{ else if eq .CommonLabels.severity "warning" }}🟢 **{{ .CommonLabels.severity | title }}**{{ else }}⚪️ **{{ .CommonLabels.severity | title }}**{{ end }}
+                  {{ end }}
+                  {{ range .Alerts }}
+                  *Instance:* {{ .Labels.instance }}
+                    - *Title:* {{ .Annotations.title }}
+                    - *Description:* {{ .Annotations.description }}
+                  {{ end }}
+                  {{ end }}
       ingress:
         enabled: true
         hosts:
