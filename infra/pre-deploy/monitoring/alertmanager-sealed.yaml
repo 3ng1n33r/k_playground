@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: alertmanager-secret-files
+  namespace: monitoring
+spec:
+  encryptedData:
+    telegram-bot-token: AgCpW3KYc57z6Iz3tjJhPLF1uh/hkaxHRDgLcykS15LrzQ5X2GEczgZIubwAEfMLs4bdbnaH1n5CLJ1iMGVgv3/sJzHj1ueuj0VUp22BkvWYGEQz64YtEbk7YrVY2M79FHH67WKHnJ3NFXW5ayhDrBSTEd+SNP50mSqvshT3Vr9rzTiIVFyPqWjoZrGcrZlYwZzqGtXkDEDeN7OqVRQbM6PO/IojxXDyLWXeO2tBoIUih4VLjX8ml6HmKakz8v6G6KeFdyTdGC3hS6naFzoRGw4XOx/mFkFS5eL24U1Rq5jhzxV90AnmYQGINerscJIgUjp1bY5d16JrDLd5yluiuec63GaonE8FC+KKNKZVpzaiKJMx0UNgeI3cM1NQ6fT7gIMokHt6gwEUBfn+IncGVDnLG2BiUJ4LrtCGfy4l2pdjrugPX9yUXwkqoawktGPvudaU6VOkCvpQuxTNpmGrn7W8P7qxf16s4jJHqmR/e4RsMdpre1EXFS0dNhtqC7rdBkfNS+bmnLI5sb0FzHjsUE6HwfF2D2pgGh2im5nggFJ9lKajdotNjqgvACfMID7am3j8yw1NyYRV5qjeC8ZZEYm09nZHJXZHbXXrqf581LbSiFQZ6+pbf4BYYZCCVC/QbavXDtSRqIEL4QM84/xL+FbtNYMDi6pNbjac7C3PocUs/mU4U7j0MPrxhn7CASFJ/uQXMk2dDO8nhVjOOJyndSAwxExnw9rU3oDqsdf/v0W2ih3t+HGfdJ0PndCcNYLO
+  template:
+    metadata:
+      creationTimestamp: null
+      name: alertmanager-secret-files
+      namespace: monitoring
