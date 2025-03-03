@@ -76,7 +76,7 @@ spec:
                 bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
                 chat_id: -880628191
                 send_resolved: true
-                parse_mode: 'MarkdownV2'
+                parse_mode: 'HTML'
                 template: |-
                   {{ define "telegram.default.message" }}
                   {{ if eq .Status "firing" }}
