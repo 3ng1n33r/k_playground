@@ -41,6 +41,13 @@ spec:
         hosts:
         - grafana.192.168.31.8.sslip.io
         ingressClassName: nginx
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
       sidecar:
         dashboards:
           enabled: true
@@ -55,6 +62,8 @@ spec:
         - alertmanager.192.168.31.8.sslip.io
         ingressClassName: nginx
       alertmanagerSpec:
+        secrets:
+          - alertmanager-secret-files
         replicas: 1
         storage:
           volumeClaimTemplate:
@@ -99,6 +108,13 @@ spec:
                   storage: 5Gi
     prometheusOperator:
       enabled: true
+      resources: 
+        limits:
+          cpu: 200m
+          memory: 200Mi
+        requests:
+          cpu: 100m
+          memory: 100Mi
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
