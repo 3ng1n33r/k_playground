@@ -58,24 +58,25 @@ spec:
       enabled: true
       config:
         global:
-          telegram_api_url: "https://api.telegram.org"
+          resolve_timeout: 5m
         route:
           receiver: telegram-alert
           group_by: ['alertname', 'cluster', 'service']
-          repeat_interval: 1h
+          group_interval: 5m
+          repeat_interval: 12h
+          group_wait: 30s
           routes:
-            - match:
+            - receiver: telegram-alert
+              match:
                 severity: critical
-              receiver: telegram-alert
-              continue: true
         receivers:
           - name: telegram-alert
-        telegram_configs:
-          - api_url: "https://api.telegram.org"
-            bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
-            chat_id: -880628191
-            send_resolved: true
-            parse_mode: "MarkdownV2"
+            telegram_configs:
+              - api_url: 'https://api.telegram.org'
+                bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
+                chat_id: -880628191
+                send_resolved: true
+                parse_mode: 'MarkdownV2'
       ingress:
         enabled: true
         hosts:
