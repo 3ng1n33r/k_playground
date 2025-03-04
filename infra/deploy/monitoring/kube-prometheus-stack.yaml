@@ -80,25 +80,25 @@ spec:
                 template: |-
                   {{ define "telegram.default.message" }}
                   {{ if eq .Status "firing" }}
-                  {{ if eq .CommonLabels.severity "critical" }}🔴 *Alert:* {{ .CommonLabels.alertname }}
-                  {{ else if eq .CommonLabels.severity "warning" }}🟠 *Alert:* {{ .CommonLabels.alertname }}
-                  {{ else }}⚪️ *Alert:* {{ .CommonLabels.alertname }}
+                  {{ if eq .CommonLabels.severity "critical" }}🔴 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}🟠 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else }}⚪️ <b>Alert:</b> {{ .CommonLabels.alertname }}
                   {{ end }}
-                  *Status:* 🔥 FIRING
-                  *Severity:* {{ if eq .CommonLabels.severity "critical" }}🔴 **{{ .CommonLabels.severity | title }}**{{ else if eq .CommonLabels.severity "warning" }}🟠 **{{ .CommonLabels.severity | title }}**{{ else }}⚪️ **{{ .CommonLabels.severity | title }}**{{ end }}
+                  <b>Status:</b> 🔥 FIRING
+                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}🔴 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}🟠 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}⚪️ <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
                   {{ else if eq .Status "resolved" }}
-                  {{ if eq .CommonLabels.severity "critical" }}🟢 *🚌 TRANSPORT Alert:* {{ .CommonLabels.alertname }}
-                  {{ else if eq .CommonLabels.severity "warning" }}🟢 *🚌 TRANSPORT 
-                  Alert:* {{ .CommonLabels.alertname }}
-                  {{ else }}⚪️ *Alert:* {{ .CommonLabels.alertname }}
+                  {{ if eq .CommonLabels.severity "critical" }}🟢 <b>🚌 TRANSPORT Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}🟢 <b>🚌 TRANSPORT 
+                  Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else }}⚪️ <b>Alert:</b> {{ .CommonLabels.alertname }}
                   {{ end }}
-                  *Status:* ✅ RESOLVED
-                  *Severity:* {{ if eq .CommonLabels.severity "critical" }}🟢 **{{ .CommonLabels.severity | title }}**{{ else if eq .CommonLabels.severity "warning" }}🟢 **{{ .CommonLabels.severity | title }}**{{ else }}⚪️ **{{ .CommonLabels.severity | title }}**{{ end }}
+                  <b>Status:</b> ✅ RESOLVED
+                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}🟢 <i>{{{ .CommonLabels.severity | title }}</i>{{{ else if eq .CommonLabels.severity "warning" }}🟢 <i>{{{ .CommonLabels.severity | title }}</i>{{{ else }}⚪️ <i>{{{ .CommonLabels.severity | title }}</i>{{{ end }}
                   {{ end }}
                   {{ range .Alerts }}
-                  *Instance:* {{ .Labels.instance }}
-                    - *Title:* {{ .Annotations.title }}
-                    - *Description:* {{ .Annotations.description }}
+                  <b>Instance:</b> {{ .Labels.instance }}
+                    - <b>Title:</b> {{ .Annotations.title }}
+                    - <b>Description:</b> {{ .Annotations.description }}
                   {{ end }}
                   {{ end }}
       ingress:
@@ -160,6 +160,12 @@ spec:
         requests:
           cpu: 100m
           memory: 100Mi
+    kubeScheduler:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    kubeScheduler:
+      enabled: false
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
