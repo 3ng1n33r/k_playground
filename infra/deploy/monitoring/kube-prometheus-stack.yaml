@@ -66,9 +66,9 @@ spec:
           repeat_interval: 12h
           group_wait: 30s
           routes:
-            - receiver: telegram-alert
-              match:
-                severity: critical
+            - match_re:
+                severity: "warning|critical"
+              receiver: telegram-alert
         receivers:
           - name: telegram-alert
             telegram_configs:
@@ -88,9 +88,8 @@ spec:
             <b>Status:</b> &#x1F525 FIRING
             <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128308 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}&#128992 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
             {{ else if eq .Status "resolved" }}
-            {{ if eq .CommonLabels.severity "critical" }}&#128994 <b>&#128652 TRANSPORT Alert:</b> {{ .CommonLabels.alertname }}
-            {{ else if eq .CommonLabels.severity "warning" }}&#128994 <b>&#128652 TRANSPORT 
-            Alert:</b> {{ .CommonLabels.alertname }}
+            {{ if eq .CommonLabels.severity "critical" }}&#128994 <b>Alert:</b> {{ .CommonLabels.alertname }}
+            {{ else if eq .CommonLabels.severity "warning" }}&#128994 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ else }}&#9898 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ end }}
             <b>Status:</b> &#x2705 RESOLVED
@@ -98,7 +97,7 @@ spec:
             {{ end }}
             {{ range .Alerts }}
             <b>Instance:</b> {{ .Labels.instance }}
-            <b> - Title:</b> {{ .Annotations.title }}
+            <b> - Summary:</b> {{ .Annotations.summary }}
             <b> - Description:</b> {{ .Annotations.description }}
             {{ end }}
             {{ end }}
