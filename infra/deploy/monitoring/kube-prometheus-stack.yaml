@@ -76,31 +76,6 @@ spec:
                 bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
                 chat_id: -880628191
                 send_resolved: true
-                parse_mode: 'HTML'
-                template: |-
-                  {{ define "telegram.default.message" }}
-                  {{ if eq .Status "firing" }}
-                  {{ if eq .CommonLabels.severity "critical" }}🔴 <b>Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ else if eq .CommonLabels.severity "warning" }}🟠 <b>Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ else }}⚪️ <b>Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ end }}
-                  <b>Status:</b> 🔥 FIRING
-                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}🔴 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}🟠 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}⚪️ <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
-                  {{ else if eq .Status "resolved" }}
-                  {{ if eq .CommonLabels.severity "critical" }}🟢 <b>🚌 TRANSPORT Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ else if eq .CommonLabels.severity "warning" }}🟢 <b>🚌 TRANSPORT 
-                  Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ else }}⚪️ <b>Alert:</b> {{ .CommonLabels.alertname }}
-                  {{ end }}
-                  <b>Status:</b> ✅ RESOLVED
-                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}🟢 <i>{{{ .CommonLabels.severity | title }}</i>{{{ else if eq .CommonLabels.severity "warning" }}🟢 <i>{{{ .CommonLabels.severity | title }}</i>{{{ else }}⚪️ <i>{{{ .CommonLabels.severity | title }}</i>{{{ end }}
-                  {{ end }}
-                  {{ range .Alerts }}
-                  <b>Instance:</b> {{ .Labels.instance }}
-                    <b>- Title:</b> {{ .Annotations.title }}
-                    <b>- Description:</b> {{ .Annotations.description }}
-                  {{ end }}
-                  {{ end }}
       ingress:
         enabled: true
         hosts:
@@ -166,6 +141,8 @@ spec:
       enabled: false
     kubeEtcd:
       enabled: false
+    kubeProxy:
+      enabled: false    
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
