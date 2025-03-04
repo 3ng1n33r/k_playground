@@ -164,7 +164,7 @@ spec:
       enabled: false
     kubeControllerManager:
       enabled: false
-    kubeScheduler:
+    kubeEtcd:
       enabled: false
   valuesFrom:
     - kind: Secret
