@@ -97,8 +97,8 @@ spec:
                   {{ end }}
                   {{ range .Alerts }}
                   <b>Instance:</b> {{ .Labels.instance }}
-                    - <b>Title:</b> {{ .Annotations.title }}
-                    - <b>Description:</b> {{ .Annotations.description }}
+                    <b>- Title:</b> {{ .Annotations.title }}
+                    <b>- Description:</b> {{ .Annotations.description }}
                   {{ end }}
                   {{ end }}
       ingress:
