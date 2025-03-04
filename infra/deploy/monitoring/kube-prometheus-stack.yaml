@@ -76,6 +76,30 @@ spec:
                 bot_token_file: /etc/alertmanager/secrets/alertmanager-secret-files/telegram-bot-token
                 chat_id: -880628191
                 send_resolved: true
+                template: |-
+                  {{ define "telegram.default.message" }}
+                  {{ if eq .Status "firing" }}
+                  {{ if eq .CommonLabels.severity "critical" }}&#128308 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}&#128992 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else }}&#9898 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ end }}
+                  <b>Status:</b> &#x1F525 FIRING
+                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128308 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}&#128992 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
+                  {{ else if eq .Status "resolved" }}
+                  {{ if eq .CommonLabels.severity "critical" }}&#128994 <b>&#128652 TRANSPORT Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else if eq .CommonLabels.severity "warning" }}&#128994 <b>&#128652 TRANSPORT 
+                  Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ else }}&#9898 <b>Alert:</b> {{ .CommonLabels.alertname }}
+                  {{ end }}
+                  <b>Status:</b> &#x2705 RESOLVED
+                  <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
+                  {{ end }}
+                  {{ range .Alerts }}
+                  <b>Instance:</b> {{ .Labels.instance }}
+                  <b> - Title:</b> {{ .Annotations.title }}
+                  <b> - Description:</b> {{ .Annotations.description }}
+                  {{ end }}
+                  {{ end }}      
       ingress:
         enabled: true
         hosts:
