@@ -5,3 +5,4 @@ resources:
   - sealed-secrets.yaml
   - metrics-server.yaml
   - local-path-storage.yaml
+  - kyverno.yaml
