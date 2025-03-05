@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: monitoring-pre-deploy
+  name: kyverno-post-deploy
   namespace: flux-system
 spec:
   dependsOn:
@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./infra/pre-deploy/monitoring"
+  path: "./infra/post-deploy/kyverno-policies"
   interval: 60m
   timeout: 5m
   prune: true
