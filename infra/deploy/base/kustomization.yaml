@@ -4,5 +4,6 @@ resources:
   - ingress-nginx.yaml
   - sealed-secrets.yaml
   - metrics-server.yaml
+  - vertical-pod-autoscaler.yaml
   - local-path-storage.yaml
   - kyverno.yaml
