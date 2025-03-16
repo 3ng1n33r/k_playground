@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - disallow-default-namespace.yaml
   - generate-vpa.yaml
+  - require-pod-requests-limits.yaml
