@@ -1,0 +1,56 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-vpa
+  annotations:
+    policies.kyverno.io/description: >
+      Создает ресурсы VerticalPodAutoscaler для объектов Deployment, StatefulSet и DaemonSet
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: generate-vpa
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+                - StatefulSet
+                - DaemonSet
+      exclude:
+        any:
+        - resources:
+            namespaces:
+            - kube-system
+            - kube-node-lease
+            - kube-public
+            - ingress-nginx
+            - local-path-storage
+      generate:
+        kind: VerticalPodAutoscaler
+        apiVersion: autoscaling.k8s.io/v1
+        name: "{{request.object.metadata.name}}"
+        namespace: "{{request.object.metadata.namespace}}"
+        synchronize: true
+        data:
+          metadata:
+            labels:
+              created-by: kyverno
+          spec:
+            targetRef:
+              apiVersion: "{{request.object.apiVersion}}"
+              kind: "{{request.object.kind}}"
+              name: "{{request.object.metadata.name}}"
+            updatePolicy:
+              updateMode: "Auto"
+            resourcePolicy:
+              containerPolicies:
+                - containerName: '*'
+                  controlledResources: ["cpu", "memory"]
+                  controlledValues: "RequestsOnly"
+                  minAllowed:
+                    cpu: "10m"
+                    memory: "32Mi"
+#                  maxAllowed:
+#                    cpu: "1"
+#                    memory: "2Gi"
