@@ -3,8 +3,9 @@ kind: ClusterPolicy
 metadata:
   name: generate-vpa
   annotations:
-    policies.kyverno.io/description: >
-      Создает ресурсы VerticalPodAutoscaler для объектов Deployment, StatefulSet и DaemonSet
+    policies.kyverno.io/subject: VerticalPodAutoscaler
+    policies.kyverno.io/description: >-
+      Creates VerticalPodAutoscaler resources for all Deployments, StatefulSet, DaemonSet.
 spec:
   validationFailureAction: Enforce
   background: true
@@ -48,9 +49,9 @@ spec:
                 - containerName: '*'
                   controlledResources: ["cpu", "memory"]
                   controlledValues: "RequestsOnly"
-                  minAllowed:
-                    cpu: "10m"
-                    memory: "32Mi"
+#                  minAllowed:
+#                    cpu: "10m"
+#                    memory: "32Mi"
 #                  maxAllowed:
 #                    cpu: "1"
 #                    memory: "2Gi"
