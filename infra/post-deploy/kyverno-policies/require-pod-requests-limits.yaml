@@ -34,6 +34,8 @@ spec:
           - kube-public
           - ingress-nginx
           - local-path-storage
+          - flux-system
+          - monitoring
     validate:
       message: "CPU and memory resource requests and memory limits are required for containers."
       pattern:
