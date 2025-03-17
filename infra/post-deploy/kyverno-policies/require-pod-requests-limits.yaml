@@ -36,6 +36,7 @@ spec:
           - local-path-storage
           - flux-system
           - monitoring
+          - kyverno
     validate:
       message: "CPU and memory resource requests and memory limits are required for containers."
       pattern:
@@ -45,19 +46,19 @@ spec:
               requests:
                 memory: "?*"
                 cpu: "?*"
-#              limits:
-#                memory: "?*"
+              limits:
+                memory: "?*"
           =(initContainers):
           - resources:
               requests:
                 memory: "?*"
                 cpu: "?*"
-#              limits:
-#                memory: "?*"
+              limits:
+                memory: "?*"
           =(ephemeralContainers):
           - resources:
               requests:
                 memory: "?*"
                 cpu: "?*"
-#              limits:
-#                memory: "?*"
+              limits:
+                memory: "?*"
