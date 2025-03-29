@@ -1,9 +1,9 @@
 #!/bin/zsh
 
 #https://ubuntu.com/download/raspberry-pi
-IMAGE_URL='https://cdimage.ubuntu.com/releases/24.04.1/release/ubuntu-24.04.1-preinstalled-server-arm64+raspi.img.xz'
-IMAGE_CHECKSUM='e59925e211080b20f02e4504bb2c8336b122d0738668491986ee29a95610e5b1'
-IMAGE_FILENAME='ubuntu-24.04.1-preinstalled-server-arm64+raspi.img.xz'
+IMAGE_URL='https://cdimage.ubuntu.com/releases/24.04.2/release/ubuntu-24.04.2-preinstalled-server-arm64+raspi.img.xz'
+IMAGE_CHECKSUM='07fe39e530381cee7095c16f54d05fd99db2fe8233e05ebf8948437e40b5feaa'
+IMAGE_FILENAME='ubuntu-24.04.2-preinstalled-server-arm64+raspi.img.xz'
 UBUNTU_BOOT_DIR='/Volumes/system-boot/'
 
 download() {
@@ -56,7 +56,7 @@ network:
       dhcp4: false
       dhcp6: false
       addresses:
-        - 192.168.31.20/24
+        - 192.168.31.21/24
       gateway4: 192.168.31.1
       nameservers:
         addresses: [1.1.1.1, 8.8.8.8]
