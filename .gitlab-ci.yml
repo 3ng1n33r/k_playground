@@ -29,8 +29,9 @@ yaml-lint:
   extends:
     - .job__lint__rules
   image:
-    name: $YAMLLNT_IMAGE
-    entrypoint: ["/bin/ash", "-c"]
+    name: $PYTHON_IMAGE
+  before_script:
+    - pip install yamllint
   script:
     - yamllint -f colored .
 
