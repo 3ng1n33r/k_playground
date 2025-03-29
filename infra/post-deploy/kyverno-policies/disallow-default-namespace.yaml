@@ -22,30 +22,30 @@ spec:
   validationFailureAction: Enforce
   background: false
   rules:
-  - name: validate-namespace
-    match:
-      any:
-      - resources:
-          kinds:
-          - Pod
-          - Service
-          - Ingress
-    validate:
-      message: "Using 'default' namespace is not allowed."
-      pattern:
-        metadata:
-          namespace: "!default"
-  - name: validate-podcontroller-namespace
-    match:
-      any:
-      - resources:
-          kinds:
-          - DaemonSet
-          - Deployment
-          - ReplicaSet
-          - StatefulSet
-    validate:
-      message: "Using 'default' namespace is not allowed for pod controllers."
-      pattern:
-        metadata:
-          namespace: "!default"
+    - name: validate-namespace
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+                - Service
+                - Ingress
+      validate:
+        message: "Using 'default' namespace is not allowed."
+        pattern:
+          metadata:
+            namespace: "!default"
+    - name: validate-podcontroller-namespace
+      match:
+        any:
+          - resources:
+              kinds:
+                - DaemonSet
+                - Deployment
+                - ReplicaSet
+                - StatefulSet
+      validate:
+        message: "Using 'default' namespace is not allowed for pod controllers."
+        pattern:
+          metadata:
+            namespace: "!default"

@@ -21,13 +21,13 @@ spec:
                 - DaemonSet
       exclude:
         any:
-        - resources:
-            namespaces:
-            - kube-system
-            - kube-node-lease
-            - kube-public
-            - ingress-nginx
-            - local-path-storage
+          - resources:
+              namespaces:
+                - kube-system
+                - kube-node-lease
+                - kube-public
+                - ingress-nginx
+                - local-path-storage
       generate:
         kind: VerticalPodAutoscaler
         apiVersion: autoscaling.k8s.io/v1

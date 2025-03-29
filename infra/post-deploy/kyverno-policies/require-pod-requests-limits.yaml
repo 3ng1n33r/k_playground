@@ -20,46 +20,46 @@ spec:
   validationFailureAction: Enforce
   background: false
   rules:
-  - name: validate-resources
-    match:
-      any:
-      - resources:
-          kinds:
-          - Pod
-    exclude:
-      any:
-      - resources:
-          namespaces:
-          - kube-system
-          - kube-node-lease
-          - kube-public
-          - ingress-nginx
-          - local-path-storage
-          - flux-system
-          - monitoring
-          - kyverno
-    validate:
-      message: "CPU and memory resource requests and memory limits are required for containers."
-      pattern:
-        spec:
-          containers:
+    - name: validate-resources
+      match:
+        any:
           - resources:
-              requests:
-                memory: "?*"
-                cpu: "?*"
-              limits:
-                memory: "?*"
-          =(initContainers):
+              kinds:
+                - Pod
+      exclude:
+        any:
           - resources:
-              requests:
-                memory: "?*"
-                cpu: "?*"
-              limits:
-                memory: "?*"
-          =(ephemeralContainers):
-          - resources:
-              requests:
-                memory: "?*"
-                cpu: "?*"
-              limits:
-                memory: "?*"
+              namespaces:
+                - kube-system
+                - kube-node-lease
+                - kube-public
+                - ingress-nginx
+                - local-path-storage
+                - flux-system
+                - monitoring
+                - kyverno
+      validate:
+        message: "CPU and memory resource requests and memory limits are required for containers."
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  requests:
+                    memory: "?*"
+                    cpu: "?*"
+                  limits:
+                    memory: "?*"
+            =(initContainers):
+              - resources:
+                  requests:
+                    memory: "?*"
+                    cpu: "?*"
+                  limits:
+                    memory: "?*"
+            =(ephemeralContainers):
+              - resources:
+                  requests:
+                    memory: "?*"
+                    cpu: "?*"
+                  limits:
+                    memory: "?*"
