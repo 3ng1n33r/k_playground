@@ -1,6 +1,5 @@
 variables:
   PYTHON_IMAGE: python:3.12-alpine
-  YAMLLNT_IMAGE: cytopia/yamllint
   ANSIBLE_HOST_KEY_CHECKING: 'false'
   ANSIBLE_FORCE_COLOR: 'true'
 
@@ -22,14 +21,14 @@ stages:
 
 .job__lint__rules:
   stage: lint
+  image:
+    name: $PYTHON_IMAGE
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 yaml-lint:
   extends:
     - .job__lint__rules
-  image:
-    name: $PYTHON_IMAGE
   before_script:
     - pip install yamllint
   script:
@@ -38,8 +37,6 @@ yaml-lint:
 ansible-lint:
   extends:
     - .job__lint__rules
-  image:
-    name: $PYTHON_IMAGE
   before_script:
     - pip install ansible-lint
   script:
