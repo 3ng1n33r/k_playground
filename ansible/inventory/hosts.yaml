@@ -8,17 +8,17 @@ all:
       vars:
         container_pause_version: '3.10'
         kubernetes_version: '1.31'
-        cilium_version: '1.17.1'
+        cilium_version: '1.17.2'
         loadbalancer_apiserver_port: 8443
         loadbalancer_apiserver_fqdn: 'cluster-endpoint'
         flux_version: '2.5.1'
-        kubeseal_version: '0.28.0'
+        kubeseal_version: '0.29.0'
         gitlab_repository: orchestration
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
         gitlab_user: s045724
       hosts:
         192.168.31.20:
-        192.168.31.21:
     worker:
       hosts:
+        192.168.31.21:
