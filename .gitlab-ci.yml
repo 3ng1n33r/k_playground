@@ -40,9 +40,9 @@ ansible-lint:
     - .job__lint__rules
   before_script:
     - pip install ansible-lint
+    - ansible-galaxy collection install -r ansible/requirements.yml
   script:
     - ansible-lint ansible/playbooks
-    - ansible-galaxy collection install community.general && ansible-galaxy collection install kubernetes.core
 
 deploy-cluster-dependencies:
   extends:
