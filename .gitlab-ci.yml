@@ -42,6 +42,7 @@ ansible-lint:
     - pip install ansible-lint
   script:
     - ansible-lint ansible/playbooks
+    - ansible-galaxy collection install community.general && ansible-galaxy collection install kubernetes.core
 
 deploy-cluster-dependencies:
   extends:
