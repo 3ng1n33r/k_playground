@@ -39,7 +39,7 @@ spec:
       ingress:
         enabled: true
         hosts:
-        - grafana.192.168.31.8.sslip.io
+          - grafana.192.168.31.8.sslip.io
         ingressClassName: nginx
       resources:
         limits:
@@ -104,7 +104,7 @@ spec:
       ingress:
         enabled: true
         hosts:
-        - alertmanager.192.168.31.8.sslip.io
+          - alertmanager.192.168.31.8.sslip.io
         ingressClassName: nginx
       alertmanagerSpec:
         secrets:
@@ -129,7 +129,7 @@ spec:
       ingress:
         enabled: true
         hosts:
-        - prometheus.192.168.31.8.sslip.io
+          - prometheus.192.168.31.8.sslip.io
         ingressClassName: nginx
       prometheusSpec:
         replicas: 1
