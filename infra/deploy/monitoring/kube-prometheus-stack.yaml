@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 70.0.2
+      version: 70.3.0
   dependsOn:
     - name: sealed-secrets-controller
   install:
@@ -153,7 +153,7 @@ spec:
                   storage: 5Gi
     prometheusOperator:
       enabled: true
-      resources: 
+      resources:
         limits:
           cpu: 200m
           memory: 200Mi
@@ -167,7 +167,7 @@ spec:
     kubeEtcd:
       enabled: false
     kubeProxy:
-      enabled: false    
+      enabled: false
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
