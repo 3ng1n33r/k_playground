@@ -19,6 +19,7 @@ rules:
   # you can easily change it or disable in your .yamllint file.
   line-length:
     max: 160
+    level: warning
   # We are adding an extra space inside braces as that's how prettier does it
   # and we are trying not to fight other linters.
   braces:
