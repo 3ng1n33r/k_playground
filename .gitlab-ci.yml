@@ -39,7 +39,7 @@ ansible-lint:
   before_script:
     - ansible-galaxy collection install -r ansible/requirements.yml
   script:
-    - ansible-lint ansible/playbooks
+    - ansible-lint ansible/
 
 deploy-cluster-dependencies:
   extends:
