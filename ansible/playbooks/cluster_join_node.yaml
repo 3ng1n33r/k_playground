@@ -49,7 +49,7 @@
         state: present
 
     - name: Include kubeconfig copy tasks.
-      ansible.builtin.include_tasks: tasks_copy_kubeconfig.yaml
+      ansible.builtin.include_tasks: tasks/copy_kubeconfig.yaml
 
 - name: Join worker nodes.
   hosts: workers

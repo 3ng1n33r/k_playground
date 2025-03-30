@@ -20,7 +20,7 @@
       when: "groups['master'] | length == 1"
 
     - name: Include kubeconfig copy tasks.
-      ansible.builtin.include_tasks: tasks_copy_kubeconfig.yaml
+      ansible.builtin.include_tasks: tasks/copy_kubeconfig.yaml
 
     - name: Add Cilium chart repo.
       kubernetes.core.helm_repository:
