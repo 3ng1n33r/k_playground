@@ -144,7 +144,7 @@
       when: "groups['master'] | length > 1"
 
     - name: Include haproxy tasks.
-      ansible.builtin.include_tasks: tasks_install_haproxy.yaml
+      ansible.builtin.include_tasks: tasks/install_haproxy.yaml
       when: "groups['master'] | length > 1"
 
 - name: Install dependencies on master hosts.
