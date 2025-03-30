@@ -1,6 +1,6 @@
 ---
 variables:
-  PYTHON_IMAGE: python:3.12-alpine
+  ANSIBLE_IMAGE: c8h11no2/ansible:11.4.0-python3.12
   ANSIBLE_HOST_KEY_CHECKING: 'false'
   ANSIBLE_FORCE_COLOR: 'true'
 
@@ -11,9 +11,9 @@ stages:
 .job__deploy__rules:
   stage: deploy
   image:
-    name: $PYTHON_IMAGE
+    name: $ANSIBLE_IMAGE
   before_script:
-    - pip install ansible
+    - ansible-galaxy collection install -r ansible/requirements.yml
     - echo "$ANSIBLE_SSH_PRIVATE_KEY" > ~/.ssh/ansible
   allow_failure: true
   rules:
@@ -23,15 +23,13 @@ stages:
 .job__lint__rules:
   stage: lint
   image:
-    name: $PYTHON_IMAGE
+    name: $ANSIBLE_IMAGE
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 yaml-lint:
   extends:
     - .job__lint__rules
-  before_script:
-    - pip install yamllint
   script:
     - yamllint -f colored .
 
@@ -39,7 +37,6 @@ ansible-lint:
   extends:
     - .job__lint__rules
   before_script:
-    - pip install ansible-lint
     - ansible-galaxy collection install -r ansible/requirements.yml
   script:
     - ansible-lint ansible/playbooks
@@ -54,7 +51,7 @@ deploy-cluster-init:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-galaxy collection install kubernetes.core && ansible ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
+    - ansible ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
 
 deploy-fluxcd:
   extends:
