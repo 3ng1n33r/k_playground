@@ -52,7 +52,7 @@
       ansible.builtin.include_tasks: tasks/copy_kubeconfig.yaml
 
 - name: Join worker nodes.
-  hosts: workers
+  hosts: worker
   become: true
   tasks:
     - name: Check the availability api server port.
