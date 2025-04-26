@@ -15,9 +15,9 @@ stages:
     name: $ANSIBLE_IMAGE
   before_script:
     - ansible-galaxy collection install -r ansible/requirements.yml
-    - mkdir ~/.ssh/
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - echo "$ANSIBLE_SSH_PRIVATE_KEY" > $ANSIBLE_SSH_PRIVATE_KEY_FILE
-    - chmod 600 $ANSIBLE_SSH_PRIVATE_KEY_FILE
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
