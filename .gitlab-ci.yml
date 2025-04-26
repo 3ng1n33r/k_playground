@@ -3,7 +3,7 @@ variables:
   ANSIBLE_IMAGE: c8h11no2/ansible:11.4.0-python3.12
   ANSIBLE_HOST_KEY_CHECKING: 'false'
   ANSIBLE_FORCE_COLOR: 'true'
-  ANSIBLE_SSH_PRIVATE_KEY_FILE: '/tmp/.ssh/ansible'
+  ANSIBLE_SSH_PRIVATE_KEY_FILE: '/tmp/.ansible'
 
 stages:
   - lint
