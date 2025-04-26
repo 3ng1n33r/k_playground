@@ -18,6 +18,7 @@ stages:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$ANSIBLE_SSH_PRIVATE_KEY" | ssh-add - > /dev/null
+    - export ANSIBLE_HOST_KEY_CHECKING=False
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
