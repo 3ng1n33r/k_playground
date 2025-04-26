@@ -18,6 +18,7 @@ stages:
     - mkdir -p .secret
     - echo "$ANSIBLE_SSH_PRIVATE_KEY" > $ANSIBLE_SSH_PRIVATE_KEY_FILE
     - chmod 400 $ANSIBLE_SSH_PRIVATE_KEY_FILE
+    - cat $ANSIBLE_SSH_PRIVATE_KEY_FILE
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -48,7 +49,7 @@ deploy-cluster-dependencies:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml --private-key=$ANSIBLE_SSH_PRIVATE_KEY_FILE
+    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml -vvv --private-key=$ANSIBLE_SSH_PRIVATE_KEY_FILE
 
 deploy-cluster-init:
   extends:
