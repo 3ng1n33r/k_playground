@@ -45,22 +45,22 @@ deploy-cluster-dependencies:
   extends:
     - .job__deploy__rules
   script:
-    - ansible ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
+    - ansible ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml --private-key=~/.ssh/ansible
 
 deploy-cluster-init:
   extends:
     - .job__deploy__rules
   script:
-    - ansible ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
+    - ansible ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml --private-key=~/.ssh/ansible
 
 deploy-fluxcd:
   extends:
     - .job__deploy__rules
   script:
-    - ansible ansible/playbooks/fluxcd.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
+    - ansible ansible/playbooks/fluxcd.yaml -i ansible/inventory/hosts.yaml --private-key=~/.ssh/ansible
 
 deploy-cluster-join-node:
   extends:
     - .job__deploy__rules
   script:
-    - ansible ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts --private-key=~/.ssh/ansible
+    - ansible ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yaml --private-key=~/.ssh/ansible

@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kyverno
-      version: 3.3.7
+      version: 3.4.0
   install:
     createNamespace: true
   interval: 30m0s
