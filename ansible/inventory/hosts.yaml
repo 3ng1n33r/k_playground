@@ -16,8 +16,6 @@ all:
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
         gitlab_user: s045724
-      hosts:
-        192.168.31.20:
     worker:
       hosts:
         192.168.31.21:
