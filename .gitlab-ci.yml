@@ -3,6 +3,7 @@ variables:
   ANSIBLE_IMAGE: c8h11no2/ansible:11.4.0-python3.12
   ANSIBLE_HOST_KEY_CHECKING: 'false'
   ANSIBLE_FORCE_COLOR: 'true'
+  ANSIBLE_PYTHON_INTERPRETER: '/usr/bin/python3'
 
 stages:
   - lint
@@ -18,7 +19,6 @@ stages:
     - echo "$ANSIBLE_SSH_PRIVATE_KEY" | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ls ~/.ssh/
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -49,22 +49,22 @@ deploy-cluster-dependencies:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml
+    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml -vv
 
 deploy-cluster-init:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml
+    - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml -vv
 
 deploy-fluxcd:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/fluxcd.yaml -i ansible/inventory/hosts.yaml
+    - ansible-playbook ansible/playbooks/fluxcd.yaml -i ansible/inventory/hosts.yaml -vv
 
 deploy-cluster-join-node:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yaml
+    - ansible-playbook ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yaml -vv
