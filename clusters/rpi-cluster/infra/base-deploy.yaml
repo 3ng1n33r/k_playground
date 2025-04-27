@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cilium-post-deploy
+    - name: cilium-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
