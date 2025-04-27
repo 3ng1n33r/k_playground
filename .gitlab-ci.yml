@@ -57,11 +57,11 @@ deploy-cluster-init:
   script:
     - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml -vv
 
-deploy-fluxcd:
+deploy-gitops-fluxcd:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/fluxcd.yaml -i ansible/inventory/hosts.yaml -vv
+    - ansible-playbook ansible/playbooks/gitops_fluxcd.yaml -i ansible/inventory/hosts.yaml -e "gitlab_pat=$GITLAB_TOKEN" -vv
 
 deploy-cluster-join-node:
   extends:

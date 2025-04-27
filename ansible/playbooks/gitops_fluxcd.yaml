@@ -40,3 +40,10 @@
         dest: /usr/local/bin
         remote_src: true
         mode: '0755'
+
+- name: Make master nodes possible to schedule.
+  hosts: master
+  tasks:
+    - name: Remove NoSchedule taint.
+      ansible.builtin.shell: kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
+      when: "groups['master'] | length >= groups['worker'] | length"
