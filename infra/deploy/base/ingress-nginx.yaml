@@ -22,8 +22,6 @@ spec:
         kind: HelmRepository
         name: ingress-nginx
       version: 4.12.1
-  dependsOn:
-    - name: cilium
   install:
     createNamespace: true
   interval: 30m
