@@ -96,8 +96,8 @@ spec:
             {{ end }}
             {{ range .Alerts }}
             <b>Instance:</b> {{ .Labels.instance }}
-            <b> - Summary:</b> {{ .Annotations.summary }}
-            <b> - Description:</b> {{ .Annotations.description }}
+            <b>Summary:</b> {{ .Annotations.summary }}
+            <b>Description:</b> {{ .Annotations.description }}
             {{ end }}
             {{ end }}
       ingress:
