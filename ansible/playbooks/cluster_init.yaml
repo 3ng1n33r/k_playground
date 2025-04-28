@@ -37,6 +37,11 @@
         kubeconfig: /etc/kubernetes/admin.conf
         values:
           kubeProxyReplacement: true
+          l2announcements:
+            enabled: true
+          k8sClientRateLimit:
+            burst: 100
+            qps: 50
           k8sServiceHost: "{{ loadbalancer_apiserver_fqdn if (groups['master'] | length > 1) else groups['master'][0] }}"
           k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length > 1) else '6443' }}"
           ipv4NativeRoutingCIDR: 10.0.0.0/8

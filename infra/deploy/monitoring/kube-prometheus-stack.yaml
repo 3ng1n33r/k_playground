@@ -26,7 +26,6 @@ spec:
     - name: sealed-secrets-controller
   install:
     crds: Create
-    createNamespace: true
   upgrade:
     crds: CreateReplace
   interval: 30m
