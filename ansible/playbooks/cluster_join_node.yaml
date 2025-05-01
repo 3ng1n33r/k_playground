@@ -3,6 +3,14 @@
   hosts: master[0]
   become: true
   tasks:
+    - name: Change external cluster lb to local ip.
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: "^{{ groups['master'][0] }}"
+        line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
+        state: present
+      when: "groups['master'] | length > 1"
+
     - name: Storing the certificates in secret.
       ansible.builtin.shell: kubeadm init phase upload-certs --upload-certs
       register: certificate_key_raw
