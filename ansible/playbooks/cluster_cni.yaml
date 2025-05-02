@@ -1,0 +1,62 @@
+---
+- name: Playbook to install CNI.
+  hosts: master[0]
+  become: true
+  tasks:
+    # Install Helm
+
+    - name: Add Helm apt-key.
+      ansible.builtin.get_url:
+        url: https://baltocdn.com/helm/signing.asc
+        dest: /etc/apt/keyrings/helm-apt-keyring.asc
+        mode: '0644'
+        force: true
+
+    - name: Add Helm's APT repo.
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/helm-apt-keyring.asc] https://baltocdn.com/helm/stable/debian/ all main"
+        state: present
+        update_cache: true
+
+    - name: Install Helm.
+      ansible.builtin.apt:
+        name: helm
+        state: present
+
+    # Install CNI Cilium
+
+    - name: Add Cilium chart repo.
+      kubernetes.core.helm_repository:
+        name: cilium
+        repo_url: "https://helm.cilium.io/"
+
+    - name: Deploy CNI Cilium chart.
+      kubernetes.core.helm:
+        name: cilium
+        chart_ref: cilium/cilium
+        chart_version: "{{ cilium_version }}"
+        release_namespace: kube-system
+        update_repo_cache: true
+        kubeconfig: /etc/kubernetes/admin.conf
+        values:
+          kubeProxyReplacement: true
+          l2announcements:
+            enabled: true
+          k8sClientRateLimit:
+            burst: 100
+            qps: 50
+          k8sServiceHost: "{{ loadbalancer_apiserver_fqdn if (groups['master'] | length > 1) else groups['master'][0] }}"
+          k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length > 1) else '6443' }}"
+          ipv4NativeRoutingCIDR: 10.0.0.0/8
+          autoDirectNodeRoutes: true
+          routingMode: native
+          ipv4:
+            enabled: true
+          bpf:
+            datapathMode: netkit
+            masquerade: true
+          rollOutCiliumPods: true
+          operator:
+            rollOutPods: true
+          envoy:
+            enabled: false
