@@ -1,0 +1,7 @@
+---
+- name: Change external cluster lb to local ip.
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: "^{{ groups['master'][0] }}"
+    line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
+    state: present

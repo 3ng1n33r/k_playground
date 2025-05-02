@@ -57,6 +57,12 @@ deploy-cluster-init:
   script:
     - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml -vv
 
+deploy-cluster-cni:
+  extends:
+    - .job__deploy__rules
+  script:
+    - ansible-playbook ansible/playbooks/cluster_cni.yaml -i ansible/inventory/hosts.yaml -vv
+
 deploy-gitops-fluxcd:
   extends:
     - .job__deploy__rules

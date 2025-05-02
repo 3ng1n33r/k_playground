@@ -3,12 +3,8 @@
   hosts: master[0]
   become: true
   tasks:
-    - name: Change external cluster lb to local ip.
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        regexp: "^{{ groups['master'][0] }}"
-        line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
-        state: present
+    - name: Include task to change the LB IP.
+      ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
       when: "groups['master'] | length > 1"
 
     - name: Storing the certificates in secret.
@@ -49,12 +45,8 @@
         port: "{{ loadbalancer_apiserver_port }}"
         delay: 30
 
-    - name: Change external cluster lb to local ip.
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        regexp: "^{{ groups['master'][0] }}"
-        line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
-        state: present
+    - name: Include task to change the LB IP.
+      ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
 
     - name: Include kubeconfig copy tasks.
       ansible.builtin.include_tasks: tasks/copy_kubeconfig.yaml
@@ -80,10 +72,6 @@
         delay: 30
       when: "groups['master'] | length > 1"
 
-    - name: Change external cluster lb to local ip.
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        regexp: "^{{ groups['master'][0] }}"
-        line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
-        state: present
+    - name: Include task to change the LB IP.
+      ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
       when: "groups['master'] | length > 1"
