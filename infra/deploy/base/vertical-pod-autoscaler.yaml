@@ -27,3 +27,34 @@ spec:
   interval: 30m0s
   releaseName: vertical-pod-autoscaler
   targetNamespace: kube-system
+  values:
+    admissionController:
+      enabled: true
+      replicaCount: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 512Mi
+        requests:
+          cpu: 50m
+          memory: 256Mi
+    recommender:
+      enabled: true
+      replicaCount: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 1024Mi
+        requests:
+          cpu: 50m
+          memory: 512Mi
+    updater:
+      enabled: true
+      replicaCount: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 1024Mi
+        requests:
+          cpu: 50m
+          memory: 512Mi

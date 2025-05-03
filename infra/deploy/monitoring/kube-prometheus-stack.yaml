@@ -55,6 +55,9 @@ spec:
           labelValue: "1"
     alertmanager:
       enabled: true
+      podDisruptionBudget:
+        enabled: false
+        minAvailable: 1
       config:
         global:
           resolve_timeout: 5m
@@ -108,7 +111,8 @@ spec:
       alertmanagerSpec:
         secrets:
           - alertmanager-secret-files
-        replicas: 1
+        replicas: 3
+        podAntiAffinity: "hard"
         storage:
           volumeClaimTemplate:
             spec:
@@ -125,13 +129,17 @@ spec:
             cpu: 250m
             memory: 200Mi
     prometheus:
+      podDisruptionBudget:
+        enabled: false
+        minAvailable: 1
       ingress:
         enabled: true
         hosts:
           - prometheus.192.168.31.8.sslip.io
         ingressClassName: nginx
       prometheusSpec:
-        replicas: 1
+        replicas: 2
+        podAntiAffinity: "hard"
         retention: 7d
         retentionSize: 5GB
         serviceMonitorSelectorNilUsesHelmValues: false
