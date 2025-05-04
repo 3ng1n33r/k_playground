@@ -178,6 +178,15 @@ spec:
         requests:
           cpu: 25m
           memory: 128Mi
+    prometheus-node-exporter:
+      enabled: true
+      resources:
+        requests:
+          cpu: 75m
+          memory: 100Mi
+        limits:
+          cpu: 150m
+          memory: 200Mi
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
