@@ -55,9 +55,6 @@ spec:
           labelValue: "1"
     alertmanager:
       enabled: true
-      podDisruptionBudget:
-        enabled: false
-        minAvailable: 1
       config:
         global:
           resolve_timeout: 5m
@@ -123,15 +120,12 @@ spec:
                   storage: 50Mi
         resources:
           limits:
-            cpu: 500m
+            cpu: 400m
             memory: 400Mi
           requests:
-            cpu: 250m
+            cpu: 200m
             memory: 200Mi
     prometheus:
-      podDisruptionBudget:
-        enabled: false
-        minAvailable: 1
       ingress:
         enabled: true
         hosts:
@@ -145,10 +139,10 @@ spec:
         serviceMonitorSelectorNilUsesHelmValues: false
         resources:
           limits:
-            cpu: 500m
+            cpu: 400m
             memory: 512Mi
           requests:
-            cpu: 250m
+            cpu: 200m
             memory: 256Mi
         storageSpec:
           volumeClaimTemplate:
@@ -175,6 +169,15 @@ spec:
       enabled: false
     kubeProxy:
       enabled: false
+    kube-state-metrics:
+      enabled: true
+      resources:
+        limits:
+          cpu: 50m
+          memory: 256Mi
+        requests:
+          cpu: 25m
+          memory: 128Mi
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
