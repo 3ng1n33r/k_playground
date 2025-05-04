@@ -26,7 +26,6 @@ spec:
                 - kube-system
                 - kube-node-lease
                 - kube-public
-                - ingress-nginx
                 - local-path-storage
       generate:
         kind: VerticalPodAutoscaler
