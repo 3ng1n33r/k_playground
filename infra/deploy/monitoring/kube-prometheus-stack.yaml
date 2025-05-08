@@ -78,28 +78,34 @@ spec:
                 message: '{{ template "telegram.default.message" . }}'
       templateFiles:
         telegram.tmpl: |-
-            {{ define "telegram.default.message" }}
-            {{ if eq .Status "firing" }}
+          {{ define "telegram.default.message" }}
+          {{ if eq .Status "firing" }}
             {{ if eq .CommonLabels.severity "critical" }}&#128308 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ else if eq .CommonLabels.severity "warning" }}&#128992 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ else }}&#9898 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ end }}
             <b>Status:</b> &#x1F525 FIRING
-            <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128308 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}&#128992 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
-            {{ else if eq .Status "resolved" }}
+            <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128308 <i>{{ .CommonLabels.severity | title }}</i>
+            {{ else if eq .CommonLabels.severity "warning" }}&#128992 <i>{{ .CommonLabels.severity | title }}</i>
+            {{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>
+            {{ end }}
+          {{ else if eq .Status "resolved" }}
             {{ if eq .CommonLabels.severity "critical" }}&#128994 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ else if eq .CommonLabels.severity "warning" }}&#128994 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ else }}&#9898 <b>Alert:</b> {{ .CommonLabels.alertname }}
             {{ end }}
             <b>Status:</b> &#x2705 RESOLVED
-            <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>{{ else if eq .CommonLabels.severity "warning" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>{{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>{{ end }}
+            <b>Severity:</b> {{ if eq .CommonLabels.severity "critical" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>
+            {{ else if eq .CommonLabels.severity "warning" }}&#128994 <i>{{ .CommonLabels.severity | title }}</i>
+            {{ else }}&#9898 <i>{{ .CommonLabels.severity | title }}</i>
             {{ end }}
-            {{ range .Alerts }}
-            <b>Instance:</b> {{ .Labels.instance }}
-            <b>Summary:</b> {{ .Annotations.summary }}
-            <b>Description:</b> {{ .Annotations.description }}
-            {{ end }}
-            {{ end }}
+          {{ end }}
+          {{ range .Alerts }}
+            {{ if .Labels.instance }}<b>Instance:</b> {{ .Labels.instance }}{{ end }}
+            {{ if .Annotations.summary }}<b>Summary:</b> {{ .Annotations.summary }}{{ end }}
+            {{ if .Annotations.description }}<b>Description:</b> {{ .Annotations.description }}{{ end }}
+          {{ end }}
+          {{ end }}
       ingress:
         enabled: true
         hosts:
