@@ -52,7 +52,6 @@ spec:
     minio:
       enabled: true
       persistence:
-        size: 5Gi
         storageClass: "local-path"
     chunksCache:
       allocatedMemory: 1024
