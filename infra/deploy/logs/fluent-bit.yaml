@@ -22,6 +22,8 @@ spec:
         kind: HelmRepository
         name: fluent
       version: 0.48.10
+  dependsOn:
+    - name: loki
   interval: 30m
   releaseName: fluent-bit
   targetNamespace: loki
@@ -70,9 +72,9 @@ spec:
             label_keys $sub['stream']
             line_format json
     resources:
-      limits:
+      requests:
         cpu: 50m
         memory: 64Mi
-      requests:
+      limits:
         cpu: 100m
         memory: 128Mi
