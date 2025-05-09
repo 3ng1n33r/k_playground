@@ -37,6 +37,7 @@ spec:
             Keep_Log Off
             K8S-Logging.Parser On
             K8S-Logging.Exclude On
+            Buffer_Size 64KB
       inputs: |
         [INPUT]
             Name tail
