@@ -53,6 +53,13 @@ spec:
           searchNamespace: ALL
           label: grafana_dashboard
           labelValue: "1"
+      additionalDataSources:
+        - name: Loki
+          type: loki
+          url: http://loki-gateway.loki.svc.cluster.local
+          editable: true
+          basicAuth: false
+          access: proxy
     alertmanager:
       enabled: true
       config:
