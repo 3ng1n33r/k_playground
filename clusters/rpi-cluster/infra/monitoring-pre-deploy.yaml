@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: kyverno-policies
+    - name: logs-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
