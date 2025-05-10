@@ -49,6 +49,8 @@ spec:
           memory: 64Mi
     chunksCache:
       allocatedMemory: 256
+    resultsCache:
+      allocatedMemory: 256
     loki:
       auth_enabled: false
       commonConfig:
