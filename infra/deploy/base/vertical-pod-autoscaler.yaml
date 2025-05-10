@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cowboysysop
-      version: 10.0.0
+      version: 10.0.1
   dependsOn:
     - name: metrics-server
   interval: 30m0s
@@ -32,29 +32,29 @@ spec:
       enabled: true
       replicaCount: 1
       resources:
-        limits:
-          cpu: 200m
-          memory: 512Mi
         requests:
           cpu: 50m
-          memory: 256Mi
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
     recommender:
       enabled: true
       replicaCount: 1
       resources:
-        limits:
-          cpu: 200m
-          memory: 1024Mi
         requests:
           cpu: 50m
-          memory: 512Mi
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
     updater:
       enabled: true
       replicaCount: 1
       resources:
-        limits:
-          cpu: 200m
-          memory: 1024Mi
         requests:
           cpu: 50m
-          memory: 512Mi
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi

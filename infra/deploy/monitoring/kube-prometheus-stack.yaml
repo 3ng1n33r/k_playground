@@ -41,12 +41,12 @@ spec:
           - grafana.192.168.31.8.sslip.io
         ingressClassName: nginx
       resources:
-        limits:
-          cpu: 200m
-          memory: 256Mi
         requests:
           cpu: 100m
-          memory: 128Mi
+          memory: 400Mi
+        limits:
+          cpu: 200m
+          memory: 600Mi
       sidecar:
         dashboards:
           enabled: true
@@ -132,12 +132,12 @@ spec:
                 requests:
                   storage: 50Mi
         resources:
-          limits:
-            cpu: 400m
-            memory: 400Mi
           requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
             cpu: 200m
-            memory: 200Mi
+            memory: 256Mi
     prometheus:
       ingress:
         enabled: true
@@ -151,12 +151,12 @@ spec:
         retentionSize: 5GB
         serviceMonitorSelectorNilUsesHelmValues: false
         resources:
-          limits:
-            cpu: 400m
-            memory: 512Mi
           requests:
             cpu: 200m
-            memory: 256Mi
+            memory: 500Mi
+          limits:
+            cpu: 400m
+            memory: 1000Mi
         storageSpec:
           volumeClaimTemplate:
             spec:
@@ -168,12 +168,12 @@ spec:
     prometheusOperator:
       enabled: true
       resources:
-        limits:
-          cpu: 200m
-          memory: 200Mi
         requests:
           cpu: 100m
           memory: 100Mi
+        limits:
+          cpu: 200m
+          memory: 200Mi
     kubeScheduler:
       enabled: false
     kubeControllerManager:
@@ -185,21 +185,21 @@ spec:
     kube-state-metrics:
       enabled: true
       resources:
-        limits:
-          cpu: 50m
-          memory: 256Mi
         requests:
-          cpu: 25m
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 100m
           memory: 128Mi
     prometheus-node-exporter:
       enabled: true
       resources:
         requests:
-          cpu: 75m
-          memory: 100Mi
+          cpu: 50m
+          memory: 64Mi
         limits:
-          cpu: 150m
-          memory: 200Mi
+          cpu: 100m
+          memory: 128Mi
   valuesFrom:
     - kind: Secret
       name: prometheus-stack-credentials
