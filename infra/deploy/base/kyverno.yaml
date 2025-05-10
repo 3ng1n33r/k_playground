@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kyverno
-      version: 3.4.0
+      version: 3.4.1
   dependsOn:
     - name: vertical-pod-autoscaler
   install:
@@ -29,12 +29,99 @@ spec:
   interval: 30m0s
   releaseName: kyverno
   targetNamespace: kyverno
-#  values:
-#    admissionController:
-#      replicas: 3
-#    backgroundController:
-#      replicas: 2
-#    cleanupController:
-#      replicas: 2
-#    reportsController:
-#      replicas: 2
+  values:
+    admissionController:
+      replicas: 3
+      antiAffinity:
+        enabled: true
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - admission-controller
+              topologyKey: kubernetes.io/hostname
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 1
+      container:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+    backgroundController:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+      antiAffinity:
+        enabled: true
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - background-controller
+              topologyKey: kubernetes.io/hostname
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 1
+    cleanupController:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+      antiAffinity:
+        enabled: true
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - cleanup-controller
+              topologyKey: kubernetes.io/hostname
+    reportsController:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+      antiAffinity:
+        enabled: true
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - reports-controller
+              topologyKey: kubernetes.io/hostname

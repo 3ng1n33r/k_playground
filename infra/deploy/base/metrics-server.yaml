@@ -29,11 +29,11 @@ spec:
     replicas: 1
     resources:
       requests:
+        cpu: 50m
+        memory: 100Mi
+      limits:
         cpu: 100m
         memory: 200Mi
-      limits:
-        cpu: 200m
-        memory: 400Mi
     defaultArgs:
       - --cert-dir=/tmp
       - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
