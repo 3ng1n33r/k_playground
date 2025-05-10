@@ -28,6 +28,27 @@ spec:
   releaseName: loki
   targetNamespace: loki
   values:
+    gateway:
+      enabled: true
+      replicas: 1
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+    lokiCanary:
+      enabled: true
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+    chunksCache:
+      allocatedMemory: 256
     loki:
       auth_enabled: false
       commonConfig:
@@ -51,10 +72,12 @@ spec:
         enable_api: true
     minio:
       enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 150Mi
       persistence:
         storageClass: "local-path"
-    chunksCache:
-      allocatedMemory: 1024
     deploymentMode: SingleBinary
     singleBinary:
       replicas: 1
