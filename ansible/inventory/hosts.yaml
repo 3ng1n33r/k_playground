@@ -7,10 +7,10 @@ all:
   children:
     master:
       vars:
-        cilium_version: '1.17.3'
+        cilium_version: '1.17.4'
         loadbalancer_apiserver_port: 8443
         loadbalancer_apiserver_fqdn: 'cluster-endpoint'
-        flux_version: '2.5.1'
+        flux_version: '2.6.1'
         kubeseal_version: '0.29.0'
         gitlab_repository: orchestration
         gitlab_branch: main
