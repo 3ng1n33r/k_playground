@@ -21,12 +21,10 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: grafana
-      version: 6.29.0
-  install:
-    createNamespace: true
+      version: 6.33.0
   interval: 30m
   releaseName: loki
-  targetNamespace: loki
+  targetNamespace: logs
   values:
     gateway:
       enabled: true
