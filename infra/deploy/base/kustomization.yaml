@@ -6,5 +6,5 @@ resources:
   - sealed-secrets.yaml
   - local-path-storage.yaml
   - metrics-server.yaml
-  - vertical-pod-autoscaler.yaml
+#  - vertical-pod-autoscaler.yaml
 #  - kyverno.yaml
