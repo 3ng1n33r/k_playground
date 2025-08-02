@@ -27,6 +27,7 @@
 
 - name: Join master nodes.
   hosts: master[1:]
+  serial: 1
   become: true
   tasks:
     - name: Check the availability api server port.
@@ -53,6 +54,7 @@
 
 - name: Join worker nodes.
   hosts: worker
+  serial: 1
   become: true
   tasks:
     - name: Check the availability api server port.
