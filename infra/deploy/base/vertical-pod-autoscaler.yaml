@@ -40,7 +40,8 @@ spec:
         limits:
           cpu: 100m
           memory: 128Mi
-      extraArgs: --feature-gates=InPlaceOrRecreate=true
+      extraArgs: 
+        - "--feature-gates=InPlaceOrRecreate=true"
     recommender:
       enabled: true
       replicaCount: 1
@@ -61,4 +62,5 @@ spec:
         limits:
           cpu: 100m
           memory: 128Mi
-      extraArgs: --feature-gates=InPlaceOrRecreate=true
+      extraArgs:
+        - "--feature-gates=InPlaceOrRecreate=true"
