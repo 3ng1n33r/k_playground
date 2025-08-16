@@ -50,6 +50,9 @@ spec:
         limits:
           cpu: 100m
           memory: 128Mi
+      extraArgs:
+        - "--humanize-memory=true"
+        - "--round-cpu-millicores=50"
     updater:
       replicas: 1
       resources:

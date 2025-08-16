@@ -6,12 +6,12 @@ all:
     containerd_pkg_version: '1.7.27-1'
     haproxy_version: '2.8.15-alpine'
     sandbox_image_version: '3.10'
+    loadbalancer_apiserver_port: 8443
+    loadbalancer_apiserver_fqdn: 'cluster-endpoint'
   children:
     master:
       vars:
         cilium_version: '1.17.6'
-        loadbalancer_apiserver_port: 8443
-        loadbalancer_apiserver_fqdn: 'cluster-endpoint'
         flux_version: '2.6.4'
         kubeseal_version: '0.30.0'
         gitlab_repository: orchestration
@@ -24,3 +24,4 @@ all:
         192.168.31.22:
     worker:
       hosts:
+        192.168.31.23:
