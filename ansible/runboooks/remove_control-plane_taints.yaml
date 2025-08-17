@@ -1,0 +1,10 @@
+---
+- name: Runbooks | Make master nodes possible to schedule.
+  hosts: master
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Remove NoSchedule taint.
+      ansible.builtin.shell: kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
