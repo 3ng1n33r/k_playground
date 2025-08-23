@@ -11,9 +11,9 @@ all:
   children:
     master:
       vars:
-        cilium_version: '1.17.6'
+        cilium_version: '1.18.1'
         flux_version: '2.6.4'
-        kubeseal_version: '0.30.0'
+        kubeseal_version: '0.31.0'
         gitlab_repository: orchestration
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
