@@ -8,7 +8,7 @@ spec:
 #  nodeSelector:
 #    matchExpressions:
 #      - key: node-role.kubernetes.io/control-plane
-#        operator: Exists
+#        operator: DoesNotExist
   interfaces:
     - ^eth[0-9]+
   externalIPs: true
@@ -17,7 +17,7 @@ spec:
 apiVersion: "cilium.io/v2alpha1"
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: loadbalancer-ips
+  name: l2-loadbalancer-ips
   namespace: kube-system
 spec:
   blocks:
