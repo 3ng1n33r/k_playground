@@ -64,6 +64,8 @@ spec:
       labelValue: "1"
     hubble:
       enabled: true
+      relay:
+        enabled: true      
       ui:
         enabled: true
       metrics:

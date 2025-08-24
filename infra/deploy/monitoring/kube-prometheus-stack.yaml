@@ -110,7 +110,7 @@ spec:
           {{- range .Alerts }}
           {{- if .Labels.instance }}<b>Instance:</b> {{ .Labels.instance }}{{ end }}
           {{ if .Annotations.summary }}<b>Summary:</b> {{ .Annotations.summary }}{{ end }}
-          {{ if .Annotations.description }}<b>Description:</b> {{ .Annotations.description }}{{ end -}}
+          {{ if .Annotations.description }}<b>Description:</b> {{ .Annotations.description }}{{ end }}
           {{ end -}}
           {{ end }}
       ingress:
