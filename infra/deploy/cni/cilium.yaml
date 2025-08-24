@@ -65,7 +65,7 @@ spec:
     hubble:
       enabled: true
       ui:
-        enabled: false
+        enabled: true
       metrics:
         enableOpenMetrics: true
         enabled:
