@@ -11,7 +11,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
   - name: haproxy
-    image: docker.io/library/haproxy:{{ haproxy_version }}
+    image: docker.io/library/haproxy:{{ haproxy_image_version }}
     imagePullPolicy: IfNotPresent
     resources:
       requests:

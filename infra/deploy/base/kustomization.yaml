@@ -7,4 +7,5 @@ resources:
   - local-path-storage.yaml
   - metrics-server.yaml
   - vertical-pod-autoscaler.yaml
+  - node-problem-detector.yaml
 #  - kyverno.yaml
