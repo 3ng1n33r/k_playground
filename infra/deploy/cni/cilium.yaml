@@ -68,6 +68,11 @@ spec:
         enabled: true
       ui:
         enabled: true
+        ingress:
+          enabled: true
+          className: "nginx"
+          hosts:
+            - hubble-ui.192.168.31.8.sslip.io
       metrics:
         enableOpenMetrics: true
         enabled:

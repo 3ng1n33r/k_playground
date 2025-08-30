@@ -32,3 +32,14 @@ spec:
         - /config/kernel-monitor.json
       custom_plugin_monitors:
         - /config/health-checker-containerd.json
+    image:
+      repository: registry.k8s.io/node-problem-detector/node-problem-detector
+      tag: v0.8.20
+    extraVolumes:
+      - name: containerd
+        hostPath:
+          path: /var/run/containerd/containerd.sock
+          type: Socket
+    extraVolumeMounts:
+      - mountPath: /var/run/containerd/containerd.sock
+        name: containerd
