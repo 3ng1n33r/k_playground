@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: fluent
-      version: 0.50.0
+      version: 0.52.0
   dependsOn:
     - name: loki
   interval: 30m
@@ -49,6 +49,7 @@ spec:
         [INPUT]
             Name tail
             Path /var/log/containers/*.log
+            Exclude_Path /var/log/containers/fluent-bit-*.log
             multiline.parser docker, cri
             Tag kube.*
             Mem_Buf_Limit 5MB
