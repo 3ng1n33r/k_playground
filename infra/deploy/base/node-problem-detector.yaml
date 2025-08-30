@@ -30,13 +30,5 @@ spec:
       heartBeatPeriod: 5m0s
       log_monitors:
         - /config/kernel-monitor.json
-        - /config/readonly-monitor.json
       custom_plugin_monitors:
         - /config/health-checker-containerd.json
-    resources:
-      requests:
-        cpu: 20m
-        memory: 80Mi
-      limits:
-        cpu: 40m
-        memory: 160Mi
