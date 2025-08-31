@@ -81,10 +81,25 @@ spec:
                       "pattern": "CE memory read error .*"
                   },
                   {
+                      "type": "temporary",
+                      "reason": "Ext4Error",
+                      "pattern": "EXT4-fs error .*"
+                  },
+                  {
+                      "type": "temporary",
+                      "reason": "Ext4Warning",
+                      "pattern": "EXT4-fs warning .*"
+                  },
+                  {
+                      "type": "temporary",
+                      "reason": "IOError",
+                      "pattern": "Buffer I/O error .*"
+                  },
+                  {
                       "type": "permanent",
                       "condition": "KernelDeadlock",
-                      "reason": "DockerHung",
-                      "pattern": "task docker:\\w+ blocked for more than \\w+ seconds\\."
+                      "reason": "AUFSUmountHung",
+                      "pattern": "task umount\\.aufs:\\w+ blocked for more than \\w+ seconds\\."
                   },
                   {
                       "type": "permanent",
