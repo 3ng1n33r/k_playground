@@ -94,34 +94,8 @@ spec:
                   }
               ]
           }
-        systemd-monitor.json |
-          {
-              "plugin": "journald",
-              "pluginConfig": {
-                "source": "systemd"
-              },
-              "logPath": "/var/log/journal",
-              "lookback": "5m",
-              "bufferSize": 10,
-              "source": "systemd-monitor",
-              "metricsReporting": true,
-              "conditions": [],
-              "rules": [
-                  {
-                    "type": "temporary",
-                    "reason": "KubeletStart",
-                    "pattern": "Started (Kubernetes kubelet|kubelet.service|kubelet.service - Kubernetes kubelet)."
-                  },
-                  {
-                    "type": "temporary",
-                    "reason": "ContainerdStart",
-                    "pattern": "Starting (containerd container runtime|containerd.service|containerd.service - containerd container runtime)..."
-                  }
-              ]
-          }
       log_monitors:
         - /custom-config/kernel-monitor.json
-        - /custom-config/systemd-monitor.json
 #        - /config/kernel-monitor.json
 #        - /config/systemd-monitor.json
 #      custom_plugin_monitors:
