@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: monitoring-post-deploy
+    - name: base-post-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system

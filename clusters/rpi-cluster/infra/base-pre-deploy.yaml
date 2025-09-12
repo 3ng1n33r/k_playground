@@ -2,15 +2,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: monitoring-deploy
+  name: base-pre-deploy
   namespace: flux-system
 spec:
   dependsOn:
-    - name: monitoring-pre-deploy
+    - name: cilium-pre-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./infra/deploy/monitoring"
+  path: "./infra/pre-deploy/base"
   interval: 60m
   timeout: 5m
   prune: true
