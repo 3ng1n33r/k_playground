@@ -2,4 +2,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: logs
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: monitoring
