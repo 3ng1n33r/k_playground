@@ -55,8 +55,5 @@
           bpf:
             datapathMode: netkit
             masquerade: true
-          rollOutCiliumPods: true
-          operator:
-            rollOutPods: true
           envoy:
             enabled: false
