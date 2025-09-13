@@ -6,7 +6,7 @@
   tasks:
     # CNI Cilium HA
     - name: Initialize the HA-cluster.
-      ansible.builtin.shell: kubeadm init --control-plane-endpoint {{ loadbalancer_apiserver_fqdn }}:{{ loadbalancer_apiserver_port }} --upload-certs --skip-phases=addon/kube-proxy > cluster_initialized.log 2>&1
+      ansible.builtin.shell: kubeadm init --kubernetes-version v{{ kubernetes_pkg_version.split('-')[0] }} --control-plane-endpoint {{ loadbalancer_apiserver_fqdn }}:{{ loadbalancer_apiserver_port }} --upload-certs --skip-phases=addon/kube-proxy > cluster_initialized.log 2>&1
       args:
         chdir: /home/{{ ansible_user }}
         creates: cluster_initialized.log
@@ -14,7 +14,7 @@
 
     # CNI Cilium non-HA
     - name: Initialize the cluster.
-      ansible.builtin.shell: kubeadm init --skip-phases=addon/kube-proxy > cluster_initialized.log 2>&1
+      ansible.builtin.shell: kubeadm init --kubernetes-version v{{ kubernetes_pkg_version.split('-')[0] }} --skip-phases=addon/kube-proxy > cluster_initialized.log 2>&1
       args:
         chdir: /home/{{ ansible_user }}
         creates: cluster_initialized.log
