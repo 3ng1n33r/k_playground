@@ -14,7 +14,7 @@
 
     - name: Add Helm's APT repo.
       ansible.builtin.apt_repository:
-        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/helm-apt-keyring.asc] https://baltocdn.com/helm/stable/debian/ all main"
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/helm-apt-keyring.asc] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"
         state: present
         update_cache: true
 
