@@ -102,12 +102,12 @@
         line: '    sandbox_image = "registry.k8s.io/pause:{{ sandbox_image_version }}"'
 
     - name: Enable and start the Containerd service.
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: containerd
         state: restarted
         enabled: true
 
-    # Install kubeadm, kubelet
+    # Install kubeadm, kubelet, Kubectl
 
     - name: Add Kubernetes apt-key.
       ansible.builtin.get_url:
@@ -127,6 +127,7 @@
         name:
           - kubelet={{ kubernetes_pkg_version }}
           - kubeadm={{ kubernetes_pkg_version }}
+          - kubectl={{ kubernetes_pkg_version }}
         state: present
 
     - name: Hold Kubeadm, Kubelet packages.
@@ -136,6 +137,7 @@
       with_items:
         - kubelet
         - kubeadm
+        - kubectl
         - containerd.io
 
     # Install Haproxy
@@ -153,20 +155,3 @@
   handlers:
     - name: Generate Containerd config.
       ansible.builtin.shell: /usr/bin/containerd config default > /etc/containerd/config.toml
-
-- name: Install dependencies on master hosts.
-  hosts: master
-  become: true
-  tasks:
-
-  # Install Kubectl
-
-    - name: Install Kubectl.
-      ansible.builtin.apt:
-        name: kubectl={{ kubernetes_pkg_version }}
-        state: present
-
-    - name: Hold Kubectl.
-      ansible.builtin.dpkg_selections:
-        name: kubectl
-        selection: hold
