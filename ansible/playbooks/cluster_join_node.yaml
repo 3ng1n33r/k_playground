@@ -2,13 +2,14 @@
 - name: Configure join commands on first master node.
   hosts: master[0]
   become: true
+  gather_facts: false
   tasks:
     - name: Include task to change the LB IP.
       ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
       when: "groups['master'] | length > 1"
 
     - name: Storing the certificates in secret.
-      ansible.builtin.shell: kubeadm init phase upload-certs --upload-certs
+      ansible.builtin.command: kubeadm init phase upload-certs --upload-certs
       register: certificate_key_raw
       when: "groups['master'] | length > 1"
 
@@ -18,7 +19,7 @@
       when: "groups['master'] | length > 1"
 
     - name: Retrieve join command.
-      ansible.builtin.shell: kubeadm token create --print-join-command
+      ansible.builtin.command: kubeadm token create --print-join-command
       register: join_command_raw
 
     - name: Set join command fact.
@@ -29,6 +30,7 @@
   hosts: master[1:]
   serial: 1
   become: true
+  gather_facts: false
   tasks:
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
@@ -56,6 +58,7 @@
   hosts: worker
   serial: 1
   become: true
+  gather_facts: false
   tasks:
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
