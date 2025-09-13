@@ -7,7 +7,7 @@
 
     - name: Add Helm apt-key.
       ansible.builtin.get_url:
-        url: https://baltocdn.com/helm/signing.asc
+        url: https://packages.buildkite.com/helm-linux/helm-debian/gpgkey
         dest: /etc/apt/keyrings/helm-apt-keyring.asc
         mode: '0644'
         force: true
