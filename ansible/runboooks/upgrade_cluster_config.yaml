@@ -1,0 +1,100 @@
+---
+- name: Runbooks | Upgrade cluster config.
+  hosts: master[0]
+  gather_facts: false
+  become: true
+  vars:
+    cluster_config: |
+      ---
+      apiVersion: kubeadm.k8s.io/v1beta4
+      kind: ClusterConfiguration
+      controlPlaneEndpoint: {{ loadbalancer_apiserver_fqdn }}:{{ loadbalancer_apiserver_port }}
+      controllerManager:
+        extraArgs:
+        - name: feature-gates
+          value: InPlacePodVerticalScaling=true
+      apiServer:
+        extraArgs:
+        - name: feature-gates
+          value: InPlacePodVerticalScaling=true
+      kubernetesVersion: v{{ kubernetes_pkg_version.split('-')[0] }}
+      proxy:
+        disabled: true
+      scheduler:
+        extraArgs:
+        - name: feature-gates
+          value: InPlacePodVerticalScaling=true
+      ---
+      apiVersion: kubelet.config.k8s.io/v1beta1
+      kind: KubeletConfiguration
+      featureGates:
+        InPlacePodVerticalScaling: true
+  tasks:
+    - name: Copy config from variable.
+      ansible.builtin.copy:
+        content: "{{ cluster_config }}"
+        dest: /home/{{ ansible_user }}/cluster-config.yaml
+        mode: '0644'
+
+    - name: Get file status.
+      ansible.builtin.stat:
+        path: /home/{{ ansible_user }}/cluster-config.yaml
+      register: file_check_result
+
+    - name: Load config to cluster.
+      ansible.builtin.shell: "kubeadm init phase upload-config all --config cluster-config.yaml >> config_upgrade.log 2>&1"
+      args:
+        chdir: /home/{{ ansible_user }}
+      when: file_check_result.stat.exists
+
+    - name: Apply new changes to control-plane.
+      ansible.builtin.shell: "kubeadm upgrade node phase control-plane >> config_upgrade.log 2>&1"
+      args:
+        chdir: /home/{{ ansible_user }}
+
+    - name: Apply new changes to kubelet.
+      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config >> config_upgrade.log 2>&1"
+      args:
+        chdir: /home/{{ ansible_user }}
+
+    - name: Wait 60 seconds.
+      ansible.builtin.pause:
+        seconds: 60
+
+    - name: Restart service kubelet.
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: kubelet
+
+    - name: Wait 120 seconds.
+      ansible.builtin.pause:
+        seconds: 120
+
+- name:  Runbooks | Upgrade nodes.
+  hosts: master[1:]
+  serial: 1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Apply new changes to control-plane.
+      ansible.builtin.shell: "kubeadm upgrade node phase control-plane >> config_upgrade.log 2>&1"
+      args:
+        chdir: /home/{{ ansible_user }}
+
+    - name: Apply new changes to kubelet.
+      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config >> config_upgrade.log 2>&1"
+      args:
+        chdir: /home/{{ ansible_user }}
+
+    - name: Wait 60 seconds.
+      ansible.builtin.pause:
+        seconds: 60
+
+    - name: Restart service kubelet.
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: kubelet
+
+    - name: Wait 120 seconds.
+      ansible.builtin.pause:
+        seconds: 120
