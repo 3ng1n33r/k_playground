@@ -1,4 +1,7 @@
 ---
+# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_cluster_config.yaml -e upload_config=true
+# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_cluster_config.yaml -l master -e cp_upgrade=true -e kubelet_upgrade=true
+# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_cluster_config.yaml -l worker -e kubelet_upgrade=true
 - name: Runbooks | Upgrade cluster config.
   hosts: master[0]
   gather_facts: false
@@ -30,71 +33,62 @@
       featureGates:
         InPlacePodVerticalScaling: true
   tasks:
-    - name: Copy config from variable.
-      ansible.builtin.copy:
-        content: "{{ cluster_config }}"
-        dest: /home/{{ ansible_user }}/cluster-config.yaml
-        mode: '0644'
+    - name: Upload config to cluster.
+      when: upload_config | default(false) | bool
+      block:
+        - name: Copy config from variable.
+          ansible.builtin.copy:
+            content: "{{ cluster_config }}"
+            dest: /home/{{ ansible_user }}/cluster-config.yaml
+            mode: '0644'
 
-    - name: Get file status.
-      ansible.builtin.stat:
-        path: /home/{{ ansible_user }}/cluster-config.yaml
-      register: file_check_result
+        - name: Get file status.
+          ansible.builtin.stat:
+            path: /home/{{ ansible_user }}/cluster-config.yaml
+          register: file_check_result
 
-    - name: Load config to cluster.
-      ansible.builtin.shell: "kubeadm init phase upload-config all --config cluster-config.yaml >> config_upgrade.log 2>&1"
-      args:
-        chdir: /home/{{ ansible_user }}
-      when: file_check_result.stat.exists
-
-    - name: Apply new changes to control-plane.
-      ansible.builtin.shell: "kubeadm upgrade node phase control-plane >> config_upgrade.log 2>&1"
-      args:
-        chdir: /home/{{ ansible_user }}
-
-    - name: Apply new changes to kubelet.
-      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config >> config_upgrade.log 2>&1"
-      args:
-        chdir: /home/{{ ansible_user }}
-
-    - name: Wait 60 seconds.
-      ansible.builtin.pause:
-        seconds: 60
-
-    - name: Restart service kubelet.
-      ansible.builtin.systemd_service:
-        state: restarted
-        name: kubelet
-
-    - name: Wait 120 seconds.
-      ansible.builtin.pause:
-        seconds: 120
+        - name: Load config to cluster.
+          ansible.builtin.shell: "kubeadm init phase upload-config all --config cluster-config.yaml > config_upgrade.log 2>&1"
+          args:
+            chdir: /home/{{ ansible_user }}
+          when: file_check_result.stat.exists
 
 - name:  Runbooks | Upgrade nodes.
-  hosts: master[1:]
+  hosts: all
   serial: 1
   become: true
-  gather_facts: false
   tasks:
     - name: Apply new changes to control-plane.
-      ansible.builtin.shell: "kubeadm upgrade node phase control-plane >> config_upgrade.log 2>&1"
+      ansible.builtin.shell: "kubeadm upgrade node phase control-plane > control-plane_upgrade.log 2>&1"
       args:
         chdir: /home/{{ ansible_user }}
+      when: cp_upgrade | default(false) | bool
 
     - name: Apply new changes to kubelet.
-      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config >> config_upgrade.log 2>&1"
+      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config > kubelet_upgrade.log 2>&1"
       args:
         chdir: /home/{{ ansible_user }}
+      when: kubelet_upgrade | default(false) | bool
 
-    - name: Wait 60 seconds.
+    - name: Drain node.
+      local_action: ansible.builtin.command kubectl drain {{ ansible_hostname }} --ignore-daemonsets --delete-emptydir-data
+      ignore_errors: true
+      become: false
+      when: kubelet_upgrade | default(false) | bool
+
+    - name: Pause 180 second for Pod eviсtion.
       ansible.builtin.pause:
-        seconds: 60
+        seconds: 180
+      when: kubelet_upgrade | default(false) | bool
 
     - name: Restart service kubelet.
       ansible.builtin.systemd_service:
         state: restarted
+        daemon_reload: true
         name: kubelet
+      when: kubelet_upgrade | default(false) | bool
 
-    - name: Wait 120 seconds.
-      ansible.builtin.pause:
-        seconds: 120
+    - name: Uncordon node.
+      local_action: ansible.builtin.command kubectl uncordon {{ ansible_hostname }}
+      become: false
+      when: kubelet_upgrade | default(false) | bool
