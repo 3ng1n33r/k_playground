@@ -11,15 +11,15 @@
 
     - name: Set the fact to the current kubeadm version.
       ansible.builtin.set_fact:
-        kubeadm_version: "{{ ansible_facts.packages['kubeadm'][0].version.split('-')[0] }}"
-        kubernetes_version: "{{ kubernetes_pkg_version.split('-')[0] }}"
+        current_version: "{{ ansible_facts.packages['kubeadm'][0].version.split('-')[0] }}"
+        desired_version: "{{ kubernetes_pkg_version.split('-')[0] }}"
 
     - name: Сompare the current version with the desired one.
       ansible.builtin.debug:
-        msg: "current version: {{ kubeadm_version }}, required version: {{ kubernetes_version }}"
+        msg: "current version: {{ current_version }}, required version: {{ desired_version }}"
 
     - name: Upgrade cluster.
-      when: kubeadm_version is version(kubernetes_version, '<', version_type='semver')
+      when: current_version is version(desired_version, '<', version_type='semver')
       block:
         - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago.
           ansible.builtin.apt:
@@ -40,10 +40,10 @@
             state: present
 
         - name: Upgrading node.
-          ansible.builtin.shell: "kubeadm upgrade node > node_upgrade_v{{ kubernetes_version }}.log 2>&1"
+          ansible.builtin.shell: "kubeadm upgrade node > node_upgrade_v{{ desired_version }}.log 2>&1"
           args:
             chdir: /home/{{ ansible_user }}
-            creates: node_upgrade_v{{ kubernetes_version }}.log
+            creates: node_upgrade_v{{ desired_version }}.log
 
         - name: Drain node.
           local_action: ansible.builtin.command kubectl drain {{ ansible_hostname }} --ignore-daemonsets --delete-emptydir-data

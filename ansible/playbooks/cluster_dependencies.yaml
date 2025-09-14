@@ -99,7 +99,7 @@
       ansible.builtin.lineinfile:
         path: /etc/containerd/config.toml
         regexp: '^    sandbox_image'
-        line: '    sandbox_image = "registry.k8s.io/pause:{{ sandbox_image_version }}"'
+        line: '    sandbox_image = "registry.k8s.io/pause:{{ sandbox_img_version }}"'
 
     - name: Enable and start the Containerd service.
       ansible.builtin.systemd_service:
