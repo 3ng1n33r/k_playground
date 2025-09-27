@@ -33,6 +33,9 @@ spec:
     controller:
       replicaCount: 2
       minAvailable: 1
+      nodeSelector:
+        kubernetes.io/os: linux
+        node-role.kubernetes.io/ingress: "true"
       metrics:
         enabled: true
         serviceMonitor:
