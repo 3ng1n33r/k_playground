@@ -11,9 +11,9 @@ all:
   children:
     master:
       vars:
-        cilium_version: '1.18.1'
+        cilium_version: '1.18.2'
         flux_version: '2.6.4'
-        kubeseal_version: '0.31.0'
+        kubeseal_version: '0.32.2'
         gitlab_repository: orchestration
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
@@ -24,3 +24,9 @@ all:
         192.168.31.22:
     worker:
       hosts:
+        192.168.31.23:
+    ingress:
+      hosts:
+        192.168.31.20:
+        192.168.31.21:
+        192.168.31.22:     
