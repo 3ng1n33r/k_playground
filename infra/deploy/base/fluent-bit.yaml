@@ -79,4 +79,3 @@ spec:
             port 80
             labels job=fluentbit
             label_keys $sub['stream']
-            line_format json
