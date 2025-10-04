@@ -61,6 +61,11 @@ spec:
             Systemd_Filter _SYSTEMD_UNIT=kubelet.service
             Systemd_Filter _SYSTEMD_UNIT=containerd.service
             Read_From_Tail On
+
+        [INPUT]
+            Name kmsg
+            Tag kernel.*
+            Prio_Level 4
       outputs: |
         [OUTPUT]
             Name loki
@@ -80,3 +85,10 @@ spec:
             labels job=fluentbit
             label_keys $sub['stream']
             line_format json
+
+        [OUTPUT]
+            Name loki
+            Match kernel.*
+            host loki-gateway
+            port 80
+            labels job=fluentbit
