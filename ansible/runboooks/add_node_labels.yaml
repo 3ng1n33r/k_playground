@@ -30,3 +30,10 @@
 
     - name: Adding label for worker node.
       local_action: ansible.builtin.command kubectl label node {{ ansible_hostname }} node-role.kubernetes.io/worker=
+
+- name: Runbooks | Labeling ingress nodes.
+  hosts: ingress
+  gather_facts: true
+  tasks:
+    - name: Adding label ingress.
+      local_action: ansible.builtin.command kubectl label node {{ ansible_hostname }} node-role.kubernetes.io/ingress=true
