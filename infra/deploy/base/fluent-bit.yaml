@@ -61,7 +61,6 @@ spec:
             Systemd_Filter _SYSTEMD_UNIT=kubelet.service
             Systemd_Filter _SYSTEMD_UNIT=containerd.service
             Read_From_Tail On
-
       outputs: |
         [OUTPUT]
             Name loki
@@ -80,3 +79,4 @@ spec:
             port 80
             labels job=fluentbit
             label_keys $sub['stream']
+            line_format json
