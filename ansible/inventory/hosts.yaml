@@ -12,7 +12,7 @@ all:
     master:
       vars:
         cilium_version: '1.18.2'
-        flux_version: '2.6.4'
+        flux_version: '2.7.0'
         kubeseal_version: '0.32.2'
         gitlab_repository: orchestration
         gitlab_branch: main
