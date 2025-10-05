@@ -39,7 +39,10 @@
         update_repo_cache: true
         kubeconfig: /etc/kubernetes/admin.conf
         values:
+          rollOutCiliumPods: false
           kubeProxyReplacement: true
+          operator:
+            rollOutPods: false
           l2announcements:
             enabled: true
           k8sClientRateLimit:
