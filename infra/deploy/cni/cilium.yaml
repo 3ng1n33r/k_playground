@@ -26,9 +26,11 @@ spec:
   releaseName: cilium
   targetNamespace: kube-system
   values:
+    rollOutCiliumPods: false
     envoy:
       enabled: false
     operator:
+      rollOutPods: false
       replicas: 2
       prometheus:
         enabled: true
