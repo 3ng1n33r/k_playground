@@ -72,3 +72,15 @@ spec:
         requests:
           cpu: 5m
           memory: 64Mi
+      config:
+        core:
+          sources: ["custom"]
+        sources:
+          custom:
+            - name: "nvme detection"
+              labels:
+                "feature.node.kubernetes.io/storage-nvme.present": "true"
+              matchFeatures:
+                - feature: storage.block
+                  matchExpressions:
+                    name: {op: InRegexp, value: ["^nvme"]}
