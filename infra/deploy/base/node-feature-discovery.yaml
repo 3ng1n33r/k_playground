@@ -79,8 +79,16 @@ spec:
           custom:
             - name: "nvme detection"
               labels:
-                "feature.node.kubernetes.io/storage-nvme.present": "true"
+                "feature.node.kubernetes.io/storage-nvme": "true"
               matchFeatures:
                 - feature: storage.block
                   matchExpressions:
                     name: {op: InRegexp, value: ["^nvme"]}
+            - name: "network interface speeds"  
+              labelsTemplate: |  
+                {{ range .network.device }}network-{{ .name }}-speed={{ .speed }}  
+                {{ end }}  
+              matchFeatures:  
+                - feature: network.device  
+                  matchExpressions:  
+                    operstate: {op: In, value: ["up"]}
