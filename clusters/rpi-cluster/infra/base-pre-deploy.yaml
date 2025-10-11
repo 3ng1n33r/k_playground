@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: secrets-pre-deploy
+    - name: secrets-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
