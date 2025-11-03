@@ -30,6 +30,9 @@
       ---
       apiVersion: kubelet.config.k8s.io/v1beta1
       kind: KubeletConfiguration
+      kubeReserved:
+        cpu: "400m"
+        memory: "400Mi"
       featureGates:
         InPlacePodVerticalScaling: true
   tasks:

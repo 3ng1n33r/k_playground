@@ -11,8 +11,8 @@ all:
   children:
     master:
       vars:
-        cilium_version: '1.18.2'
-        flux_version: '2.7.2'
+        cilium_version: '1.18.3'
+        flux_version: '2.7.3'
         kubeseal_version: '0.32.2'
         gitlab_repository: orchestration
         gitlab_branch: main
@@ -20,13 +20,9 @@ all:
         gitlab_user: s045724
       hosts:
         192.168.31.20:
-        192.168.31.21:
-        192.168.31.22:
     worker:
       hosts:
         192.168.31.23:
     ingress:
       hosts:
-        192.168.31.20:
-        192.168.31.21:
-        192.168.31.22:     
+        192.168.31.20:  
