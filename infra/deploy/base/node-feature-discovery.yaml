@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: nfd
-      version: 0.18.1
+      version: 0.18.2
   interval: 30m0s
   install:
     createNamespace: true
@@ -30,6 +30,8 @@ spec:
   values:
     master:
       enable: true
+      extraArgs: 
+        - "-v=2"
       replicaCount: 1
       resources:
         limits:
@@ -74,7 +76,8 @@ spec:
           memory: 64Mi
       config:
         core:
-          sources: ["custom"]
+          sleepInterval: 60s
+          labelSources: ["custom"]
         sources:
           custom:
             - name: "nvme detection"

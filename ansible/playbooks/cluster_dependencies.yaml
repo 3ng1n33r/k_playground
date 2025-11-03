@@ -23,10 +23,15 @@
       ansible.builtin.reboot:
       when: reboot_required_file.stat.exists
 
+    - name: Remove dependencies that are no longer required.
+      ansible.builtin.apt:
+        autoremove: true
+
     # Disable SWAP
 
     - name: Disable SWAP.
       ansible.builtin.command: swapoff -a
+      changed_when: false
 
     - name: Disable SWAP in fstab.
       ansible.builtin.replace:
@@ -155,3 +160,4 @@
   handlers:
     - name: Generate Containerd config.
       ansible.builtin.shell: /usr/bin/containerd config default > /etc/containerd/config.toml
+      changed_when: false
