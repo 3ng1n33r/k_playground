@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: nfd
-      version: 0.18.2
+      version: 0.18.3
   interval: 30m0s
   install:
     createNamespace: true
@@ -30,8 +30,8 @@ spec:
   values:
     master:
       enable: true
-      extraArgs: 
-        - "-v=2"
+#      extraArgs: 
+#        - "-v=2"
       replicaCount: 1
       resources:
         limits:
@@ -95,3 +95,41 @@ spec:
                 - feature: network.device  
                   matchExpressions:  
                     operstate: {op: In, value: ["up"]}
+            - name: "1G network interface"
+              labels:
+                "feature.node.kubernetes.io/network-speed-1g": "true"
+              matchFeatures:
+                - feature: network.device
+                  matchExpressions:
+                    name: {op: In, value: ["eth0"]}
+                    speed: {op: In, value: ["1000"]}
+                    operstate: {op: In, value: ["up"]}
+            - name: "nfd built-in cpu-model labels"  
+              labelsTemplate: |  
+                {{ range .cpu.model }}cpu-model.{{ .Name }}={{ .Value }}  
+                {{ end }}  
+              matchFeatures:  
+                - feature: cpu.model  
+                  matchName:  
+                    op: Exists
+            - name: "intel cpu"  
+              labels:  
+                "feature.node.kubernetes.io/cpu-intel": "true"  
+              matchFeatures:  
+                - feature: cpu.model  
+                  matchExpressions:  
+                    vendor_id: {op: In, value: ["Intel"]}
+            - name: "amd cpu"  
+              labels:  
+                "feature.node.kubernetes.io/cpu-amd": "true"  
+              matchFeatures:  
+                - feature: cpu.model  
+                  matchExpressions:  
+                    vendor_id: {op: In, value: ["AMD"]}
+            - name: "arm cpu"  
+              labels:  
+                "feature.node.kubernetes.io/cpu-arm": "true"  
+              matchFeatures:  
+                - feature: cpu.model  
+                  matchExpressions:  
+                    vendor_id: {op: In, value: ["ARM"]}

@@ -13,7 +13,7 @@ all:
       vars:
         cilium_version: '1.18.3'
         flux_version: '2.7.3'
-        kubeseal_version: '0.32.2'
+        kubeseal_version: '0.33.1'
         gitlab_repository: orchestration
         gitlab_branch: main
         gitlab_path: 'clusters/rpi-cluster'
