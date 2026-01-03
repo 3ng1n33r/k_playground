@@ -1,21 +1,7 @@
 ---
-- name: Make kubernetes directory.
-  ansible.builtin.file:
-    path: /etc/kubernetes
-    state: directory
-    mode: '0751'
-    owner: root
-
-- name: Make manifests directory.
-  ansible.builtin.file:
-    path: /etc/kubernetes/manifests
-    state: directory
-    mode: '0700'
-    owner: root
-
 - name: Make haproxy directory.
   ansible.builtin.file:
-    path: /etc/haproxy
+    path: "{{ haproxy_config_dir }}"
     state: directory
     mode: '0755'
     owner: root
@@ -23,7 +9,7 @@
 - name: Write haproxy configuration.
   ansible.builtin.template:
     src: haproxy.cfg.j2
-    dest: /etc/haproxy/haproxy.cfg
+    dest: "{{ haproxy_config_dir }}/haproxy.cfg"
     owner: root
     mode: '0644'
     backup: true
@@ -31,5 +17,5 @@
 - name: Write static pod.
   ansible.builtin.template:
     src: haproxy.manifest.j2
-    dest: /etc/kubernetes/manifests/haproxy.yaml
+    dest: "{{ kube_manifest_dir }}/haproxy.yaml"
     mode: '0600'

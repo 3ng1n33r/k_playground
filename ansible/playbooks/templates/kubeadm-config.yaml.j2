@@ -1,0 +1,43 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: v{{ kubernetes_pkg_version.split('-')[0] }}
+encryptionAlgorithm: {{ kube_asymmetric_encryption_algorithm }}
+certificateValidityPeriod: {{ kube_cert_validity_period }}
+caCertificateValidityPeriod: {{ kube_ca_cert_validity_period }}
+clusterName: {{ cluster_name }}
+networking:
+  dnsDomain: {{ dns_domain }}
+  serviceSubnet: "{{ kube_service_subnets }}"
+{% if groups['master'] | length == 3 %}
+controlPlaneEndpoint: {{ loadbalancer_apiserver_address }}:{{ loadbalancer_apiserver_port }}
+{% endif %}
+{% if groups['etcd'] | length in [3, 5] %}
+etcd:
+  external:
+    caFile: {{ kube_cert_dir }}/etcd/ca.crt
+    certFile: {{ kube_cert_dir }}/apiserver-etcd-client.crt
+    keyFile: {{ kube_cert_dir }}/apiserver-etcd-client.key
+    endpoints:
+{% for host in groups['etcd'] %}
+    - https://{{ host }}:2379
+{% endfor %}
+{% endif %}
+apiServer:
+  extraArgs:
+{% if kube_apiserver_feature_gates %}
+  - name: feature-gates
+    value: "{{ kube_apiserver_feature_gates | join(',') }}"
+{% endif %}
+controllerManager:
+  extraArgs:
+{% if kube_controller_feature_gates %}
+  - name: feature-gates
+    value: "{{ kube_controller_feature_gates | join(',') }}"
+{% endif %}
+scheduler:
+  extraArgs:
+{% if kube_scheduler_feature_gates %}
+  - name: feature-gates
+    value: "{{ kube_scheduler_feature_gates | join(',') }}"
+{% endif %}
