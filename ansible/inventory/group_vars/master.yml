@@ -1,0 +1,12 @@
+kube_asymmetric_encryption_algorithm: "RSA-2048"
+kube_cert_validity_period: 87600h
+kube_ca_cert_validity_period: 87600h
+kube_apiserver_feature_gates:
+  - InPlacePodVerticalScaling=true
+kube_controller_feature_gates:
+  - InPlacePodVerticalScaling=true
+kube_scheduler_feature_gates:
+  - InPlacePodVerticalScaling=true
+kubeadm_init_phases_skip:
+  - addon/kube-proxy
+kube_service_subnets: "10.96.0.0/12"

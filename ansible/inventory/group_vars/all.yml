@@ -1,0 +1,66 @@
+ansible_user: 'pi'
+cluster_name: kubernetes
+dns_domain: 'cluster.local'
+loadbalancer_apiserver_port: 8443
+loadbalancer_apiserver_address: 'cluster-endpoint'
+kubernetes_release: '1.32'
+kubernetes_pkg_version: '1.32.11-1.1'
+containerd_pkg_version: '1.7.29-1~ubuntu.24.04~noble'
+haproxy_image: 'docker.io/library/haproxy:3.2.10-alpine'
+sandbox_image: 'registry.k8s.io/pause:3.10'
+cilium_version: '1.18.5'
+flux_version: '2.7.5'
+kubeseal_version: '0.34.0'
+gitlab_repository: orchestration
+gitlab_branch: main
+gitlab_path: 'clusters/rpi-cluster'
+gitlab_user: s045724
+kube_config_dir: /etc/kubernetes
+kube_cert_dir: "{{ kube_config_dir }}/pki"
+kube_manifest_dir: "{{ kube_config_dir }}/manifests"
+haproxy_config_dir: /etc/haproxy
+containerd_config_dir: /etc/containerd
+kubelet_config_dir: /var/lib/kubelet
+bin_dir: /usr/local/bin
+cri_socket: "unix:///var/run/containerd/containerd.sock"
+# kubelet
+kubelet_max_pods: 110
+kubelet_pod_pids_limit: -1
+kubelet_healthz_port: 10248
+kubelet_healthz_bind_address: 127.0.0.1
+kubelet_status_update_frequency: 10s
+kubelet_fail_swap_on: true
+kubelet_authentication_token_webhook: true
+kubelet_authorization_mode_webhook: true
+kubelet_cgroup_driver: systemd
+kubelet_logfiles_max_nr: 5
+kubelet_logfiles_max_size: 10Mi
+kubelet_rotate_certificates: true
+kubelet_rotate_server_certificates: false
+kubelet_feature_gates:
+  - InPlacePodVerticalScaling=true
+kubelet_max_parallel_image_pulls: 1
+kubelet_image_gc_high_threshold: 85
+kubelet_image_gc_low_threshold: 80
+kubelet_event_record_qps: 5
+kubelet_shutdown_grace_period: 30s
+kubelet_shutdown_grace_period_critical_pods: 10s
+kubelet_swap_behavior: UnlimitedSwap
+kubelet_streaming_connection_idle_timeout: "4h0m0s"
+kube_resolv_conf: "/run/systemd/resolve/resolv.conf"
+kubelet_cluster_dns:
+  - 10.96.0.10
+eviction_hard:
+  memory.available: "100Mi"
+  nodefs.available: "10%"
+  nodefs.inodesFree: "5%"
+  imagefs.available: "15%"
+  imagefs.inodesFree: "5%"
+kube_reserved:
+  cpu: "250m"
+  memory: "400Mi"
+  ephemeral-storage: "1Gi"
+system_reserved:
+  cpu: "250m"
+  memory: "400Mi"
+  ephemeral-storage: "1Gi"

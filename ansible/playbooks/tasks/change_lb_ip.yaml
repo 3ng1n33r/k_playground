@@ -3,5 +3,5 @@
   ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: "^{{ groups['master'][0] }}"
-    line: "127.0.0.1        {{ loadbalancer_apiserver_fqdn }}"
+    line: "127.0.0.1        {{ loadbalancer_apiserver_address }}"
     state: present

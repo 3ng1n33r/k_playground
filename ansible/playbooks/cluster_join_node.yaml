@@ -6,18 +6,18 @@
   tasks:
     - name: Include task to change the LB IP.
       ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
-      when: "groups['master'] | length > 1"
+      when: "groups['master'] | length >= 3"
 
-    - name: Storing the certificates in secret.
-      ansible.builtin.command: kubeadm init phase upload-certs --upload-certs
-      register: certificate_key_raw
-      changed_when: false
-      when: "groups['master'] | length > 1"
-
-    - name: Set certificate key fact.
-      ansible.builtin.set_fact:
-        certificate_key: "{{ certificate_key_raw.stdout_lines[-1] }}"
-      when: "groups['master'] | length > 1"
+#    - name: Storing the certificates in secret.
+#      ansible.builtin.command: kubeadm init phase upload-certs --upload-certs
+#      register: certificate_key_raw
+#      changed_when: false
+#      when: "groups['master'] | length >= 3"
+#
+#    - name: Set certificate key fact.
+#      ansible.builtin.set_fact:
+#        certificate_key: "{{ certificate_key_raw.stdout_lines[-1] }}"
+#      when: "groups['master'] | length >= 3"
 
     - name: Retrieve join command.
       ansible.builtin.command: kubeadm token create --print-join-command
@@ -36,11 +36,12 @@
   tasks:
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
-        host: "{{ loadbalancer_apiserver_fqdn }}"
+        host: "{{ loadbalancer_apiserver_address }}"
         port: "{{ loadbalancer_apiserver_port }}"
 
     - name: Join master node to cluster.
-      ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --certificate-key {{ hostvars[groups['master'][0]].certificate_key }} > node_joined.log 2>&1"
+      #ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --certificate-key {{ hostvars[groups['master'][0]].certificate_key }} > node_joined.log 2>&1"
+      ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --skip-phases=control-plane-prepare/download-certs > node_joined.log 2>&1"
       args:
         chdir: /home/{{ ansible_user }}
         creates: node_joined.log
@@ -64,8 +65,8 @@
   tasks:
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
-        host: "{{ loadbalancer_apiserver_fqdn if (groups['master'] | length > 1) else groups['master'][0] }}"
-        port: "{{ loadbalancer_apiserver_port if (groups['master'] | length > 1) else '6443' }}"
+        host: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
+        port: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
 
     - name: Join worker node to cluster.
       ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} > node_joined.log 2>&1"
@@ -77,8 +78,31 @@
       ansible.builtin.wait_for:
         port: "{{ loadbalancer_apiserver_port }}"
         delay: 30
-      when: "groups['master'] | length > 1"
+      when: "groups['master'] | length >= 3"
 
     - name: Include task to change the LB IP.
       ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
-      when: "groups['master'] | length > 1"
+      when: "groups['master'] | length >= 3"
+
+- name: Upgrade kubelet config.
+  hosts: master,worker
+  serial: 1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Write kubelet config file.
+      ansible.builtin.template:  
+        src: "kubelet-config.yaml.j2"
+        dest: "{{ kubelet_config_dir }}/config.yaml"
+        mode: '0644'
+        owner: root
+        group: root
+        backup: true
+      notify: Restart kubelet.
+
+  handlers:  
+    - name: Restart kubelet.
+      ansible.builtin.systemd_service:  
+        name: kubelet  
+        state: restarted  
+        daemon_reload: true
