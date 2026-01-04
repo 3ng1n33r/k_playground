@@ -3,4 +3,5 @@
   hosts: master
   tasks:
     - name: Remove NoSchedule taint.
-      local_action: ansible.builtin.command kubectl taint node {{ ansible_hostname }} node-role.kubernetes.io/control-plane:NoSchedule-
+      ansible.builtin.command: kubectl taint node {{ ansible_hostname }} node-role.kubernetes.io/control-plane:NoSchedule-
+      delegate_to: localhost
