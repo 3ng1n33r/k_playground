@@ -75,8 +75,8 @@
         - name: Include haproxy tasks.
           ansible.builtin.include_tasks: tasks/install_haproxy.yaml
 
-    - name: Include cert tasks.
-      ansible.builtin.include_tasks: tasks/copy_certs.yaml
+    - name: Include etcd cert tasks.
+      ansible.builtin.include_tasks: tasks/copy_etcd_certs.yaml
       when:
         - groups['master'] | length >= 3
         - groups['etcd'] | length in [3, 5]
@@ -93,12 +93,13 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Write kubeadm-config.
+    - name: Write kubeadm config.
       ansible.builtin.template:
         src: kubeadm-config.yaml.j2
         dest: "{{ kube_config_dir }}/kubeadm-config.yaml"
         mode: '0600'
         owner: root
+        backup: true
       when: inventory_hostname == groups['master'][0]
 
     - name: Create certs on first control-plane node.
@@ -142,7 +143,10 @@
         group: root
         mode: "{{ '0600' if item is match('.*\\.(key|pub)$') else '0644' }}"
       loop: "{{ lookup('ansible.builtin.fileglob', '/tmp/kubernetes-certs/*', wantlist=True) }}"
-      when: inventory_hostname != groups['master'][0]
+      when:
+        - groups['master'] | length >= 3
+        - groups['etcd'] | length in [3, 5] 
+        - inventory_hostname != groups['master'][0]
 
     # HA
     - name: Initialize the HA-cluster.
@@ -169,21 +173,3 @@
     - name: Include kubeconfig copy tasks.
       ansible.builtin.include_tasks: tasks/copy_kubeconfig.yaml
       when: inventory_hostname == groups['master'][0]
-
-    - name: Write kubelet config file.
-      ansible.builtin.template:  
-        src: "kubelet-config.yaml.j2"
-        dest: "{{ kubelet_config_dir }}/config.yaml"
-        mode: '0644'
-        owner: root
-        group: root
-        backup: true
-      when: inventory_hostname == groups['master'][0]
-      notify: Restart kubelet.
-
-  handlers:  
-    - name: Restart kubelet.
-      ansible.builtin.systemd_service:  
-        name: kubelet  
-        state: restarted  
-        daemon_reload: true

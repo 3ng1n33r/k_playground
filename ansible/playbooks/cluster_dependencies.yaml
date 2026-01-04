@@ -3,12 +3,11 @@
   hosts: all
   become: true
   tasks:
-    # Upgrade the OS
+    # Add repos
+    - name: Add repos.
+      ansible.builtin.include_tasks: tasks/add_repos.yaml
 
-    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago.
-      ansible.builtin.apt:
-        update_cache: true
-        cache_valid_time: 3600
+    # Upgrade the OS
 
     - name: Upgrade OS.
       when: upgrade_os | default(false) | bool
@@ -67,29 +66,6 @@
         - net.bridge.bridge-nf-call-iptables
         - net.ipv4.ip_forward
 
-    # Install Containerd
-
-    - name: Install required packages.
-      ansible.builtin.apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-        state: present
-
-    - name: Add Docker apt-key.
-      ansible.builtin.get_url:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        dest: /etc/apt/keyrings/docker-apt-keyring.asc
-        mode: '0644'
-        force: true
-
-    - name: Add Docker's APT repo.
-      ansible.builtin.apt_repository:
-        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/docker-apt-keyring.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-        state: present
-        update_cache: true
-
     - name: Unhold packages.
       ansible.builtin.dpkg_selections:
         name: "{{ item }}"
@@ -101,12 +77,13 @@
         - containerd.io
       ignore_errors: true
 
+    # Install Containerd
+
     - name: Install Containerd.
       ansible.builtin.apt:
         name: containerd.io={{ containerd_pkg_version }}
         state: present
-      notify:
-        - Generate Containerd config.
+      notify: Generate Containerd config.
 
     - name: Force all notified handlers to run at this point.
       ansible.builtin.meta: flush_handlers
@@ -114,15 +91,17 @@
     - name: Configuring Systemd cgroup driver for Containerd.
       ansible.builtin.lineinfile:
         path: "{{ containerd_config_dir }}/config.toml"
-        regexp: '            SystemdCgroup = false'
-        line: '            SystemdCgroup = true'
+        regexp: "            SystemdCgroup = false"
+        line: "            SystemdCgroup = true"
+        backup: true
       notify: Restart containerd.
 
     - name: Configuring Pause image version.
       ansible.builtin.lineinfile:
         path: "{{ containerd_config_dir }}/config.toml"
-        regexp: '^    sandbox_image'
-        line: '    sandbox_image = "{{ sandbox_image }}"'
+        regexp: "^      sandbox"
+        line: "      sandbox = '{{ sandbox_image }}'"
+        backup: true
       notify: Restart containerd.
 
     - name: Enable and start the Containerd service.
@@ -132,19 +111,6 @@
         enabled: true
 
     # Install kubeadm, kubelet, Kubectl
-
-    - name: Add Kubernetes apt-key.
-      ansible.builtin.get_url:
-        url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_release }}/deb/Release.key"
-        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
-        mode: '0644'
-        force: true
-
-    - name: Add Kubernetes APT repository.
-      ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_release }}/deb/ /"
-        state: present
-        update_cache: true
 
     - name: Install Kubeadm, Kubelet packages.
       ansible.builtin.apt:

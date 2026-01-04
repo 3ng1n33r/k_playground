@@ -1,0 +1,64 @@
+---
+# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_config.yaml -e upload_kubelet=true
+# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_config.yaml -e kubelet_upgrade=true
+- name: Runbooks | Upgrade cluster config.
+  hosts: master,worker
+  gather_facts: false
+  serial: 1
+  become: true
+  tasks:
+    - name: Write kubeadm config.
+      ansible.builtin.template:
+        src: ../playbooks/templates/kubeadm-config.yaml.j2
+        dest: "{{ kube_config_dir }}/kubeadm-config.yaml"
+        mode: '0600'
+        owner: root
+        backup: true
+      when: 
+        - inventory_hostname == groups['master'][0]
+        - (upload_all | default(false) | bool) or (upload_kubelet | default(false) | bool)
+
+    - name: Get file status.
+      ansible.builtin.stat:
+        path: "{{ kube_config_dir }}/kubeadm-config.yaml"
+      register: file_check_result
+      when: 
+        - inventory_hostname == groups['master'][0]
+        - (upload_all | default(false) | bool) or (upload_kubelet | default(false) | bool)
+
+    - name: Load config to cluster.
+      ansible.builtin.shell: "kubeadm init phase upload-config all --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
+      args:
+        chdir: "{{ kube_config_dir }}"
+      when: 
+        - file_check_result.stat.exists | default(false)
+        - upload_all | default(false) | bool
+        - inventory_hostname == groups['master'][0]
+
+    - name: Load kubelet config to cluster.
+      ansible.builtin.shell: "kubeadm init phase upload-config kubelet --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
+      args:
+        chdir: "{{ kube_config_dir }}"
+      when: 
+        - file_check_result.stat.exists | default(false)
+        - upload_kubelet | default(false) | bool
+        - inventory_hostname == groups['master'][0]
+
+    - name: Apply new changes to control-plane.
+      ansible.builtin.shell: "kubeadm upgrade node phase control-plane > /home/{{ ansible_user }}/control-plane_upgrade.log 2>&1"
+      args:
+        chdir: "{{ kube_config_dir }}"
+      when: cp_upgrade | default(false) | bool
+
+    - name: Apply new changes to kubelet.
+      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config > /home/{{ ansible_user }}/kubelet_upgrade.log 2>&1"
+      args:
+        chdir: "{{ kube_config_dir }}"
+      when: kubelet_upgrade | default(false) | bool
+
+    - name: Restart service kubelet.
+      ansible.builtin.systemd_service:
+        state: restarted
+        daemon_reload: true
+        name: kubelet
+      when: kubelet_upgrade | default(false) | bool

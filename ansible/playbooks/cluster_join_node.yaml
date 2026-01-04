@@ -83,26 +83,3 @@
     - name: Include task to change the LB IP.
       ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
       when: "groups['master'] | length >= 3"
-
-- name: Upgrade kubelet config.
-  hosts: master,worker
-  serial: 1
-  become: true
-  gather_facts: false
-  tasks:
-    - name: Write kubelet config file.
-      ansible.builtin.template:  
-        src: "kubelet-config.yaml.j2"
-        dest: "{{ kubelet_config_dir }}/config.yaml"
-        mode: '0644'
-        owner: root
-        group: root
-        backup: true
-      notify: Restart kubelet.
-
-  handlers:  
-    - name: Restart kubelet.
-      ansible.builtin.systemd_service:  
-        name: kubelet  
-        state: restarted  
-        daemon_reload: true
