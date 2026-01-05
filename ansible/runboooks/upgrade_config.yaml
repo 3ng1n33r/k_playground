@@ -14,7 +14,7 @@
         mode: '0600'
         owner: root
         backup: true
-      when: 
+      when:
         - inventory_hostname == groups['master'][0]
         - (upload_all | default(false) | bool) or (upload_kubelet | default(false) | bool)
 
@@ -30,7 +30,7 @@
       ansible.builtin.shell: "kubeadm init phase upload-config all --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
-      when: 
+      when:
         - file_check_result.stat.exists | default(false)
         - upload_all | default(false) | bool
         - inventory_hostname == groups['master'][0]
@@ -39,7 +39,7 @@
       ansible.builtin.shell: "kubeadm init phase upload-config kubelet --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
-      when: 
+      when:
         - file_check_result.stat.exists | default(false)
         - upload_kubelet | default(false) | bool
         - inventory_hostname == groups['master'][0]

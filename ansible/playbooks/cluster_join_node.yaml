@@ -40,7 +40,7 @@
         port: "{{ loadbalancer_apiserver_port }}"
 
     - name: Join master node to cluster.
-      #ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --certificate-key {{ hostvars[groups['master'][0]].certificate_key }} > node_joined.log 2>&1"
+      # ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --certificate-key {{ hostvars[groups['master'][0]].certificate_key }} > node_joined.log 2>&1"
       ansible.builtin.shell: "{{ hostvars[groups['master'][0]].join_command }} --control-plane --skip-phases=control-plane-prepare/download-certs > node_joined.log 2>&1"
       args:
         chdir: /home/{{ ansible_user }}
