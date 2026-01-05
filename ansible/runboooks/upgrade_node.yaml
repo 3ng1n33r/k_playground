@@ -1,5 +1,4 @@
 ---
-# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_node.yaml -u pi --private-key=~/.ssh/ansible -e upgrade_cri=true -CD
 - name: Runbooks | Upgrade Kubernetes on other nodes.
   hosts: "master:worker:!{{ groups['master'][0] }}"
   serial: 1

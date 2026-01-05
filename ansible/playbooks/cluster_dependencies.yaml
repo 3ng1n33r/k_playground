@@ -15,7 +15,7 @@
         - name: Upgrade the OS (apt-get dist-upgrade).
           ansible.builtin.apt:
             upgrade: dist
-    
+
         - name: Check if a reboot is needed.
           ansible.builtin.stat:
             path: "{{ item }}"
@@ -23,11 +23,11 @@
             - /var/run/reboot-required
             - /var/run/reboot-required.pkgs
           register: reboot_required_files
-    
+
         - name: Reboot, if needed.
           ansible.builtin.reboot:
           when: reboot_required_files.results | selectattr('stat.exists') | list | length > 0
-    
+
         - name: Remove dependencies that are no longer required.
           ansible.builtin.apt:
             autoremove: true
