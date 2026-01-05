@@ -74,4 +74,3 @@ deploy-cluster-join-node:
     - .job__deploy__rules
   script:
     - ansible-playbook ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yml -Dv
-
