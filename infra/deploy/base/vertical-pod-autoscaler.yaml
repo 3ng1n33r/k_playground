@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stevehipwell
-      version: 1.10.0
+      version: 1.10.1
   install:
     createNamespace: true
   dependsOn:

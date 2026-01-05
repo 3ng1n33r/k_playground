@@ -76,7 +76,7 @@ spec:
           memory: 64Mi
       config:
         core:
-          sleepInterval: 60s
+          sleepInterval: 300s
           labelSources: ["custom"]
         sources:
           custom:
