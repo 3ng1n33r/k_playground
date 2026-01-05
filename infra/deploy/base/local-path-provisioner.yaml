@@ -23,7 +23,7 @@ spec:
       chart: ./deploy/chart/local-path-provisioner
       reconcileStrategy: ChartVersion
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: rancher
       version: 0.0.33
   install:
@@ -31,3 +31,4 @@ spec:
   interval: 30m
   releaseName: local-path-provisioner
   targetNamespace: local-path-provisioner
+
