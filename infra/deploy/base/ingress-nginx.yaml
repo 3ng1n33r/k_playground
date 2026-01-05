@@ -22,8 +22,6 @@ spec:
         kind: HelmRepository
         name: ingress-nginx
       version: 4.14.1
-  dependsOn:
-    - name: kube-prometheus-stack
   install:
     createNamespace: true
   interval: 30m
