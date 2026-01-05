@@ -23,7 +23,7 @@ spec:
         name: prometheus-community
       version: 80.10.0
   dependsOn:
-    - name: sealed-secrets-controller
+    - name: local-path-provisioner
   install:
     crds: Create
   upgrade:
