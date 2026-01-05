@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
-      version: 4.13.3
+      version: 4.14.1
   dependsOn:
     - name: kube-prometheus-stack
   install:
@@ -41,12 +41,12 @@ spec:
           nodeSelector:
             kubernetes.io/os: linux
             node-role.kubernetes.io/ingress: "true"
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: kube-prometheus-stack
+#      metrics:
+#        enabled: true
+#        serviceMonitor:
+#          enabled: true
+#          additionalLabels:
+#            release: kube-prometheus-stack
       resources:
         limits:
           cpu: 200m

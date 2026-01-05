@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 77.13.0
+      version: 80.10.0
   dependsOn:
     - name: sealed-secrets-controller
   install:
