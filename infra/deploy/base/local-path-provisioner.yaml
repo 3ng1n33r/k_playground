@@ -26,6 +26,8 @@ spec:
         kind: GitRepository
         name: rancher
       version: 0.0.33
+  dependsOn:
+    - name: sealed-secrets-controller
   install:
     createNamespace: true
   interval: 30m
