@@ -5,8 +5,6 @@ metadata:
   name: base-pre-deploy
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: secrets-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
