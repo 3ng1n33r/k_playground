@@ -10,6 +10,6 @@ resources:
   - vertical-pod-autoscaler.yaml
   - loki.yaml
   - fluent-bit.yaml
-#  - node-feature-discovery.yaml
+  - node-feature-discovery.yaml
 #  - node-problem-detector.yaml
 #  - kyverno.yaml

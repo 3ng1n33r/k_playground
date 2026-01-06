@@ -26,7 +26,7 @@ spec:
   install:
     createNamespace: true
   releaseName: node-feature-discovery
-  targetNamespace: nfd
+  targetNamespace: node-feature-discovery
   values:
     master:
       enable: true
@@ -77,59 +77,4 @@ spec:
       config:
         core:
           sleepInterval: 300s
-          labelSources: ["custom"]
-        sources:
-          custom:
-            - name: "nvme detection"
-              labels:
-                "feature.node.kubernetes.io/storage-nvme": "true"
-              matchFeatures:
-                - feature: storage.block
-                  matchExpressions:
-                    name: {op: InRegexp, value: ["^nvme"]}
-            - name: "network interface speeds"  
-              labelsTemplate: |  
-                {{ range .network.device }}network-{{ .name }}-speed={{ .speed }}  
-                {{ end }}  
-              matchFeatures:  
-                - feature: network.device  
-                  matchExpressions:  
-                    operstate: {op: In, value: ["up"]}
-            - name: "1G network interface"
-              labels:
-                "feature.node.kubernetes.io/network-speed-1g": "true"
-              matchFeatures:
-                - feature: network.device
-                  matchExpressions:
-                    name: {op: In, value: ["eth0"]}
-                    speed: {op: In, value: ["1000"]}
-                    operstate: {op: In, value: ["up"]}
-            - name: "nfd built-in cpu-model labels"  
-              labelsTemplate: |  
-                {{ range .cpu.model }}cpu-model.{{ .Name }}={{ .Value }}  
-                {{ end }}  
-              matchFeatures:  
-                - feature: cpu.model  
-                  matchName:  
-                    op: Exists
-            - name: "intel cpu"  
-              labels:  
-                "feature.node.kubernetes.io/cpu-intel": "true"  
-              matchFeatures:  
-                - feature: cpu.model  
-                  matchExpressions:  
-                    vendor_id: {op: In, value: ["Intel"]}
-            - name: "amd cpu"  
-              labels:  
-                "feature.node.kubernetes.io/cpu-amd": "true"  
-              matchFeatures:  
-                - feature: cpu.model  
-                  matchExpressions:  
-                    vendor_id: {op: In, value: ["AMD"]}
-            - name: "arm cpu"  
-              labels:  
-                "feature.node.kubernetes.io/cpu-arm": "true"  
-              matchFeatures:  
-                - feature: cpu.model  
-                  matchExpressions:  
-                    vendor_id: {op: In, value: ["ARM"]}
+          labelSources: []
