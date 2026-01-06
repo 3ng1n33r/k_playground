@@ -1,3 +1,4 @@
 private.key
 ansible/playbooks/files/cfssl/*.key
 ansible/playbooks/files/cfssl/*.crt
+extras/
