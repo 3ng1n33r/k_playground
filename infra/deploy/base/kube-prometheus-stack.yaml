@@ -150,6 +150,7 @@ spec:
         retention: 7d
         retentionSize: 5GB
         serviceMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
         resources:
           requests:
             cpu: 200m
