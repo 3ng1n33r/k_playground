@@ -60,6 +60,10 @@ spec:
           editable: true
           basicAuth: false
           access: proxy
+    defaultRules:
+      disabled:
+        InfoInhibitor: true
+        Watchdog: true
     alertmanager:
       enabled: true
       config:
