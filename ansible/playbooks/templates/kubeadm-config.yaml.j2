@@ -35,6 +35,8 @@ controllerManager:
   - name: feature-gates
     value: "{{ kube_controller_feature_gates | join(',') }}"
 {% endif %}
+  - name: terminated-pod-gc-threshold
+    value: "{{ kube_controller_terminated_pod_gc_threshold }}"
 scheduler:
   extraArgs:
 {% if kube_scheduler_feature_gates %}

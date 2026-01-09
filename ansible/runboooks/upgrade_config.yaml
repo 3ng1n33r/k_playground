@@ -14,9 +14,10 @@
         mode: '0600'
         owner: root
         backup: true
+        validate: "kubeadm config validate --config %s"
       when:
         - inventory_hostname == groups['master'][0]
-        - (upload_all | default(false) | bool) or (upload_kubelet | default(false) | bool)
+      #  - (upload_kubeadm | default(false) | bool) or (upload_kubelet | default(false) | bool)
 
     - name: Get file status.
       ansible.builtin.stat:
@@ -24,15 +25,15 @@
       register: file_check_result
       when: 
         - inventory_hostname == groups['master'][0]
-        - (upload_all | default(false) | bool) or (upload_kubelet | default(false) | bool)
+        - (upload_kubeadm | default(false) | bool) or (upload_kubelet | default(false) | bool)
 
     - name: Load config to cluster.
-      ansible.builtin.shell: "kubeadm init phase upload-config all --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
+      ansible.builtin.shell: "kubeadm init phase upload-config kubeadm --config kubeadm-config.yaml > /home/{{ ansible_user }}/config_upgrade.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
       when:
         - file_check_result.stat.exists | default(false)
-        - upload_all | default(false) | bool
+        - upload_kubeadm | default(false) | bool
         - inventory_hostname == groups['master'][0]
 
     - name: Load kubelet config to cluster.

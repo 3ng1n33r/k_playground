@@ -6,7 +6,7 @@ loadbalancer_apiserver_address: 'cluster-endpoint'
 kubernetes_pkg_version: '1.34.3-1.1'
 containerd_pkg_version: '2.1.5-1~ubuntu.24.04~noble'
 haproxy_image: 'docker.io/library/haproxy:3.2.10-alpine'
-sandbox_image: 'registry.k8s.io/pause:3.10.1' #  registry.k8s.io/pause:3.10
+sandbox_image: 'registry.k8s.io/pause:3.10.1'
 cilium_version: '1.18.5'
 flux_version: '2.7.5'
 kubeseal_version: '0.34.0'
@@ -56,10 +56,10 @@ eviction_hard:
   imagefs.available: "15%"
   imagefs.inodesFree: "5%"
 kube_reserved:
-  cpu: "250m"
-  memory: "400Mi"
+  cpu: "200m"
+  memory: "300Mi"
   ephemeral-storage: "1Gi"
 system_reserved:
-  cpu: "250m"
-  memory: "400Mi"
+  cpu: "300m"
+  memory: "700Mi"
   ephemeral-storage: "1Gi"
