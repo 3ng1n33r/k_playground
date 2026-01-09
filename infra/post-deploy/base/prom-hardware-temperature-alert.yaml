@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: hardware-temperature-alert
+  namespace: monitoring
+spec:
+  groups:
+    - name: hardware-temperature
+      rules:
+        - alert: HighTemperature
+          expr: node_hwmon_temp_celsius{chip="thermal_thermal_zone0",sensor="temp0"} > 70
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High temperature detected on {{ $labels.instance }}"
+            description: "Temperature {{ $value }}°C exceeds threshold"

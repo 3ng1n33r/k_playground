@@ -28,6 +28,11 @@ spec:
   releaseName: fluent-bit
   targetNamespace: logs
   values:
+    tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Equal"
+      value: ""
+      effect: "NoSchedule"
     resources:
       requests:
         cpu: 50m
