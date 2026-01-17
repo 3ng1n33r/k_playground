@@ -22,9 +22,8 @@ spec:
       sourceRef:
         kind: OCIRepository
         name: deliveryhero
-        namespace: flux-system
   interval: 30m
-  releaseName: local-path-provisioner
+  releaseName: k8s-event-logger
   targetNamespace: logs
   values:
     containerName: k8s-event-logger
