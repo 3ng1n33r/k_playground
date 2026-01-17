@@ -11,6 +11,6 @@ resources:
   - loki.yaml
   - fluent-bit.yaml
   - node-feature-discovery.yaml
-#  - k8s-event-logger.yaml
+  - k8s-event-logger.yaml
 #  - node-problem-detector.yaml
 #  - kyverno.yaml
