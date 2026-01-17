@@ -1,12 +1,14 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
   name: deliveryhero
   namespace: flux-system
 spec:
-  interval: 24h0m0s
-  url: https://charts.deliveryhero.io/
+  interval: 24h
+  url: oci://ghcr.io/deliveryhero/helm-charts
+  ref:
+    tag: 1.1.10
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -17,15 +19,12 @@ spec:
   chart:
     spec:
       chart: k8s-event-logger
-      reconcileStrategy: ChartVersion
       sourceRef:
-        kind: HelmRepository
+        kind: OCIRepository
         name: deliveryhero
-      version: 1.1.8
-  dependsOn:
-    - name: loki
-  interval: 30m0s
-  releaseName: k8s-event-logger
+        namespace: flux-system
+  interval: 30m
+  releaseName: local-path-provisioner
   targetNamespace: logs
   values:
     containerName: k8s-event-logger
