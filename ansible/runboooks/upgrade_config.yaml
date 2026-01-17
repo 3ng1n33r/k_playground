@@ -1,6 +1,6 @@
 ---
-# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_config.yaml -e upload_kubelet=true
-# ansible-playbook -i inventory/hosts.yaml runbooks/upgrade_config.yaml -e kubelet_upgrade=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubelet=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e kubelet_upgrade=true
 - name: Runbooks | Upgrade cluster config.
   hosts: master,worker
   gather_facts: false
@@ -9,7 +9,7 @@
   tasks:
     - name: Write kubeadm config.
       ansible.builtin.template:
-        src: ../playbooks/templates/kubeadm-config.yaml.j2
+        src: "../playbooks/templates/kubeadm-config.yaml.j2"
         dest: "{{ kube_config_dir }}/kubeadm-config.yaml"
         mode: '0600'
         owner: root
@@ -55,6 +55,15 @@
       ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config > /home/{{ ansible_user }}/kubelet_upgrade.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
+      when: kubelet_upgrade | default(false) | bool
+
+    - name: Write kubelet systemd init file.
+      template:
+        src: "../playbooks/templates/kubelet.service.j2"
+        dest: "/usr/lib/systemd/system/kubelet.service"
+        backup: true
+        mode: "0644"
+        owner: root
       when: kubelet_upgrade | default(false) | bool
 
     - name: Restart service kubelet.

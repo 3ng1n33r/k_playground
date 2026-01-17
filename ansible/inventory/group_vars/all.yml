@@ -55,11 +55,21 @@ eviction_hard:
   nodefs.inodesFree: "5%"
   imagefs.available: "15%"
   imagefs.inodesFree: "5%"
-kube_reserved:
-  cpu: "200m"
-  memory: "300Mi"
-  ephemeral-storage: "1Gi"
-system_reserved:
-  cpu: "300m"
-  memory: "700Mi"
-  ephemeral-storage: "1Gi"
+# Enforce node allocatable settings  
+#kubelet_enforce_node_allocatable: "pods,kube-reserved,system-reserved"    
+# Kube-reserved settings for Kubernetes components  
+kube_reserved: true
+kube_reserved_cgroups_for_service_slice: kube.slice
+kube_reserved_cgroups: "/{{ kube_reserved_cgroups_for_service_slice }}"
+kube_memory_reserved: "256Mi"
+kube_cpu_reserved: "100m"
+kube_ephemeral_storage_reserved: "1Gi"
+kube_pid_reserved: "1000"
+# System-reserved settings for OS daemons  
+system_reserved: true
+system_reserved_cgroups_for_service_slice: system.slice
+system_reserved_cgroups: "/{{ system_reserved_cgroups_for_service_slice }}"
+system_memory_reserved: "512Mi"
+system_cpu_reserved: "500m"
+system_ephemeral_storage_reserved: "1Gi"
+system_pid_reserved: 1000

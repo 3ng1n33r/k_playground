@@ -1,0 +1,15 @@
+# https://github.com/kubernetes-sigs/node-feature-discovery/blob/master/docs/usage/features.md
+---
+apiVersion: nfd.k8s-sigs.io/v1alpha1  
+kind: NodeFeatureRule  
+metadata:  
+  name: nvme-device-rule  
+spec:  
+  rules:  
+    - name: "nvme device detection"  
+      labels:  
+        "feature.node.kubernetes.io/storage-nvme.present": "true"  
+      matchFeatures:  
+        - feature: storage.block  
+          matchExpressions:  
+            name: {op: InRegexp, value: ["^nvme"]}
