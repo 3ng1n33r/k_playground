@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 80.10.0
+      version: 81.2.2
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -180,10 +180,6 @@ spec:
         limits:
           cpu: 200m
           memory: 200Mi
-    kubeScheduler:
-      enabled: false
-    kubeControllerManager:
-      enabled: false
     kubeEtcd:
       enabled: false
     kubeProxy:
