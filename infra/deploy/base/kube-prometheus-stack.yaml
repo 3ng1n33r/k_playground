@@ -22,6 +22,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community
       version: 80.10.0
+      timeout: 10m0s
   dependsOn:
     - name: local-path-provisioner
   install:
