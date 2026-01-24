@@ -2,7 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - local-path-provisioner.yaml
   - ingress-nginx.yaml
   - kube-prometheus-stack.yaml
   - metrics-server.yaml
@@ -11,5 +10,6 @@ resources:
   - fluent-bit.yaml
   - node-feature-discovery.yaml
   - k8s-event-logger.yaml
+  - cilium.yaml
 #  - node-problem-detector.yaml
 #  - kyverno.yaml
