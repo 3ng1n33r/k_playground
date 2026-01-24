@@ -156,6 +156,7 @@ spec:
         retentionSize: 5GB
         serviceMonitorSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
+        ignoreNamespaceSelectors: true
         resources:
           requests:
             cpu: 200m
