@@ -3,6 +3,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-#  - local-path-storage.yaml
-  - prometheus-stack-credentials-sealed.yaml
-  - alertmanager-sealed.yaml
+  - sealed-secrets.yaml
+  - ./prometheus/prometheus-stack-credentials-sealed.yaml
+  - ./prometheus/alertmanager-sealed.yaml
