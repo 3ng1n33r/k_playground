@@ -180,26 +180,14 @@ spec:
         limits:
           cpu: 200m
           memory: 200Mi
-    kubeScheduler:
-      service:
-        enabled: true
-        ports:
-          http: 10259
-        targetPorts:
-          http: 10259
-      serviceMonitor:
-        https: true
-        insecureSkipVerify: "true"
     kubeControllerManager:
-      service:
-        enabled: true
-        ports:
-          http: 10257
-        targetPorts:
-          http: 10257
+      enabled: true
       serviceMonitor:
-        https: true
-        insecureSkipVerify: "true"
+        enabled: true
+    kubeScheduler:
+      enabled: true
+      serviceMonitor:
+        enabled: true
     kubeEtcd:
       enabled: false
     kubeProxy:
