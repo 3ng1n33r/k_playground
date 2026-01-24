@@ -1,0 +1,4 @@
+[Service]
+{% if kube_reserved|bool %}
+Slice={{ kube_reserved_cgroups_for_service_slice }}
+{% endif %}

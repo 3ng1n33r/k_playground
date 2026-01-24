@@ -57,24 +57,6 @@
             - "{{ etcd_cert_dir }}"
             - "{{ etcd_data_dir }}"
 
-    - name: Include haproxy tasks.
-      when:
-        - groups['master'] | length >= 3
-      block:
-        - name: Check haproxy manifest exist.
-          ansible.builtin.stat:
-            path: "{{ kube_manifest_dir }}/haproxy.yaml"
-          register: haproxy_check
-
-        - name: Add external cluster lb bootstrap ip.
-          ansible.builtin.lineinfile:
-            path: /etc/hosts
-            line: "{{ groups['master'][0] }}        {{ loadbalancer_apiserver_address }}"
-          when: not haproxy_check.stat.exists
-
-        - name: Include haproxy tasks.
-          ansible.builtin.include_tasks: tasks/install_haproxy.yaml
-
     - name: Include etcd cert tasks.
       ansible.builtin.include_tasks: tasks/copy_etcd_certs.yaml
       when:
@@ -87,6 +69,20 @@
         - groups['master'] | length >= 3
         - groups['etcd'] | length in [3, 5]
         - "'etcd' in group_names"
+
+    - name: Check cluster initialized files.
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - /home/{{ ansible_user }}/cluster_initialized.log
+        - /home/{{ ansible_user }}/node_joined.log
+      register: cluster_initialized_files
+
+    - name: Add external cluster lb bootstrap ip.
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ groups['master'][0] }}        {{ loadbalancer_apiserver_address }}"
+      when: cluster_initialized_files.results | selectattr('stat.exists') | list | length == 0
 
 - name: Initialize Kubernetes cluster.
   hosts: master

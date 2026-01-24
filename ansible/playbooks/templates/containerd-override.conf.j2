@@ -1,0 +1,4 @@
+[Service]
+{% if cri_cgroups_for_service_slice is defined %}
+Slice={{ cri_cgroups_for_service_slice }}
+{% endif %}

@@ -124,4 +124,11 @@ imageGCHighThresholdPercent: {{ kubelet_image_gc_high_threshold }}
 {% if kubelet_image_gc_low_threshold is defined %}
 imageGCLowThresholdPercent: {{ kubelet_image_gc_low_threshold }}
 {% endif %}
+{% if kubelet_cpu_manager_policy is defined %}
+cpuManagerPolicy: {{ kubelet_cpu_manager_policy }}
+{% endif %}
+{% if kubelet_cpu_manager_policy_options is defined %}
+cpuManagerPolicyOptions:
+  {{ kubelet_cpu_manager_policy_options | to_nice_yaml(indent=2) | indent(width=2) }}
+{% endif %}
 maxParallelImagePulls: {{ kubelet_max_parallel_image_pulls }}

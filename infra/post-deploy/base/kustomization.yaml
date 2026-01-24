@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./flux/alertmanager.yaml
   - ./nfd/nvme-device-rule.yaml
+  - ./prometheus/hardware-temperature-rule.yaml

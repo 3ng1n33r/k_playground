@@ -5,9 +5,9 @@ loadbalancer_apiserver_port: 8443
 loadbalancer_apiserver_address: 'cluster-endpoint'
 kubernetes_pkg_version: '1.34.3-1.1'
 containerd_pkg_version: '2.1.5-1~ubuntu.24.04~noble'
-haproxy_image: 'docker.io/library/haproxy:3.2.10-alpine'
+haproxy_pkg_version: '2.8.16-0ubuntu0.24.04.1'
 sandbox_image: 'registry.k8s.io/pause:3.10.1'
-cilium_version: '1.18.5'
+cilium_version: '1.18.6'
 flux_version: '2.7.5'
 kubeseal_version: '0.34.0'
 flux_gitlab_repo: orchestration
@@ -42,8 +42,8 @@ kubelet_max_parallel_image_pulls: 1
 kubelet_image_gc_high_threshold: 85
 kubelet_image_gc_low_threshold: 80
 kubelet_event_record_qps: 5
-kubelet_shutdown_grace_period: 30s
-kubelet_shutdown_grace_period_critical_pods: 10s
+kubelet_shutdown_grace_period: 0s
+kubelet_shutdown_grace_period_critical_pods: 0s
 kubelet_swap_behavior: UnlimitedSwap
 kubelet_streaming_connection_idle_timeout: "4h0m0s"
 kube_resolv_conf: "/run/systemd/resolve/resolv.conf"
@@ -55,14 +55,20 @@ eviction_hard:
   nodefs.inodesFree: "5%"
   imagefs.available: "15%"
   imagefs.inodesFree: "5%"
+# CPU Manager Policy  
+kubelet_cpu_manager_policy: "static"
+#kubelet_cpu_manager_policy_options:
+#  distribute-cpus-across-numa: "true"
+#  full-pcpus-only: "true"
 # Enforce node allocatable settings  
-#kubelet_enforce_node_allocatable: "pods,kube-reserved,system-reserved"    
-# Kube-reserved settings for Kubernetes components  
+kubelet_enforce_node_allocatable: "pods"
+# Kube-reserved settings for Kubernetes components
+cri_cgroups_for_service_slice: runtime.slice
 kube_reserved: true
 kube_reserved_cgroups_for_service_slice: kube.slice
 kube_reserved_cgroups: "/{{ kube_reserved_cgroups_for_service_slice }}"
-kube_memory_reserved: "256Mi"
-kube_cpu_reserved: "100m"
+kube_memory_reserved: "512Mi"
+kube_cpu_reserved: "200m"
 kube_ephemeral_storage_reserved: "1Gi"
 kube_pid_reserved: "1000"
 # System-reserved settings for OS daemons  
@@ -70,6 +76,6 @@ system_reserved: true
 system_reserved_cgroups_for_service_slice: system.slice
 system_reserved_cgroups: "/{{ system_reserved_cgroups_for_service_slice }}"
 system_memory_reserved: "512Mi"
-system_cpu_reserved: "500m"
+system_cpu_reserved: "200m"
 system_ephemeral_storage_reserved: "1Gi"
 system_pid_reserved: 1000
