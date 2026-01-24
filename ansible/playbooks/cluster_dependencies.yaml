@@ -75,7 +75,35 @@
         - kubelet
         - kubectl
         - containerd.io
+        - haproxy
       ignore_errors: true
+
+    # Install HAProxy
+
+    - name: Install HAProxy.
+      when:
+        - groups['master'] | length >= 3
+      block:
+        - name: Install HAProxy.
+          ansible.builtin.apt:
+            name:
+              - haproxy={{ haproxy_pkg_version }}
+            state: present
+
+        - name: Write HAProxy configuration.
+          ansible.builtin.template:
+            src: haproxy.cfg.j2
+            dest: "{{ haproxy_config_dir }}/haproxy.cfg"
+            owner: root
+            mode: '0644'
+            backup: true
+          notify: Restart haproxy.
+
+        - name: Enable and start the HAProxy service.
+          ansible.builtin.systemd_service:
+            name: haproxy
+            state: started
+            enabled: true
 
     # Install Containerd
 
@@ -104,6 +132,9 @@
         backup: true
       notify: Restart containerd.
 
+    - name: Write containerd systemd init file.
+      ansible.builtin.include_tasks: tasks/write_containerd_init.yaml
+
     - name: Enable and start the Containerd service.
       ansible.builtin.systemd_service:
         name: containerd
@@ -120,6 +151,9 @@
           - kubectl={{ kubernetes_pkg_version }}
         state: present
 
+    - name: Write kubelet systemd init file.
+      ansible.builtin.include_tasks: tasks/write_kubelet_init.yaml
+
     - name: Hold Kubeadm, Kubelet packages.
       ansible.builtin.dpkg_selections:
         name: "{{ item }}"
@@ -129,13 +163,23 @@
         - kubeadm
         - kubectl
         - containerd.io
+        - haproxy
 
   handlers:
     - name: Generate Containerd config.
       ansible.builtin.shell: /usr/bin/containerd config default > {{ containerd_config_dir }}/config.toml
       changed_when: false
 
+    - name: Reload systemd.
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
     - name: Restart containerd.
-      ansible.builtin.service:
+      ansible.builtin.systemd_service:
         name: containerd
+        state: restarted
+
+    - name: Restart haproxy.
+      ansible.builtin.systemd_service:
+        name: haproxy
         state: restarted
