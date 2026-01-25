@@ -185,10 +185,14 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
+        https: true  
+        insecureSkipVerify: true
     kubeScheduler:
       enabled: true
       serviceMonitor:
         enabled: true
+        https: true  
+        insecureSkipVerify: true
     kubeEtcd:
       enabled: false
     kubeProxy:
