@@ -9,5 +9,4 @@ kube_scheduler_feature_gates:
   - InPlacePodVerticalScaling=true
 kubeadm_init_phases_skip:
   - addon/kube-proxy
-kube_service_subnets: "10.96.0.0/12"
 kube_controller_terminated_pod_gc_threshold: 20

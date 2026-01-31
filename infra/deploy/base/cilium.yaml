@@ -29,6 +29,8 @@ spec:
   targetNamespace: kube-system
   values:
     rollOutCiliumPods: false
+    ipam:
+      mode: "kubernetes"
     envoy:
       enabled: false
     operator:

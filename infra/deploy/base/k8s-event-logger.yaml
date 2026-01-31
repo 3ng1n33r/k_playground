@@ -27,7 +27,7 @@ spec:
   releaseName: k8s-event-logger
   targetNamespace: logs
   values:
-    containerName: k8s-event-logger
+    containerName: eventrouter
     resources:
       requests:
         cpu: 10m
