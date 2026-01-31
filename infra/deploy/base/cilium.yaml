@@ -31,6 +31,10 @@ spec:
     rollOutCiliumPods: false
     ipam:
       mode: "kubernetes"
+    k8s:
+      requireIPv4PodCIDR: true
+    ipv4:
+      enabled: true
     envoy:
       enabled: false
     operator:
@@ -53,8 +57,6 @@ spec:
     ipv4NativeRoutingCIDR: 10.0.0.0/8
     autoDirectNodeRoutes: true
     routingMode: native
-    ipv4:
-      enabled: true
     bpf:
       datapathMode: netkit
       masquerade: true
