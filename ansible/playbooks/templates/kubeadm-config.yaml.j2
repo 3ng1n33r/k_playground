@@ -31,6 +31,8 @@ apiServer:
 {% endif %}
 controllerManager:
   extraArgs:
+  - name: bind-address
+    value: 0.0.0.0
 {% if kube_controller_feature_gates %}
   - name: feature-gates
     value: "{{ kube_controller_feature_gates | join(',') }}"
@@ -39,6 +41,8 @@ controllerManager:
     value: "{{ kube_controller_terminated_pod_gc_threshold }}"
 scheduler:
   extraArgs:
+  - name: bind-address
+    value: 0.0.0.0
 {% if kube_scheduler_feature_gates %}
   - name: feature-gates
     value: "{{ kube_scheduler_feature_gates | join(',') }}"
