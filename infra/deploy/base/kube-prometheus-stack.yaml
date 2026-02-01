@@ -201,6 +201,10 @@ spec:
        - 192.168.31.20
        - 192.168.31.21
        - 192.168.31.22
+      service:
+        enabled: true
+        port: 2379
+        targetPort: 2379
       serviceMonitor:
         enabled: true
         https: true  
