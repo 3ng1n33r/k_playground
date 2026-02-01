@@ -150,6 +150,8 @@ spec:
           - prometheus.192.168.31.8.sslip.io
         ingressClassName: nginx
       prometheusSpec:
+        secrets:
+          - etcd-client-cert
         replicas: 2
         podAntiAffinity: "hard"
         retention: 7d
@@ -194,7 +196,19 @@ spec:
         https: true  
         insecureSkipVerify: true
     kubeEtcd:
-      enabled: false
+      enabled: true
+      endpoints:
+       - 192.168.31.20
+       - 192.168.31.21
+       - 192.168.31.22
+      serviceMonitor:
+        enabled: true
+        https: true  
+        insecureSkipVerify: false
+        serverName: localhost
+        caFile: /etc/prometheus/secrets/etcd-client-cert/etcd-ca.crt
+        certFile: /etc/prometheus/secrets/etcd-client-cert/healthcheck-client.crt
+        keyFile: /etc/prometheus/secrets/etcd-client-cert/healthcheck-client.key
     kubeProxy:
       enabled: false
     kube-state-metrics:
