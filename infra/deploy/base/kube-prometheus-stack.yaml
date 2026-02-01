@@ -203,13 +203,13 @@ spec:
        - 192.168.31.22
       service:
         enabled: true
+        https: true
         port: 2379
         targetPort: 2379
       serviceMonitor:
         enabled: true
-        https: true  
+        https: true
         insecureSkipVerify: false
-        serverName: localhost
         caFile: /etc/prometheus/secrets/etcd-client-cert/etcd-ca.crt
         certFile: /etc/prometheus/secrets/etcd-client-cert/healthcheck-client.crt
         keyFile: /etc/prometheus/secrets/etcd-client-cert/healthcheck-client.key
