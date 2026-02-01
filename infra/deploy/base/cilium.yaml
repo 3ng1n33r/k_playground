@@ -31,10 +31,7 @@ spec:
     rollOutCiliumPods: false
     ipam:
       operator:
-        clusterPoolIPv4PodCIDRList: ["10.100.0.0/12"]
-        clusterPoolIPv4MaskSize: 24
-    k8s:
-      requireIPv4PodCIDR: false
+        clusterPoolIPv4PodCIDRList: ["172.0.0.0/16"]
     ipv4:
       enabled: true
     envoy:
@@ -56,7 +53,7 @@ spec:
     k8sServiceHost: cluster-endpoint
     k8sServicePort: 8443
     kubeProxyReplacement: true
-    ipv4NativeRoutingCIDR: 10.100.0.0/12
+    ipv4NativeRoutingCIDR: 172.0.0.0/16
     autoDirectNodeRoutes: true
     routingMode: native
     bpf:
@@ -64,7 +61,7 @@ spec:
       masquerade: true
     l2announcements:
       enabled: true
-##    localRedirectPolicies:
+#    localRedirectPolicies:
 #      enabled: true
     prometheus:
       enabled: true

@@ -3,7 +3,7 @@
   hosts: master[0]
   become: true
   tasks:
-    # Install Helm #
+    # Install Helm
 
     - name: Add Helm apt-key.
       ansible.builtin.get_url:
@@ -41,12 +41,8 @@
         values:
           rollOutCiliumPods: false
           ipam:
-            mode: "cluster-pool"
             operator:
               clusterPoolIPv4PodCIDRList: ["{{ kube_pods_subnet }}"]
-              clusterPoolIPv4MaskSize: 24
-          k8s:
-            requireIPv4PodCIDR: false
           ipv4:
             enabled: true
           kubeProxyReplacement: true
