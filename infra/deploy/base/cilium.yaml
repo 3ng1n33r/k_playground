@@ -64,7 +64,7 @@ spec:
       masquerade: true
     l2announcements:
       enabled: true
-#    localRedirectPolicies:
+##    localRedirectPolicies:
 #      enabled: true
     prometheus:
       enabled: true
