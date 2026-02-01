@@ -43,6 +43,7 @@
           ipam:
             operator:
               clusterPoolIPv4PodCIDRList: ["{{ kube_pods_subnet }}"]
+              clusterPoolIPv4MaskSize: 24
           ipv4:
             enabled: true
           kubeProxyReplacement: true

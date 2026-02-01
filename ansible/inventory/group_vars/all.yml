@@ -2,7 +2,7 @@ ansible_user: 'pi'
 cluster_name: kubernetes
 dns_domain: 'cluster.local'
 kube_service_subnets: "10.96.0.0/12"
-kube_pods_subnet: "172.0.0.0/16"
+kube_pods_subnet: "172.16.0.0/16"
 loadbalancer_apiserver_port: 8443
 loadbalancer_apiserver_address: 'cluster-endpoint'
 kubernetes_pkg_version: '1.34.3-1.1'
