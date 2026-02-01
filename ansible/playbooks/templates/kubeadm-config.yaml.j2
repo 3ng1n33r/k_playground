@@ -9,7 +9,6 @@ clusterName: {{ cluster_name }}
 networking:
   dnsDomain: {{ dns_domain }}
   serviceSubnet: "{{ kube_service_subnets }}"
-  podSubnet: "{{ kube_pods_subnet }}"
 {% if groups['master'] | length >= 3 %}
 controlPlaneEndpoint: {{ loadbalancer_apiserver_address }}:{{ loadbalancer_apiserver_port }}
 {% endif %}
