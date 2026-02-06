@@ -150,14 +150,13 @@ spec:
           - prometheus.192.168.31.8.sslip.io
         ingressClassName: nginx
       prometheusSpec:
-        additionalScrapeConfigs:  
-          - job_name: 'haproxy-external'  
-            static_configs:  
-              - targets:  
+        additionalScrapeConfigs:
+          - job_name: 'haproxy-external'
+            static_configs:
+              - targets:
                   - 192.168.31.20:7000  
                   - 192.168.31.21:7000  
-                  - 192.168.31.22:7000  
-            metricsPath: /metrics
+                  - 192.168.31.22:7000
             scheme: http
         secrets:
           - etcd-client-cert
