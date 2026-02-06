@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: grafana
-      version: 6.49.0
+      version: 6.52.0
   dependsOn:
     - name: local-path-provisioner
   timeout: 10m0s
@@ -31,6 +31,7 @@ spec:
   values:
     gateway:
       enabled: true
+      verboseLogging: false
       replicas: 1
       resources:
         limits:
@@ -53,6 +54,8 @@ spec:
     resultsCache:
       allocatedMemory: 256
     loki:
+      server:
+        log_level: warn
       auth_enabled: false
       commonConfig:
         replication_factor: 1
