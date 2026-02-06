@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 81.2.2
+      version: 81.5.0
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -150,6 +150,15 @@ spec:
           - prometheus.192.168.31.8.sslip.io
         ingressClassName: nginx
       prometheusSpec:
+        additionalScrapeConfigs:  
+          - job_name: 'haproxy-external'  
+            static_configs:  
+              - targets:  
+                  - 192.168.31.20:7000  
+                  - 192.168.31.21:7000  
+                  - 192.168.31.22:7000  
+            metricsPath: /metrics
+            scheme: http
         secrets:
           - etcd-client-cert
         replicas: 2
