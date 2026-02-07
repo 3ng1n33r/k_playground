@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cilium
-      version: 1.18.6
+      version: 1.19.0
   dependsOn:
     - name: kube-prometheus-stack
   interval: 30m
@@ -29,6 +29,8 @@ spec:
   targetNamespace: kube-system
   values:
     rollOutCiliumPods: false
+    gatewayAPI:
+      enabled: true
     ipam:
       operator:
         clusterPoolIPv4PodCIDRList: ["172.16.0.0/16"]
@@ -84,7 +86,7 @@ spec:
           hosts:
             - hubble-ui.192.168.31.8.sslip.io
       metrics:
-        enableOpenMetrics: true
+        enableOpenMetrics: false
         enabled:
           - dns
           - drop
@@ -94,8 +96,8 @@ spec:
           - icmp
           - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
         serviceMonitor:
-          enabled: true
+          enabled: false
         dashboards:
-          enabled: true
+          enabled: false
           label: grafana_dashboard
           labelValue: "1"
