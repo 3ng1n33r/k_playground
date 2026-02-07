@@ -26,7 +26,7 @@ etcd:
 apiServer:
   extraArgs:
   - name: enable-aggregator-routing
-    value: "true"
+    value: "{{ kube_api_aggregator_routing | ternary('true', 'false') }}"
 {% if kube_apiserver_feature_gates %}
   - name: feature-gates
     value: "{{ kube_apiserver_feature_gates | join(',') }}"
