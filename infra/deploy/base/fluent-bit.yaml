@@ -28,6 +28,8 @@ spec:
   releaseName: fluent-bit
   targetNamespace: logs
   values:
+    nodeSelector:
+      kubernetes.io/os: linux
     tolerations:
     - key: "node-role.kubernetes.io/control-plane"
       operator: "Exists"
@@ -39,9 +41,10 @@ spec:
         cpu: 100m
         memory: 128Mi
     securityContext:
-       capabilities:
-         add:
-         - CAP_SYSLOG
+      privileged: true
+    #  capabilities:
+    #    add:
+    #    - CAP_SYSLOG
     extraVolumes:
       - name: dev-kmsg  
         hostPath:  
