@@ -36,7 +36,6 @@ spec:
         memory: 200Mi
     defaultArgs:
       - --cert-dir=/tmp
-      - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+      - --kubelet-preferred-address-types=Hostname,InternalDNS,ExternalDNS
       - --kubelet-use-node-status-port
-      - --kubelet-insecure-tls
       - --metric-resolution=15s
