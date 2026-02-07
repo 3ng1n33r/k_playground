@@ -1,6 +1,6 @@
 ---
-# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubelet=true
-# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e kubelet_upgrade=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubelet=true -e upload_kubeadm=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upgrade_kubelet=true -e upgrade_kubeadm=true
 - name: Runbooks | Upgrade cluster config.
   hosts: master,worker
   gather_facts: false
@@ -49,17 +49,17 @@
       ansible.builtin.shell: "kubeadm upgrade node phase control-plane > /home/{{ ansible_user }}/control-plane_upgrade.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
-      when: cp_upgrade | default(false) | bool
+      when: upgrade_kubeadm | default(false) | bool
 
     - name: Apply new changes to kubelet.
-      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config > /home/{{ ansible_user }}/kubelet_upgrade.log 2>&1"
+      ansible.builtin.shell: "kubeadm upgrade node phase kubelet-config > /home/{{ ansible_user }}/upgrade_kubelet.log 2>&1"
       args:
         chdir: "{{ kube_config_dir }}"
-      when: kubelet_upgrade | default(false) | bool
+      when: upgrade_kubelet | default(false) | bool
 
     - name: Restart service kubelet.
       ansible.builtin.systemd_service:
         state: restarted
         daemon_reload: true
         name: kubelet
-      when: kubelet_upgrade | default(false) | bool
+      when: upgrade_kubelet | default(false) | bool
