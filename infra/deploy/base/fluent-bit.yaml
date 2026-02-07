@@ -42,6 +42,14 @@ spec:
        capabilities:
          add:
          - CAP_SYSLOG
+    extraVolumes:
+      - name: dev-kmsg  
+        hostPath:  
+          path: /dev/kmsg  
+          type: CharDevice
+    extraVolumeMounts:
+      - name: dev-kmsg  
+        mountPath: /dev/kmsg 
     config:
       filters: |
         [FILTER]
