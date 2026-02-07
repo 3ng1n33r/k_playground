@@ -34,3 +34,8 @@ spec:
       limits:
         cpu: 100m
         memory: 200Mi
+    defaultArgs:
+      - --cert-dir=/tmp
+      - --kubelet-preferred-address-types=Hostname,InternalDNS,ExternalDNS
+      - --kubelet-use-node-status-port
+      - --metric-resolution=15s
