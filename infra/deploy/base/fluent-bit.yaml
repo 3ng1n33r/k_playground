@@ -31,8 +31,7 @@ spec:
     nodeSelector:
       kubernetes.io/os: linux
     tolerations:
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
+    - operator: "Exists"
     resources:
       requests:
         cpu: 50m
@@ -67,6 +66,7 @@ spec:
         [INPUT]
             Name kmsg
             Tag kernel.*
+            prio_level 4
 
         [INPUT]
             Name tail
