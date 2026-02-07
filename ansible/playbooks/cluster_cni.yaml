@@ -64,3 +64,5 @@
             masquerade: true
           envoy:
             enabled: false
+          hubble:
+            enabled: false
