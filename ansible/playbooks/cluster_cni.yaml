@@ -46,9 +46,10 @@
               clusterPoolIPv4MaskSize: 24
           ipv4:
             enabled: true
-          kubeProxyReplacement: true
           operator:
             rollOutPods: false
+          gatewayAPI:
+            enabled: true
           l2announcements:
             enabled: true
           k8sClientRateLimit:
@@ -58,10 +59,15 @@
           k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
           ipv4NativeRoutingCIDR: "{{ kube_pods_subnet }}"
           autoDirectNodeRoutes: true
+          kubeProxyReplacement: true
           routingMode: native
+          bpfClockProbe: true
           bpf:
             datapathMode: netkit
             masquerade: true
+            mapDynamicSizeRatio: 0.08
+            distributedLRU:
+              enabled: true
           envoy:
             enabled: false
           hubble:
