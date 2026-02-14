@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-  - ./cilium/loadbalancer.yaml
+  - ./cilium/l2-loadbalancer-ips.yaml
   - ./prometheus/alertmanager-sealed.yaml
   - ./prometheus/prom-stack-credentials-sealed.yaml
   - ./prometheus/etcd-client-cert-sealed.yaml
@@ -13,3 +13,4 @@ resources:
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_grpcroutes.yaml
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_httproutes.yaml
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_referencegrants.yaml
+  - ./prometheus/cilium-gateway-monitoring.yaml
