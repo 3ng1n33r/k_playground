@@ -126,7 +126,8 @@ spec:
           hostnames:
             - alertmanager.192.168.31.10.sslip.io
           parentRefs:
-            - cilium-gateway-monitoring
+            - name: cilium-gateway-monitoring
+              namespace: monitoring
           matches:
             - path:
                 type: PathPrefix
@@ -160,7 +161,8 @@ spec:
           hostnames:
             - prometheus.192.168.31.10.sslip.io
           parentRefs:
-            - cilium-gateway-monitoring
+            - name: cilium-gateway-monitoring
+              namespace: monitoring
           matches:
             - path:
                 type: PathPrefix
