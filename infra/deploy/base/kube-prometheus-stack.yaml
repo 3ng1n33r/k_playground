@@ -71,11 +71,11 @@ spec:
           editable: true
           basicAuth: false
           access: proxy
-      dashboards:
-        default:
-          HAProxy:
-            gnetId: 12693
-            datasource: Prometheus
+#      dashboards:
+#        default:
+#          HAProxy:
+#            gnetId: 12693
+#            datasource: Prometheus
     defaultRules:
       disabled:
         InfoInhibitor: true
