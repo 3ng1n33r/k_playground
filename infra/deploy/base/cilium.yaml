@@ -55,13 +55,17 @@ spec:
       qps: 50
     k8sServiceHost: cluster-endpoint
     k8sServicePort: 8443
-    kubeProxyReplacement: true
     ipv4NativeRoutingCIDR: 172.16.0.0/16
+    kubeProxyReplacement: true
     autoDirectNodeRoutes: true
+    bpfClockProbe: true
     routingMode: native
     bpf:
       datapathMode: netkit
       masquerade: true
+      mapDynamicSizeRatio: 0.08
+      distributedLRU:
+        enabled: true
     l2announcements:
       enabled: true
 #    localRedirectPolicies:
