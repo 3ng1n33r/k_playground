@@ -12,7 +12,7 @@ resources:
   - k8s-event-logger.yaml
   - cilium.yaml
   - kured.yaml
-#  - ./system-upgrade-controller/crd.yaml
-#  - ./system-upgrade-controller/system-upgrade-controller.yaml
+  - ./system-upgrade-controller/crd.yaml
+  - ./system-upgrade-controller/system-upgrade-controller.yaml
 #  - node-problem-detector.yaml
 #  - kyverno.yaml
