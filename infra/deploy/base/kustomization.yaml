@@ -12,8 +12,7 @@ resources:
   - k8s-event-logger.yaml
   - cilium.yaml
   - kured.yaml
-  - ./system-upgrade-controller/clusterrole.yaml
-  - ./system-upgrade-controller/clusterrolebinding.yaml
-  - ./system-upgrade-controller/system-upgrade-controller.yaml
+#  - ./system-upgrade-controller/crd.yaml
+#  - ./system-upgrade-controller/system-upgrade-controller.yaml
 #  - node-problem-detector.yaml
 #  - kyverno.yaml
