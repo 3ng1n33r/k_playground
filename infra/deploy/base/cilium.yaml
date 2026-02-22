@@ -28,6 +28,8 @@ spec:
   releaseName: cilium
   targetNamespace: kube-system
   values:
+#    config:
+#      IPv4ServiceRange: "10.96.0.0/12"
     extraConfig:
       ipv4-service-range: "10.96.0.0/12"
     rollOutCiliumPods: false

@@ -49,28 +49,28 @@ deploy-cluster-dependencies:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yml -Dv
+    - ansible-playbook ansible/playbooks/cluster_dependencies.yaml -i ansible/inventory/hosts.yaml -Dv
 
 deploy-cluster-init:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yml -Dv
+    - ansible-playbook ansible/playbooks/cluster_init.yaml -i ansible/inventory/hosts.yaml -Dv
 
 deploy-cluster-cni:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_cni.yaml -i ansible/inventory/hosts.yml -Dv
+    - ansible-playbook ansible/playbooks/cluster_cni.yaml -i ansible/inventory/hosts.yaml -Dv
 
 deploy-cluster-fluxcd:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_fluxcd.yaml -i ansible/inventory/hosts.yml -e "gitlab_pat=$GITLAB_TOKEN" -Dv
+    - ansible-playbook ansible/playbooks/cluster_fluxcd.yaml -i ansible/inventory/hosts.yaml -e "gitlab_pat=$GITLAB_TOKEN" -Dv
 
 deploy-cluster-join-node:
   extends:
     - .job__deploy__rules
   script:
-    - ansible-playbook ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yml -Dv
+    - ansible-playbook ansible/playbooks/cluster_join_node.yaml -i ansible/inventory/hosts.yaml -Dv

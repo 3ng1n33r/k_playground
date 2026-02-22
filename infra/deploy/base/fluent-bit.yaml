@@ -39,11 +39,12 @@ spec:
       limits:
         cpu: 100m
         memory: 128Mi
+    #kmsg works only with sysctl -w kernel.dmesg_restrict=0 or privileged: true  
     securityContext:
-      privileged: true
-    #  capabilities:
-    #    add:
-    #    - CAP_SYSLOG
+    #  privileged: true
+      capabilities:
+        add:
+        - CAP_SYSLOG
     extraVolumes:
       - name: dev-kmsg  
         hostPath:  
