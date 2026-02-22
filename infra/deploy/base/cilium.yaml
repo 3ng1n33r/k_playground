@@ -29,7 +29,7 @@ spec:
   targetNamespace: kube-system
   values:
     extraConfig:
-      ipv4ServiceRange: "10.96.0.0/12"
+      ipv4-service-range: "10.96.0.0/12"
     rollOutCiliumPods: false
     gatewayAPI:
       enabled: true
