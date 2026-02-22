@@ -80,30 +80,30 @@ spec:
       enabled: true
       label: grafana_dashboard
       labelValue: "1"
-#    hubble:
-#      enabled: false
-#      relay:
-#        enabled: false
-#      ui:
-#        enabled: false
-#        ingress:
-#          enabled: false
-#          className: "nginx"
-#          hosts:
-#            - hubble-ui.192.168.31.8.sslip.io
-#      metrics:
-#        enableOpenMetrics: false
-#        enabled:
-#          - dns
-#          - drop
-#          - tcp
-#          - flow
-#          - port-distribution
-#          - icmp
-#          - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
-#        serviceMonitor:
-#          enabled: false
-#        dashboards:
-#          enabled: false
-#          label: grafana_dashboard
-#          labelValue: "1"
+    hubble:
+      enabled: false
+      relay:
+        enabled: false
+      ui:
+        enabled: false
+        ingress:
+          enabled: false
+          className: "nginx"
+          hosts:
+            - hubble-ui.192.168.31.8.sslip.io
+      metrics:
+        enableOpenMetrics: false
+        enabled:
+          - dns
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+        serviceMonitor:
+          enabled: false
+        dashboards:
+          enabled: false
+          label: grafana_dashboard
+          labelValue: "1"
