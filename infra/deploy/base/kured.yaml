@@ -30,7 +30,9 @@ spec:
   values:
     configuration:
       concurrency: 1
-      rebootDays: [su,sa]
+      rebootDays:
+        - su
+        - sa
       useRebootSentinelHostPath: true
       rebootMethod: "signal"
     containerSecurityContext:
