@@ -31,10 +31,17 @@ spec:
     configuration:
       concurrency: 1
       rebootDays: [su,sa]
-      rebootSentinel: "/var/run/reboot-required"
+      useRebootSentinelHostPath: true
+      rebootMethod: "signal"
     containerSecurityContext:
-      privileged: true  # Give permission to nsenter /proc/1/ns/mnt
+      privileged: false
       readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        add:
+        - CAP_KILL
+        drop:
+        - '*'
     nodeSelector:
       kubernetes.io/os: linux
     resources:
