@@ -30,11 +30,13 @@ spec:
   values:
     configuration:
       concurrency: 1
-      rebootDays:
-        - su
-        - sa
+      rebootDays: [su,sa]
+      startTime: "10:00"
+      endTime: "19:00"
+      timeZone: "Asia/Yekaterinburg"
       useRebootSentinelHostPath: true
       rebootMethod: "signal"
+      rebootSentinel: "/var/run/reboot-required.pkgs"
     containerSecurityContext:
       privileged: false
       readOnlyRootFilesystem: true

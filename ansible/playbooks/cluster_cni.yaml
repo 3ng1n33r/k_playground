@@ -40,6 +40,8 @@
         kubeconfig: /etc/kubernetes/admin.conf
         values:
           rollOutCiliumPods: false
+          extraConfig:
+            ipv4-service-range: "{{ kube_service_subnets }}"
           ipam:
             operator:
               clusterPoolIPv4PodCIDRList: ["{{ kube_pods_subnet }}"]
@@ -48,8 +50,8 @@
             enabled: true
           operator:
             rollOutPods: false
-          gatewayAPI:
-            enabled: true
+#          gatewayAPI:
+#            enabled: true
           l2announcements:
             enabled: true
           k8sClientRateLimit:
