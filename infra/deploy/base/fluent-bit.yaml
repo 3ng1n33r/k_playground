@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: fluent
-      version: 0.55.0
+      version: 0.56.0
   dependsOn:
     - name: loki
   interval: 30m
@@ -39,19 +39,19 @@ spec:
       limits:
         cpu: 100m
         memory: 128Mi
-    securityContext:
-      privileged: true
+#    securityContext:
+#      privileged: true
 #      capabilities:
 #        add:
 #        - CAP_SYSLOG
-    extraVolumes:
-      - name: dev-kmsg  
-        hostPath:  
-          path: /dev/kmsg  
-          type: CharDevice
-    extraVolumeMounts:
-      - name: dev-kmsg  
-        mountPath: /dev/kmsg 
+#    extraVolumes:
+#      - name: dev-kmsg  
+#        hostPath:  
+#          path: /dev/kmsg  
+#          type: CharDevice
+#    extraVolumeMounts:
+#      - name: dev-kmsg  
+#        mountPath: /dev/kmsg 
     config:
       filters: |
         [FILTER]
@@ -63,11 +63,6 @@ spec:
             K8S-Logging.Exclude On
             Buffer_Size 64KB
       inputs: |
-        [INPUT]
-            Name kmsg
-            Tag kernel.*
-            prio_level 4
-
         [INPUT]
             Name tail
             Path /var/log/containers/*.log
@@ -96,14 +91,6 @@ spec:
         [OUTPUT]
             Name loki
             Match host.*
-            host loki-gateway
-            port 80
-            labels job=fluentbit
-            label_keys $sub['stream']
-
-        [OUTPUT]
-            Name loki
-            Match kernel.*
             host loki-gateway
             port 80
             labels job=fluentbit
