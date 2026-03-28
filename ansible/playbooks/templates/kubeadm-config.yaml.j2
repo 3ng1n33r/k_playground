@@ -25,6 +25,8 @@ etcd:
 {% endif %}
 apiServer:
   extraArgs:
+  - name: service-cluster-ip-range
+    value: "{{ kube_service_subnets }}"
   - name: enable-aggregator-routing
     value: "{{ kube_api_aggregator_routing | ternary('true', 'false') }}"
 {% if kube_apiserver_feature_gates %}

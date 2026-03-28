@@ -21,9 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: jetstack
-      version: 1.19.2
-  dependsOn:
-    - name: ingress-nginx
+      version: 1.20.1
   install:
     createNamespace: true
   interval: 30m

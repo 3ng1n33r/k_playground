@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: grafana
-      version: 6.52.0
+      version: 6.55.0
   dependsOn:
     - name: local-path-provisioner
   timeout: 10m0s
