@@ -125,7 +125,7 @@ spec:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
-            - alertmanager.192.168.31.10.sslip.io
+            - alertmanager.192.168.31.9.sslip.io
           parentRefs:
             - name: cilium-gateway-monitoring
               namespace: monitoring
@@ -160,7 +160,7 @@ spec:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
-            - prometheus.192.168.31.10.sslip.io
+            - prometheus.192.168.31.9.sslip.io
           parentRefs:
             - name: cilium-gateway-monitoring
               namespace: monitoring
