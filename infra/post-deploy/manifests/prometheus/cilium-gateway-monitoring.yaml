@@ -4,10 +4,11 @@ kind: Gateway
 metadata:
   name: cilium-gateway-monitoring
   namespace: monitoring
-  annotations:
-    lbipam.cilium.io/ips: "192.168.31.10"  # Specify the desired IP
 spec:
   gatewayClassName: cilium
+  addresses:
+  - type: IPAddress
+    value: 192.168.31.9
   listeners:
   - protocol: HTTP
     port: 80
