@@ -39,8 +39,8 @@ spec:
         clusterPoolIPv4MaskSize: 24
     ipv4:
       enabled: true
-#    envoy:
-#      enabled: false
+    envoy:
+      enabled: false
     operator:
       rollOutPods: false
       replicas: 2
