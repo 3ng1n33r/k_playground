@@ -28,7 +28,7 @@ spec:
     - name: metrics-server
   interval: 30m0s
   releaseName: vertical-pod-autoscaler
-  targetNamespace: vpa
+  targetNamespace: vertical-pod-autoscaler
   values:
     admissionController:
       replicas: 1

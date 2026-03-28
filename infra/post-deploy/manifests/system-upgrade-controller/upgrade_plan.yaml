@@ -1,0 +1,25 @@
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: ubuntu-upgrade
+  namespace: system-upgrade
+spec:
+  concurrency: 1
+  nodeSelector:
+    matchExpressions:
+      - key: plan.upgrade.cattle.io/ubuntu
+        operator: Exists
+  serviceAccountName: system-upgrade
+  cordon: false
+#  drain:
+#    force: true
+#    ignoreDaemonSets: true
+#    deleteEmptyDirData: true
+  upgrade:
+    image: ubuntu:22.04
+    command:
+      - sh
+      - -c
+      - |
+        apt-get update && \
+        DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade

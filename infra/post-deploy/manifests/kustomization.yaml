@@ -5,3 +5,4 @@ resources:
   - ./flux/alertmanager.yaml
   - ./nfd/nvme-device-rule.yaml
   - ./prometheus/hardware-temperature-rule.yaml
+  - ./prometheus/cilium-gateway-monitoring.yaml
