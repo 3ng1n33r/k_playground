@@ -50,8 +50,6 @@
             enabled: true
           operator:
             rollOutPods: false
-#          gatewayAPI:
-#            enabled: true
           l2announcements:
             enabled: true
           k8sClientRateLimit:
