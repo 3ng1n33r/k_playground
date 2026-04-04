@@ -46,7 +46,7 @@
             creates: cluster_upgrade_v{{ desired_version }}.log
 
         - name: Change the cluster version.
-          ansible.builtin.shell: "kubeadm upgrade apply v{{ desired_version }} --yes > node_upgrade_v{{ desired_version }}.log 2>&1"
+          ansible.builtin.shell: "kubeadm upgrade apply v{{ desired_version }} --yes --skip-phases={{ kubeadm_init_phases_skip | join(',') }} > node_upgrade_v{{ desired_version }}.log 2>&1"
           args:
             chdir: /home/{{ ansible_user }}
             creates: node_upgrade_v{{ desired_version }}.log

@@ -1,3 +1,17 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: script
+  namespace: system-upgrade
+type: Opaque
+stringData:
+  upgrade.sh: |
+    #!/bin/sh
+    set -e
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+---
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
@@ -5,6 +19,12 @@ metadata:
   namespace: system-upgrade
 spec:
   concurrency: 1
+  version: "04.2026"
+  window:
+    days: [6,7]
+    startTime: "10:00:00"
+    endTime: "22:00:00"
+    timeZone: "Asia/Yekaterinburg"
   nodeSelector:
     matchExpressions:
       - key: plan.upgrade.cattle.io/ubuntu
@@ -15,11 +35,10 @@ spec:
 #    force: true
 #    ignoreDaemonSets: true
 #    deleteEmptyDirData: true
+  secrets:
+    - name: script
+      path: /host/run/system-upgrade/secrets/script
   upgrade:
-    image: ubuntu:22.04
-    command:
-      - sh
-      - -c
-      - |
-        apt-get update && \
-        DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+    image: ubuntu
+    command: ["chroot", "/host"]
+    args: ["sh", "/run/system-upgrade/secrets/script/upgrade.sh"]
