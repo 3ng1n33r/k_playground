@@ -25,6 +25,8 @@ etcd:
 {% endif %}
 apiServer:
   extraArgs:
+  - name: event-ttl
+    value: "{{ event_ttl_duration }}"
   - name: service-cluster-ip-range
     value: "{{ kube_service_subnets }}"
   - name: enable-aggregator-routing

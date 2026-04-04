@@ -11,3 +11,4 @@ kubeadm_init_phases_skip:
   - addon/kube-proxy
 kube_controller_terminated_pod_gc_threshold: 20
 kube_api_aggregator_routing: true
+event_ttl_duration: "6h0m0s"
