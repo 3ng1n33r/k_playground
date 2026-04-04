@@ -19,6 +19,7 @@ metadata:
   namespace: system-upgrade
 spec:
   concurrency: 1
+  postCompleteDelay: "5m"
   version: "04.2026"
   window:
     days:
@@ -41,6 +42,6 @@ spec:
     - name: script
       path: /host/run/system-upgrade/secrets/script
   upgrade:
-    image: ubuntu
+    image: ubuntu:24.04
     command: ["chroot", "/host"]
     args: ["sh", "/run/system-upgrade/secrets/script/upgrade.sh"]
