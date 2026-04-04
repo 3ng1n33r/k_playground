@@ -6,3 +6,4 @@ resources:
   - ./nfd/nvme-device-rule.yaml
   - ./prometheus/hardware-temperature-rule.yaml
   - ./prometheus/cilium-gateway-monitoring.yaml
+  - ./system-upgrade-controller/upgrade_plan.yaml
