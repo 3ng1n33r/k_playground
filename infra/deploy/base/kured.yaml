@@ -39,14 +39,14 @@ spec:
       rebootMethod: "signal"
       rebootSentinel: "/var/run/reboot-required.pkgs"
     containerSecurityContext:
-      privileged: false
+      privileged: true
       readOnlyRootFilesystem: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        add:
-        - CAP_KILL
-        drop:
-        - '*'
+#      allowPrivilegeEscalation: false
+#      capabilities:
+#        add:
+#        - CAP_KILL
+#        drop:
+#        - '*'
     nodeSelector:
       kubernetes.io/os: linux
     resources:
