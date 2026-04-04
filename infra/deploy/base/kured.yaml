@@ -30,6 +30,7 @@ spec:
   values:
     configuration:
       concurrency: 1
+      period: "0h10m0s"
       rebootDays: [su,sa]
       startTime: "10:00"
       endTime: "23:00"
