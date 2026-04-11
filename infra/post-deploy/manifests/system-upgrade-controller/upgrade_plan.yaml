@@ -19,7 +19,7 @@ metadata:
   namespace: system-upgrade
 spec:
   concurrency: 1
-  postCompleteDelay: "5m"
+  postCompleteDelay: "10m"
   version: "04.2026"
   window:
     days:

@@ -134,6 +134,9 @@ imageGCHighThresholdPercent: {{ kubelet_image_gc_high_threshold }}
 {% if kubelet_image_gc_low_threshold is defined %}
 imageGCLowThresholdPercent: {{ kubelet_image_gc_low_threshold }}
 {% endif %}
+{% if kubelet_image_maximum_gc_age is defined %}
+imageMaximumGCAge: {{ kubelet_image_maximum_gc_age }}
+{% endif %}
 {% if kubelet_cpu_manager_policy is defined %}
 cpuManagerPolicy: {{ kubelet_cpu_manager_policy }}
 {% endif %}
