@@ -31,6 +31,16 @@ spec:
   targetNamespace: kyverno
   values:
     admissionController:
+      rbac:
+        clusterRole:
+          extraResources:
+            - apiGroups:
+                - autoscaling.k8s.io
+              resources:
+                - verticalpodautoscalers
+              verbs:
+                - get
+                - list
       replicas: 3
       antiAffinity:
         enabled: true
@@ -57,6 +67,19 @@ spec:
             cpu: 200m
             memory: 256Mi
     backgroundController:
+      rbac:
+        clusterRole:
+          extraResources:
+            - apiGroups:
+                - autoscaling.k8s.io
+              resources:
+                - verticalpodautoscalers
+              verbs:
+                - get
+                - list
+                - create
+                - update
+                - delete
       replicas: 2
       resources:
         requests:
