@@ -1,6 +1,6 @@
 ---
-# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubelet=true -e upload_kubeadm=true
-# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upgrade_kubelet=true -e upgrade_kubeadm=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubeadm=true -e upgrade_kubeadm=true
+# ansible-playbook -i inventory/hosts.yml runbooks/upgrade_config.yaml -e upload_kubelet=true -e upgrade_kubelet=true
 - name: Runbooks | Upgrade cluster config.
   hosts: master,worker
   gather_facts: false
