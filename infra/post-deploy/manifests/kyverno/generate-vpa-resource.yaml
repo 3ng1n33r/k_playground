@@ -28,11 +28,12 @@ spec:
                 - kube-public
                 - local-path-storage
       generate:
+        synchronize: true
+        generateExisting: true
         kind: VerticalPodAutoscaler
         apiVersion: autoscaling.k8s.io/v1
         name: "{{request.object.metadata.name}}"
         namespace: "{{request.object.metadata.namespace}}"
-        synchronize: true
         data:
           metadata:
             labels:
