@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ./flux/alertmanager.yaml
   - ./nfd/nvme-device-rule.yaml
+  - ./nfd/arm64-scaling-governor.yaml
   - ./prometheus/hardware-temperature-rule.yaml
   - ./prometheus/cilium-gateway-monitoring.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml

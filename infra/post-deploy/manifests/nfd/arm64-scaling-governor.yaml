@@ -1,0 +1,14 @@
+---
+apiVersion: nfd.k8s-sigs.io/v1alpha1  
+kind: NodeFeatureRule  
+metadata:  
+  name: arm64-scaling-governor  
+spec:  
+  rules:  
+    - name: "arm64-scaling-governor"  
+      labels:  
+        "feature.node.kubernetes.io/cpu-scaling-governor": "@local.feature.cpu.scaling_governor"  
+      matchFeatures:  
+        - feature: local.feature  
+          matchExpressions:  
+            cpu.scaling_governor: {op: Exists}
