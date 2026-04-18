@@ -26,7 +26,7 @@ spec:
                 - kube-system
                 - kube-node-lease
                 - kube-public
-                - local-path-storage
+                - local-path-provisioner
       generate:
         synchronize: true
         generateExisting: true
