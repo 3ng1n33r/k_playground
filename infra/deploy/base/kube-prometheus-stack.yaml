@@ -158,7 +158,7 @@ spec:
             - weight: 1
               preference:
                 matchExpressions:
-                - key: feature.node.kubernetes.io/storage-nvme.present
+                - key: "feature.node.kubernetes.io/storage-nvme.present"
                   operator: In
                   values:
                   - true
@@ -211,7 +211,7 @@ spec:
             - weight: 1
               preference:
                 matchExpressions:
-                - key: feature.node.kubernetes.io/storage-nvme.present
+                - key: "feature.node.kubernetes.io/storage-nvme.present"
                   operator: In
                   values:
                   - true
