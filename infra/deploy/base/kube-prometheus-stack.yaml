@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 82.15.1
+      version: 84.0.1
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -37,8 +37,22 @@ spec:
       enabled: true
       defaultDashboardsTimezone: "Asia/Yekaterinburg"
       defaultDashboardsEnabled: true
+      route:
+        main:
+          enabled: true
+          apiVersion: gateway.networking.k8s.io/v1
+          kind: HTTPRoute
+          hostnames:
+            - grafana.192.168.31.9.sslip.io
+          parentRefs:
+            - name: cilium-gateway-monitoring
+              namespace: monitoring
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
       ingress:
-        enabled: true
+        enabled: false
         hosts:
           - grafana.192.168.31.8.sslip.io
         ingressClassName: nginx
@@ -138,6 +152,16 @@ spec:
           - alertmanager-secret-files
         replicas: 3
         podAntiAffinity: "hard"
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: feature.node.kubernetes.io/storage-nvme.present
+                  operator: In
+                  values:
+                  - true
         storage:
           volumeClaimTemplate:
             spec:
@@ -181,6 +205,16 @@ spec:
           - etcd-client-cert
         replicas: 2
         podAntiAffinity: "hard"
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: feature.node.kubernetes.io/storage-nvme.present
+                  operator: In
+                  values:
+                  - true
         retention: 7d
         retentionSize: 5GB
         serviceMonitorSelectorNilUsesHelmValues: false
