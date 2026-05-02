@@ -2,7 +2,7 @@
 Wants=containerd.service
 
 [Service]
-{% if kube_reserved|bool %}
-Slice={{ kube_reserved_cgroups_for_service_slice }}
+{% if kube_reserved_cgroups is defined %}
+Slice={{ kube_reserved_cgroups }}
 {% endif %}
 OOMScoreAdjust=-999

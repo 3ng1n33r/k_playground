@@ -66,6 +66,16 @@
         - net.bridge.bridge-nf-call-iptables
         - net.ipv4.ip_forward
 
+    - name: Apply other sysctl parameters.
+      ansible.posix.sysctl:
+        name: '{{ item.key }}'
+        value: '{{ item.value }}'
+        sysctl_set: true
+        state: present
+        reload: true
+      with_dict: '{{ sysctl_config }}'
+      ignore_errors: true
+
     - name: Unhold packages.
       ansible.builtin.dpkg_selections:
         name: "{{ item }}"
@@ -104,6 +114,18 @@
             name: haproxy
             state: started
             enabled: true
+
+    # IRQ affinity
+
+    - name: Write IRQ affinity configuration.
+      ansible.builtin.template:
+        src: irq-affinity.service.j2
+        dest: "/etc/systemd/system/irq-affinity.service"
+        owner: root
+        mode: '0644'
+        backup: true
+      when: irq_affinity | default(false) | bool
+      notify: Reload systemd.
 
     # Install Containerd
 
@@ -164,6 +186,13 @@
         - kubectl
         - containerd.io
         - haproxy
+
+    - name: Enable and start the IRQ affinity service.
+      ansible.builtin.systemd_service:
+        name: irq-affinity
+        state: started
+        enabled: true
+      when: irq_affinity | default(false) | bool
 
   handlers:
     - name: Generate Containerd config.

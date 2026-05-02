@@ -15,16 +15,30 @@
     owner: root
   notify: Reload systemd.
 
-- name: Create runtime.slice systemd unit.
+- name: Create kube.slice systemd unit.
   ansible.builtin.copy:
-    dest: "/etc/systemd/system/runtime.slice"
+    dest: "/etc/systemd/system/kube.slice"
     owner: root
     group: root
     mode: '0644'
     content: |
       [Unit]
-      Description=Container Runtime Slice
+      Description=Kubernetes Slice
 
       [Slice]
-  when: cri_cgroups_for_service_slice is defined
+  when: kube_reserved_cgroups is defined
+  notify: Reload systemd.
+
+- name: Check kube.slice systemd unit exist.
+  ansible.builtin.stat:
+    path: "/etc/systemd/system/kube.slice"
+  register: kube_slice_check
+
+- name: Remove kube.slice systemd unit.
+  ansible.builtin.file:
+    path: "/etc/systemd/system/kube.slice"
+    state: absent
+  when: 
+    - kube_slice_check.stat.exists
+    - kube_reserved_cgroups is not defined
   notify: Reload systemd.
