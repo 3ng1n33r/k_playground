@@ -8,4 +8,4 @@ resources:
   - ./prometheus/hardware-temperature-rule.yaml
   - ./prometheus/cilium-gateway-monitoring.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml
-  - ./kyverno/generate-vpa-resource.yaml
+#  - ./kyverno/generate-vpa-resource.yaml

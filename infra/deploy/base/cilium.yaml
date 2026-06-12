@@ -31,6 +31,8 @@ spec:
 #    extraConfig:
 #      ipv4-service-range: "10.96.0.0/23"
     rollOutCiliumPods: false
+    updateStrategy:
+      type: OnDelete
     gatewayAPI:
       enabled: true
     ipam:
