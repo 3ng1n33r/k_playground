@@ -5,7 +5,7 @@ resources:
   - ingress-nginx.yaml
   - kube-prometheus-stack.yaml
   - metrics-server.yaml
-#  - vertical-pod-autoscaler.yaml
+  - vertical-pod-autoscaler.yaml
 #  - loki.yaml
 #  - fluent-bit.yaml
   - node-feature-discovery.yaml
