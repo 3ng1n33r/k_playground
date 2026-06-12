@@ -5,14 +5,14 @@ resources:
   - ingress-nginx.yaml
   - kube-prometheus-stack.yaml
   - metrics-server.yaml
-  - vertical-pod-autoscaler.yaml
+#  - vertical-pod-autoscaler.yaml
 #  - loki.yaml
 #  - fluent-bit.yaml
   - node-feature-discovery.yaml
 #  - k8s-event-logger.yaml
   - cilium.yaml
   - kured.yaml
-  - ./system-upgrade-controller/v0.19.0/crd.yaml
-  - ./system-upgrade-controller/v0.19.0/system-upgrade-controller.yaml
+  - ./system-upgrade-controller/v0.19.2/crd.yaml
+  - ./system-upgrade-controller/v0.19.2/system-upgrade-controller.yaml
 #  - node-problem-detector.yaml
   - kyverno.yaml
