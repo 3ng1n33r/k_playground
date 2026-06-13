@@ -29,6 +29,8 @@ spec:
         memory: 128Mi
     serviceMonitor:
       enabled: true
+      defaults:
+        interval: 30s
     config:
       modules:
         dns_kubernetes_internal:
