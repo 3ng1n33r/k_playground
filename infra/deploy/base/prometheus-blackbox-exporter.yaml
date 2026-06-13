@@ -1,0 +1,62 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prometheus-blackbox-exporter
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: prometheus-blackbox-exporter
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+      version: 11.11.0
+  interval: 30m
+  releaseName: prometheus-blackbox-exporter
+  targetNamespace: monitoring
+  dependsOn:
+    - name: kube-prometheus-stack
+  values:
+    kind: DaemonSet
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+    serviceMonitor:
+      enabled: true
+    config:
+      modules:
+        dns_kubernetes_internal:
+          prober: dns
+          timeout: 5s
+          dns:
+            transport_protocol: udp
+            preferred_ip_protocol: ip4
+            query_name: kubernetes.default.svc.cluster.local
+            query_type: A
+            valid_rcodes:
+              - NOERROR
+        dns_external_yaru:
+          prober: dns
+          timeout: 5s
+          dns:
+            transport_protocol: udp
+            preferred_ip_protocol: ip4
+            query_name: ya.ru
+            query_type: A
+            valid_rcodes:
+              - NOERROR

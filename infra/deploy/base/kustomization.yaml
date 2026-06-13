@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ingress-nginx.yaml
   - kube-prometheus-stack.yaml
+  - prometheus-blackbox-exporter.yaml
   - metrics-server.yaml
   - vertical-pod-autoscaler.yaml
 #  - loki.yaml
