@@ -28,9 +28,12 @@ spec:
         cpu: 100m
         memory: 128Mi
     serviceMonitor:
+      selfMonitor:
+        enabled: true
       enabled: true
       defaults:
         interval: 30s
+        scrapeTimeout: 30s
     config:
       modules:
         dns_kubernetes_internal:
