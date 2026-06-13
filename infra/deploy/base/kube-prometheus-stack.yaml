@@ -187,46 +187,52 @@ spec:
                   - 192.168.31.21:7000  
                   - 192.168.31.22:7000
             scheme: http
-          - job_name: 'blackbox-dns-kubernetes'
-            scrape_interval: 30s
+          - job_name: blackbox-dns-kubernetes
+            metrics_path: /probe
             kubernetes_sd_configs:
               - role: pod
             relabel_configs:
-              - source_labels: [__meta_kubernetes_pod_label_app]
-                regex: blackbox-exporter
+              - source_labels:
+                  - __meta_kubernetes_pod_label_app_kubernetes_io_name
+                regex: prometheus-blackbox-exporter
                 action: keep
-              - target_label: __address__
-                replacement: $1:9115
-                source_labels:
+              - source_labels:
                   - __meta_kubernetes_pod_ip
+                regex: (.*)
+                target_label: __address__
+                replacement: $1:9115
               - target_label: __param_module
                 replacement: dns_kubernetes_internal
               - target_label: __param_target
                 replacement: 10.96.0.10
-              - source_labels: [__meta_kubernetes_pod_node_name]
-                target_label: node
               - target_label: __metrics_path__
                 replacement: /probe
-          - job_name: 'blackbox-dns-yaru'
-            scrape_interval: 30s
+              - source_labels:
+                  - __meta_kubernetes_pod_node_name
+                target_label: node
+          - job_name: blackbox-dns-yaru
+            metrics_path: /probe
             kubernetes_sd_configs:
               - role: pod
             relabel_configs:
-              - source_labels: [__meta_kubernetes_pod_label_app]
-                regex: blackbox-exporter
+              - source_labels:
+                  - __meta_kubernetes_pod_label_app_kubernetes_io_name
+                regex: prometheus-blackbox-exporter
                 action: keep
-              - target_label: __address__
-                replacement: $1:9115
-                source_labels:
+              - source_labels:
                   - __meta_kubernetes_pod_ip
+                regex: (.*)
+                target_label: __address__
+                replacement: $1:9115
               - target_label: __param_module
-                replacement: dns_external_yaru
+                replacement: dns_kubernetes_internal
               - target_label: __param_target
                 replacement: 10.96.0.10
-              - source_labels: [__meta_kubernetes_pod_node_name]
-                target_label: node
               - target_label: __metrics_path__
                 replacement: /probe
+              - source_labels:
+                  - __meta_kubernetes_pod_node_name
+                target_label: node
         secrets:
           - etcd-client-cert
         replicas: 2
