@@ -202,7 +202,7 @@ spec:
               - target_label: __param_module
                 replacement: dns_kubernetes_internal
               - target_label: __param_target
-                replacement: kubernetes.default.svc.cluster.local
+                replacement: 10.96.0.10
               - source_labels: [__meta_kubernetes_pod_node_name]
                 target_label: node
               - target_label: __metrics_path__
@@ -222,7 +222,7 @@ spec:
               - target_label: __param_module
                 replacement: dns_external_yaru
               - target_label: __param_target
-                replacement: ya.ru
+                replacement: 10.96.0.10
               - source_labels: [__meta_kubernetes_pod_node_name]
                 target_label: node
               - target_label: __metrics_path__
