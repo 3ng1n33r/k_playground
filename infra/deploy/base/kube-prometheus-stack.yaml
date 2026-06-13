@@ -187,6 +187,46 @@ spec:
                   - 192.168.31.21:7000  
                   - 192.168.31.22:7000
             scheme: http
+          - job_name: 'blackbox-dns-kubernetes'
+            scrape_interval: 30s
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_label_app]
+                regex: blackbox-exporter
+                action: keep
+              - target_label: __address__
+                replacement: $1:9115
+                source_labels:
+                  - __meta_kubernetes_pod_ip
+              - target_label: __param_module
+                replacement: dns_kubernetes_internal
+              - target_label: __param_target
+                replacement: kubernetes.default.svc.cluster.local
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: node
+              - target_label: __metrics_path__
+                replacement: /probe
+          - job_name: 'blackbox-dns-yaru'
+            scrape_interval: 30s
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_label_app]
+                regex: blackbox-exporter
+                action: keep
+              - target_label: __address__
+                replacement: $1:9115
+                source_labels:
+                  - __meta_kubernetes_pod_ip
+              - target_label: __param_module
+                replacement: dns_external_yaru
+              - target_label: __param_target
+                replacement: ya.ru
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: node
+              - target_label: __metrics_path__
+                replacement: /probe
         secrets:
           - etcd-client-cert
         replicas: 2
