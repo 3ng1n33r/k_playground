@@ -227,7 +227,7 @@ spec:
                 target_label: __address__
                 replacement: $1:9115
               - target_label: __param_module
-                replacement: dns_kubernetes_internal
+                replacement: dns_external_yaru
               - target_label: __param_target
                 replacement: 10.96.0.10
               - target_label: __metrics_path__
