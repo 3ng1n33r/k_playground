@@ -17,3 +17,4 @@ resources:
   - ./system-upgrade-controller/v0.19.2/system-upgrade-controller.yaml
 #  - node-problem-detector.yaml
   - kyverno.yaml
+  - etcd-defrag-cronjob.yaml
