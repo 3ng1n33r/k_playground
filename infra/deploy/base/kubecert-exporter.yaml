@@ -1,0 +1,119 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubecert-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: kubecert-exporter
+  template:
+    metadata:
+      labels:
+        app: kubecert-exporter
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: exporter
+        image: pitipiwpiwwiwwiw/kubecert-exporter:0.1
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        securityContext:
+          runAsUser: 0
+        ports:
+        - name: http
+          containerPort: 9100
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: pki
+            mountPath: /etc/kubernetes/pki
+            readOnly: true
+          - name: etcd-pki
+            mountPath: /etc/ssl/etcd/ssl
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: kubecert-exporter-config
+        - name: pki
+          hostPath:
+            path: /etc/kubernetes/pki
+        - name: etcd-pki
+          hostPath:
+            path: /etc/ssl/etcd/ssl
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kubecert-exporter
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: kubecert-exporter
+  podMetricsEndpoints:
+    - port: http
+      path: /metrics
+      interval: 15m
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubecert-exporter-config
+  namespace: monitoring
+data:
+  certs.yaml: |
+    certs:
+      - name: apiserver
+        path: /etc/kubernetes/pki/apiserver.crt
+        group: control-plane
+
+      - name: apiserver-kubelet-client
+        path: /etc/kubernetes/pki/apiserver-kubelet-client.crt
+        group: control-plane
+
+      - name: apiserver-etcd-client
+        path: /etc/kubernetes/pki/apiserver-etcd-client.crt
+        group: control-plane
+
+      - name: front-proxy-client
+        path: /etc/kubernetes/pki/front-proxy-client.crt
+        group: control-plane
+
+      - name: ca
+        path: /etc/kubernetes/pki/ca.crt
+        group: control-plane
+
+      - name: etcd-external-server
+        path: /etc/ssl/etcd/ssl/server.crt
+        group: etcd-external
+
+      - name: etcd-external-peer
+        path: /etc/ssl/etcd/ssl/peer.crt
+        group: etcd-external
+
+      - name: etcd-ca
+        path: /etc/ssl/etcd/ssl/ca.crt
+        group: etcd-external

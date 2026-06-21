@@ -37,12 +37,6 @@ spec:
       enabled: true
       defaultDashboardsTimezone: "Asia/Yekaterinburg"
       defaultDashboardsEnabled: true
-      dashboards:
-        default:
-          HAProxy:
-            gnetId: 12693
-            revision: 14
-            datasource: Prometheus
       route:
         main:
           enabled: false
