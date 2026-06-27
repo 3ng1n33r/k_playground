@@ -63,6 +63,12 @@
   become: true
   gather_facts: false
   tasks:
+    - name: Add lb address.
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "127.0.0.1       {{ loadbalancer_apiserver_address }}"
+      when: "groups['master'] | length >= 3"
+        
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
         host: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
@@ -73,13 +79,3 @@
       args:
         chdir: /home/{{ ansible_user }}
         creates: node_joined.log
-
-    - name: Wait for port to become open on the host.
-      ansible.builtin.wait_for:
-        port: "{{ loadbalancer_apiserver_port }}"
-        delay: 30
-      when: "groups['master'] | length >= 3"
-
-    - name: Include task to change the LB IP.
-      ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
-      when: "groups['master'] | length >= 3"
