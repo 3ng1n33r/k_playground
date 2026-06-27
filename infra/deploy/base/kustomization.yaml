@@ -7,6 +7,7 @@ resources:
   - prometheus-blackbox-exporter.yaml
   - metrics-server.yaml
   - vertical-pod-autoscaler.yaml
+  - cert-manager.yaml
 #  - loki.yaml
 #  - fluent-bit.yaml
   - node-feature-discovery.yaml
