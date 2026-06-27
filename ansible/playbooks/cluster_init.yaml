@@ -68,7 +68,6 @@
       when:
         - groups['master'] | length >= 3
         - groups['etcd'] | length in [3, 5]
-        - "'etcd' in group_names"
 
     - name: Check cluster initialized files.
       ansible.builtin.stat:

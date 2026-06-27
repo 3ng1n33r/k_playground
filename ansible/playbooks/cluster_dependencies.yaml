@@ -3,7 +3,6 @@
   hosts: all
   become: true
   tasks:
-    # Add repos
     - name: Add repos.
       ansible.builtin.include_tasks: tasks/add_repos.yaml
 
@@ -31,6 +30,9 @@
         - name: Remove dependencies that are no longer required.
           ansible.builtin.apt:
             autoremove: true
+
+    - name: Add linux tasks.
+      ansible.builtin.include_tasks: tasks/common_linux.yaml
 
     # Disable SWAP
 
@@ -66,16 +68,6 @@
         - net.bridge.bridge-nf-call-iptables
         - net.ipv4.ip_forward
 
-    - name: Apply other sysctl parameters.
-      ansible.posix.sysctl:
-        name: '{{ item.key }}'
-        value: '{{ item.value }}'
-        sysctl_set: true
-        state: present
-        reload: true
-      with_dict: '{{ sysctl_config }}'
-      ignore_errors: true
-
     - name: Unhold packages.
       ansible.builtin.dpkg_selections:
         name: "{{ item }}"
@@ -86,6 +78,7 @@
         - kubectl
         - containerd.io
         - haproxy
+        - cri-tools
       ignore_errors: true
 
     # Install HAProxy
@@ -114,18 +107,6 @@
             name: haproxy
             state: started
             enabled: true
-
-    # IRQ affinity
-
-    - name: Write IRQ affinity configuration.
-      ansible.builtin.template:
-        src: irq-affinity.service.j2
-        dest: "/etc/systemd/system/irq-affinity.service"
-        owner: root
-        mode: '0644'
-        backup: true
-      when: irq_affinity | default(false) | bool
-      notify: Reload systemd.
 
     # Install Containerd
 
@@ -171,10 +152,23 @@
           - kubelet={{ kubernetes_pkg_version }}
           - kubeadm={{ kubernetes_pkg_version }}
           - kubectl={{ kubernetes_pkg_version }}
+          - cri-tools={{ cri_tools_pkg_version }}
         state: present
 
     - name: Write kubelet systemd init file.
       ansible.builtin.include_tasks: tasks/write_kubelet_init.yaml
+
+    - name: Set the crictl endpoint in the configuration file.
+      ansible.builtin.copy:
+        dest: /etc/crictl.yaml
+        content: |
+          runtime-endpoint: unix:///var/run/containerd/containerd.sock
+          image-endpoint: unix:///var/run/containerd/containerd.sock
+          timeout: 10
+          debug: true
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Hold Kubeadm, Kubelet packages.
       ansible.builtin.dpkg_selections:
@@ -186,13 +180,7 @@
         - kubectl
         - containerd.io
         - haproxy
-
-    - name: Enable and start the IRQ affinity service.
-      ansible.builtin.systemd_service:
-        name: irq-affinity
-        state: started
-        enabled: true
-      when: irq_affinity | default(false) | bool
+        - cri-tools
 
   handlers:
     - name: Generate Containerd config.
@@ -211,4 +199,14 @@
     - name: Restart haproxy.
       ansible.builtin.systemd_service:
         name: haproxy
+        state: restarted
+
+    - name: Restart journald.
+      ansible.builtin.systemd_service:
+        name: systemd-journald.service
+        state: restarted
+
+    - name: Restart atop.
+      ansible.builtin.service:
+        name: atop
         state: restarted

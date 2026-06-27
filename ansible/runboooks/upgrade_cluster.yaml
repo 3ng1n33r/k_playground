@@ -40,7 +40,7 @@
             state: present
 
         - name: Fetching available versions to upgrade.
-          ansible.builtin.shell: "kubeadm upgrade plan > cluster_upgrade_v{{ desired_version }}.log 2>&1"
+          ansible.builtin.shell: "kubeadm upgrade plan --v=5 > cluster_upgrade_v{{ desired_version }}.log 2>&1"
           args:
             chdir: /home/{{ ansible_user }}
             creates: cluster_upgrade_v{{ desired_version }}.log

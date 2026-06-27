@@ -39,6 +39,7 @@
             - kubelet
             - kubectl
             - containerd.io
+            - cri-tools
           ignore_errors: true
 
         - name: Remove packages.

@@ -39,11 +39,19 @@
               - kubeadm={{ kubernetes_pkg_version }}
             state: present
 
-        - name: Upgrading node.
+        - name: Upgrading master node.
+          ansible.builtin.shell: "kubeadm upgrade node --skip-phases={{ kubeadm_init_phases_skip | join(',') }} > node_upgrade_v{{ desired_version }}.log 2>&1"
+          args:
+            chdir: /home/{{ ansible_user }}
+            creates: node_upgrade_v{{ desired_version }}.log
+          when: "'master' in group_names"
+
+        - name: Upgrading worker node.
           ansible.builtin.shell: "kubeadm upgrade node > node_upgrade_v{{ desired_version }}.log 2>&1"
           args:
             chdir: /home/{{ ansible_user }}
             creates: node_upgrade_v{{ desired_version }}.log
+          when: "'worker' in group_names"
 
         - name: Allow Kubectl, Kubelet to be upgraded.
           ansible.builtin.dpkg_selections:
