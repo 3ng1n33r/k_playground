@@ -51,7 +51,6 @@ spec:
             - path:
                 type: PathPrefix
                 value: /
-        ingressClassName: nginx
       resources:
         requests:
           cpu: 250m
