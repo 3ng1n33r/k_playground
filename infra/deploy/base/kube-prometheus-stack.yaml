@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 86.3.2
+      version: 87.3.0
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -45,16 +45,12 @@ spec:
           hostnames:
             - grafana.192.168.31.9.sslip.io
           parentRefs:
-            - name: cilium-gateway-monitoring
+            - name: monitoring-gateway
               namespace: monitoring
           matches:
             - path:
                 type: PathPrefix
                 value: /
-      ingress:
-        enabled: false
-        hosts:
-          - grafana.192.168.31.8.sslip.io
         ingressClassName: nginx
       resources:
         requests:
@@ -141,7 +137,7 @@ spec:
           hostnames:
             - alertmanager.192.168.31.9.sslip.io
           parentRefs:
-            - name: cilium-gateway-monitoring
+            - name: monitoring-gateway
               namespace: monitoring
           matches:
             - path:
@@ -186,7 +182,7 @@ spec:
           hostnames:
             - prometheus.192.168.31.9.sslip.io
           parentRefs:
-            - name: cilium-gateway-monitoring
+            - name: monitoring-gateway
               namespace: monitoring
           matches:
             - path:

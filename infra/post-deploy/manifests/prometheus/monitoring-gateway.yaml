@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: cilium-gateway-monitoring
+  name: monitoring-gateway
   namespace: monitoring
 spec:
   gatewayClassName: cilium
@@ -10,9 +10,15 @@ spec:
   - type: IPAddress
     value: 192.168.31.9
   listeners:
-  - protocol: HTTP
-    port: 80
-    name: http-gw
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "*.192.168.31.9.sslip.io"
     allowedRoutes:
       namespaces:
         from: Same
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: monitoring-gateway-tls
