@@ -39,7 +39,7 @@ spec:
       defaultDashboardsEnabled: true
       route:
         main:
-          enabled: false
+          enabled: true
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
