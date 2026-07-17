@@ -59,10 +59,10 @@ spec:
 #      qps: 50
 #    k8sServiceHost: cluster-endpoint
 #    k8sServicePort: 8443
-    l2announcements:
-      enabled: false
+#    l2announcements:
+#      enabled: true
     bgpControlPlane:
-      enabled: false
+      enabled: true
     ipv4NativeRoutingCIDR: "10.95.0.0/22"
     kubeProxyReplacement: true
     autoDirectNodeRoutes: true
