@@ -31,8 +31,8 @@ spec:
 #    extraConfig:
 #      ipv4-service-range: "10.96.0.0/23"
     rollOutCiliumPods: false
-    updateStrategy:
-      type: OnDelete
+#    updateStrategy:
+#      type: OnDelete
     gatewayAPI:
       enabled: true
     ipam:
@@ -59,10 +59,10 @@ spec:
 #      qps: 50
 #    k8sServiceHost: cluster-endpoint
 #    k8sServicePort: 8443
-#    l2announcements:
-#      enabled: true
+    l2announcements:
+      enabled: false
     bgpControlPlane:
-      enabled: true
+      enabled: false
     ipv4NativeRoutingCIDR: "10.95.0.0/22"
     kubeProxyReplacement: true
     autoDirectNodeRoutes: true
