@@ -9,7 +9,7 @@ resources:
   - ./nfd/nvme-device-rule.yaml
   - ./nfd/arm64-scaling-governor.yaml
   - ./prometheus/hardware-temperature-rule.yaml
-  - ./prometheus/monitoring-gateway-cert.yaml  
-  - ./prometheus/monitoring-gateway.yaml
+#  - ./prometheus/monitoring-gateway-cert.yaml  
+#  - ./prometheus/monitoring-gateway.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml
   - ./kyverno/generate-vpa-resource.yaml
