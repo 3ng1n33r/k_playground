@@ -52,13 +52,6 @@
             enabled: true
           operator:
             rollOutPods: false
-#          l2announcements:
-#            enabled: true
-#          k8sClientRateLimit:
-#            burst: 100
-#            qps: 50
-#          k8sServiceHost: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
-#          k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
           ipv4NativeRoutingCIDR: "{{ kube_pods_subnet }}"
           autoDirectNodeRoutes: true
           kubeProxyReplacement: true
@@ -74,6 +67,13 @@
             enabled: false
           hubble:
             enabled: false
+#          l2announcements:
+#            enabled: true
+#          k8sClientRateLimit:
+#            burst: 100
+#            qps: 50
+#          k8sServiceHost: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
+#          k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
 
 - name: Install the Cilium CLI.
   hosts: master
