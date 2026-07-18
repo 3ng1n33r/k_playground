@@ -5,10 +5,10 @@ resources:
   - namespace.yaml
   - rbac.yaml
 #  - ./cilium/l2-announcement-policy.yaml
-#  - ./cilium/bgp-cluster-config.yaml
-#  - ./cilium/bgp-peer-config.yaml
-#  - ./cilium/bgp-advertisements.yaml
-#  - ./cilium/loadbalancer-ip-pool.yaml
+  - ./cilium/bgp-cluster-config.yaml
+  - ./cilium/bgp-peer-config.yaml
+  - ./cilium/bgp-advertisements.yaml
+  - ./cilium/loadbalancer-ip-pool.yaml
   - ./prometheus/alertmanager-sealed.yaml
   - ./prometheus/prom-stack-credentials-sealed.yaml
   - ./prometheus/etcd-client-cert-sealed.yaml
