@@ -39,6 +39,8 @@
         update_repo_cache: true
         kubeconfig: /etc/kubernetes/admin.conf
         values:
+          bgpControlPlane:
+            enabled: true
           rollOutCiliumPods: false
 #          extraConfig:
 #            ipv4-service-range: "{{ kube_service_subnets }}"
@@ -50,13 +52,13 @@
             enabled: true
           operator:
             rollOutPods: false
-          l2announcements:
-            enabled: true
-          k8sClientRateLimit:
-            burst: 100
-            qps: 50
-          k8sServiceHost: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
-          k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
+#          l2announcements:
+#            enabled: true
+#          k8sClientRateLimit:
+#            burst: 100
+#            qps: 50
+#          k8sServiceHost: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
+#          k8sServicePort: "{{ loadbalancer_apiserver_port if (groups['master'] | length >= 3) else '6443' }}"
           ipv4NativeRoutingCIDR: "{{ kube_pods_subnet }}"
           autoDirectNodeRoutes: true
           kubeProxyReplacement: true

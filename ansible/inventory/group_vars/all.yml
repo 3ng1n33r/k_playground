@@ -14,7 +14,7 @@ cilium_version: '1.19.6'
 flux_version: '2.9.1'
 kubeseal_version: '0.38.4'
 helm_pkg_version: '3.20.0-1'
-cilium_cli_version: '0.19.5'
+cilium_cli_version: '0.19.6'
 flux_gitlab_repo: orchestration
 flux_gitlab_branch: main
 flux_gitlab_path: 'clusters/rpi-cluster'

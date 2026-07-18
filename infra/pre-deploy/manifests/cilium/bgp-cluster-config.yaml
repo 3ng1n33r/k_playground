@@ -9,7 +9,7 @@ spec:
     matchLabels:
       kubernetes.io/os: linux
   bgpInstances:
-  - name: home
+  - name: nanocluster
     localASN: 65010
     peers:
     - name: openwrt

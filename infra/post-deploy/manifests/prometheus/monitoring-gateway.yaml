@@ -6,9 +6,9 @@ metadata:
   namespace: monitoring
 spec:
   gatewayClassName: cilium
-  addresses:
-  - type: IPAddress
-    value: 192.168.31.9
+#  addresses:
+#  - type: IPAddress
+#    value: 192.168.31.9
   listeners:
   - name: https
     protocol: HTTPS
