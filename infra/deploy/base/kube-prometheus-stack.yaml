@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 87.3.0
+      version: 87.17.0
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -43,7 +43,7 @@ spec:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
-            - grafana.192.168.31.9.sslip.io
+            - grafana.192.168.100.1.sslip.io
           parentRefs:
             - name: monitoring-gateway
               namespace: monitoring
@@ -134,7 +134,7 @@ spec:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
-            - alertmanager.192.168.31.9.sslip.io
+            - alertmanager.192.168.100.1.sslip.io
           parentRefs:
             - name: monitoring-gateway
               namespace: monitoring
@@ -179,7 +179,7 @@ spec:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           hostnames:
-            - prometheus.192.168.31.9.sslip.io
+            - prometheus.192.168.100.1.sslip.io
           parentRefs:
             - name: monitoring-gateway
               namespace: monitoring
