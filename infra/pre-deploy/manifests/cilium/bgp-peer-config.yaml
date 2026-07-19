@@ -2,8 +2,7 @@
 apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
-  name: openwrt-peer
-  namespace: kube-system
+  name: cilium-peer
 spec:
   timers:
     connectRetryTimeSeconds: 5

@@ -3,7 +3,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
   name: cilium-bgp
-  namespace: kube-system
 spec:
   nodeSelector:
     matchLabels:
@@ -16,4 +15,4 @@ spec:
       peerASN: 65000
       peerAddress: 192.168.31.1
       peerConfigRef:
-        name: openwrt-peer
+        name: cilium-peer
