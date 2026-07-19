@@ -37,3 +37,16 @@
     repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_pkg_version.split('-')[0].rsplit('.', 1)[0] }}/deb/ /"
     state: present
     update_cache: true
+
+- name: Add Helm apt-key.
+  ansible.builtin.get_url:
+    url: https://packages.buildkite.com/helm-linux/helm-debian/gpgkey
+    dest: /etc/apt/keyrings/helm-apt-keyring.asc
+    mode: '0644'
+    force: true
+
+- name: Add Helm's APT repo.
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/helm-apt-keyring.asc] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"
+    state: present
+    update_cache: true

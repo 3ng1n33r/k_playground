@@ -3,6 +3,9 @@
   hosts: all
   become: true
   tasks:
+    - name: Add proxy.
+      ansible.builtin.include_tasks: tasks/add_proxy.yaml
+
     - name: Add repos.
       ansible.builtin.include_tasks: tasks/add_repos.yaml
 
@@ -30,9 +33,6 @@
         - name: Remove dependencies that are no longer required.
           ansible.builtin.apt:
             autoremove: true
-
-    - name: Add linux tasks.
-      ansible.builtin.include_tasks: tasks/common_linux.yaml
 
     # Disable SWAP
 
@@ -181,6 +181,9 @@
         - containerd.io
         - haproxy
         - cri-tools
+
+    - name: Add linux tasks.
+      ansible.builtin.include_tasks: tasks/common_linux.yaml
 
   handlers:
     - name: Generate Containerd config.

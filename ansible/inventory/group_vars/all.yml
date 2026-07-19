@@ -29,6 +29,7 @@ bin_dir: /usr/local/bin
 cri_socket: "unix:///var/run/containerd/containerd.sock"
 # os
 unattended_upgrades: true
+proxy_address: "socks5h://192.168.31.216:1080"
 # irq
 irq_affinity: false
 # sysctl

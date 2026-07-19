@@ -68,7 +68,7 @@
         path: /etc/hosts
         line: "127.0.0.1       {{ loadbalancer_apiserver_address }}"
       when: "groups['master'] | length >= 3"
-        
+
     - name: Check the availability api server port.
       ansible.builtin.wait_for:
         host: "{{ loadbalancer_apiserver_address if (groups['master'] | length >= 3) else groups['master'][0] }}"
