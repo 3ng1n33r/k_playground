@@ -7,7 +7,7 @@ metadata:
 spec:
   secretName: monitoring-gateway-tls
   dnsNames:
-    - "*.192.168.31.9.sslip.io"
+    - "*.192.168.100.1.sslip.io"
   issuerRef:
     name: internal-ca
     kind: ClusterIssuer
