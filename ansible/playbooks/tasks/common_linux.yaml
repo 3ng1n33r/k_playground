@@ -71,6 +71,14 @@
     backup: true
   notify: Restart atop.
 
+- name: Set LOGGENERATIONS for atop.
+  ansible.builtin.lineinfile:
+    path: /etc/default/atop
+    regexp: '^LOGGENERATIONS='
+    line: 'LOGGENERATIONS=7'
+    backup: true
+  notify: Restart atop.
+
   # IRQ affinity
 
 - name: IRQ affinity.

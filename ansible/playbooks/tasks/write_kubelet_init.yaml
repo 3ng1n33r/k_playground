@@ -38,7 +38,7 @@
   ansible.builtin.file:
     path: "/etc/systemd/system/kube.slice"
     state: absent
-  when: 
+  when:
     - kube_slice_check.stat.exists
     - kube_reserved_cgroups is not defined
   notify: Reload systemd.
