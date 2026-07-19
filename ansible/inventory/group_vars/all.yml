@@ -27,6 +27,8 @@ containerd_config_dir: /etc/containerd
 kubelet_config_dir: /var/lib/kubelet
 bin_dir: /usr/local/bin
 cri_socket: "unix:///var/run/containerd/containerd.sock"
+# os
+unattended_upgrades: true
 # irq
 irq_affinity: false
 # sysctl

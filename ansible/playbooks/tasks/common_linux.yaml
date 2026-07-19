@@ -9,6 +9,8 @@
   with_dict: '{{ sysctl_config }}'
   ignore_errors: true
 
+  # Unattended Upgrades
+
 - name: Create unattended-upgrades directory.
   ansible.builtin.file:
     path: "/etc/apt/apt.conf.d/50unattended-upgrades.d"
@@ -31,6 +33,27 @@
     owner: root
     group: root
     mode: '0644'
+
+- name: Disable unattended-upgrades.
+  when:
+    - not unattended_upgrades | bool
+  block:
+    - name: Disable unattended-upgrades service.
+      ansible.builtin.systemd_service:
+        name: unattended-upgrades
+        enabled: false
+        state: stopped
+      ignore_errors: true
+
+    - name: Disable periodic package updates.
+      ansible.builtin.copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          APT::Periodic::Update-Package-Lists "0";
+          APT::Periodic::Unattended-Upgrade "0";
 
 - name: Configure journald.
   ansible.builtin.lineinfile:
