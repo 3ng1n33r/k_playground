@@ -3,12 +3,14 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: bgp-advertisements
-  namespace: kube-system
   labels:
     advertise: "bgp"
 spec:
   advertisements:
-  - advertisementType: Service
-    service:
-      addresses:
-      - LoadBalancerIP
+    - advertisementType: "Service"
+      service:
+        addresses:          # <-- specify the service types to advertise
+          - LoadBalancerIP
+      selector:             # <-- select all services
+        matchExpressions:
+         - {key: somekey, operator: NotIn, values: ['never-used-value']}

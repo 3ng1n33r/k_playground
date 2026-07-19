@@ -8,7 +8,7 @@ resources:
   - ./cilium/bgp-cluster-config.yaml
   - ./cilium/bgp-peer-config.yaml
   - ./cilium/bgp-advertisements.yaml
-  - ./cilium/loadbalancer-ip-pool.yaml
+  - ./cilium/lb-ip-pool.yaml
   - ./prometheus/alertmanager-sealed.yaml
   - ./prometheus/prom-stack-credentials-sealed.yaml
   - ./prometheus/etcd-client-cert-sealed.yaml
