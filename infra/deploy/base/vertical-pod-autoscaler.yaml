@@ -31,7 +31,7 @@ spec:
   targetNamespace: vertical-pod-autoscaler
   values:
     admissionController:
-      replicas: 1
+      replicas: 2
       resources:
         requests:
           cpu: 50m
@@ -42,7 +42,7 @@ spec:
 #      extraArgs: 
 #        - "--feature-gates=InPlaceOrRecreate=true"
     recommender:
-      replicas: 1
+      replicas: 2
       resources:
         requests:
           cpu: 50m
@@ -54,7 +54,7 @@ spec:
         - "--humanize-memory=true"
         - "--round-cpu-millicores=50"
     updater:
-      replicas: 1
+      replicas: 2
       resources:
         requests:
           cpu: 50m
