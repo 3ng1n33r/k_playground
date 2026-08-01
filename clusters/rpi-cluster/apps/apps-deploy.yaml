@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./apps/deploy/base"
+  path: "./apps/deploy"
   interval: 60m
   timeout: 5m
   prune: true
