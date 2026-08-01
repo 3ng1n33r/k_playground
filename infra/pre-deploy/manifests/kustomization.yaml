@@ -18,3 +18,4 @@ resources:
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_grpcroutes.yaml
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_httproutes.yaml
   - ./gateway-api/v1.4.1/crd/gateway.networking.k8s.io_referencegrants.yaml
+  - ./apps/regcred-sealed.yaml
