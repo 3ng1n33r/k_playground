@@ -63,10 +63,8 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Add lb address.
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        line: "127.0.0.1       {{ loadbalancer_apiserver_address }}"
+    - name: Include task to change the LB IP.
+      ansible.builtin.include_tasks: tasks/change_lb_ip.yaml
       when: "groups['master'] | length >= 3"
 
     - name: Check the availability api server port.

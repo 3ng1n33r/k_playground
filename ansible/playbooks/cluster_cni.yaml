@@ -1,4 +1,6 @@
 ---
+# https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#kubeproxy-free
+# https://docs.cilium.io/en/stable/operations/performance/tuning/
 - name: Playbook to install CNI.
   hosts: master[0]
   become: true
@@ -64,21 +66,3 @@
 #          k8sClientRateLimit:
 #            burst: 100
 #            qps: 50
-
-- name: Install the Cilium CLI.
-  hosts: master
-  become: true
-  tasks:
-    - name: Download Cilium CLI.
-      ansible.builtin.unarchive:
-        src: https://github.com/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}.tar.gz
-        dest: /tmp
-        remote_src: true
-        mode: '0755'
-
-    - name: Copy Cilium binary to /usr/local/bin.
-      ansible.builtin.copy:
-        src: /tmp/cilium
-        dest: "{{ bin_dir }}/cilium"
-        remote_src: true
-        mode: '0755'

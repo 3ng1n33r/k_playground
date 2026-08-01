@@ -182,6 +182,24 @@
         - haproxy
         - cri-tools
 
+    # Install Cilium CLI
+
+    - name: Download Cilium CLI.
+      ansible.builtin.unarchive:
+        src: https://github.com/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}.tar.gz
+        dest: /tmp
+        remote_src: true
+        mode: '0755'
+
+    - name: Copy Cilium binary to /usr/local/bin.
+      ansible.builtin.copy:
+        src: /tmp/cilium
+        dest: "{{ bin_dir }}/cilium"
+        remote_src: true
+        mode: '0755'
+
+    # Linux
+
     - name: Add linux tasks.
       ansible.builtin.include_tasks: tasks/common_linux.yaml
 
