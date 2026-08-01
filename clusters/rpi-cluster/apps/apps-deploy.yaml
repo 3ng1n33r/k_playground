@@ -2,15 +2,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: manifests
+  name: apps-deploy
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apps
+    - name: manifests-post-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./apps/deploy/manifests"
+  path: "./apps/deploy/base"
   interval: 60m
   timeout: 5m
   prune: true
