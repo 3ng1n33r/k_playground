@@ -50,6 +50,8 @@ spec:
     nodeSelector:
       kubernetes.io/os: linux
     hostPID: true
+    podAnnotations: 
+      container.apparmor.security.beta.kubernetes.io/kured: unconfined
     resources:
       limits:
         memory: 256Gi
