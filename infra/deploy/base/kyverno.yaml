@@ -26,6 +26,7 @@ spec:
     - name: vertical-pod-autoscaler
   install:
     createNamespace: true
+  timeout: 10m0s
   interval: 30m0s
   releaseName: kyverno
   targetNamespace: kyverno
