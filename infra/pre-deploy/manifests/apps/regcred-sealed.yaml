@@ -11,6 +11,6 @@ spec:
     metadata:
       name: regcred-dockerhub
       namespace: default
-    labels:
-      sync: "true"
+      labels:
+        sync: "true"
     type: kubernetes.io/dockerconfigjson
