@@ -13,3 +13,4 @@ resources:
   - ./prometheus/monitoring-gateway.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml
   - ./kyverno/generate-vpa-resource.yaml
+  - ./kyverno/clone-default-secrets.yaml
