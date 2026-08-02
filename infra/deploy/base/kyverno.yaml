@@ -88,6 +88,15 @@ spec:
                 - create
                 - update
                 - delete
+            - apiGroups:
+                - ''
+              resources:
+                - secrets
+              verbs:
+                - get
+                - create
+                - update
+                - delete
       replicas: 2
       resources:
         requests:
