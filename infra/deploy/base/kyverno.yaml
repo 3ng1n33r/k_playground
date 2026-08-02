@@ -42,6 +42,13 @@ spec:
               verbs:
                 - get
                 - list
+            - apiGroups:
+                - ''
+              resources:
+                - secrets
+              verbs:
+                - get
+                - list
       replicas: 3
       antiAffinity:
         enabled: true
