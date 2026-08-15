@@ -57,6 +57,10 @@
         chdir: "{{ kube_config_dir }}"
       when: upgrade_kubelet | default(false) | bool
 
+    - name: Write kubelet config.
+      ansible.builtin.include_tasks: "../playbooks/tasks/config_kubelet.yaml"
+      when: upgrade_kubelet | default(false) | bool
+
     - name: Restart service kubelet.
       ansible.builtin.systemd_service:
         state: restarted

@@ -104,7 +104,7 @@
             name: containerd
           when: upgrade_cri | default(false) | bool
 
-        - name: Restart service Kubectl, also issue daemon-reload to pick up config changes.
+        - name: Restart service Kubelet, also issue daemon-reload to pick up config changes.
           ansible.builtin.systemd_service:
             state: restarted
             daemon_reload: true

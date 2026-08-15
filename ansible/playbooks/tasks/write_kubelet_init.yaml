@@ -5,6 +5,22 @@
     state: directory
     mode: '0755'
     owner: root
+    group: root
+
+- name: Create kubernetes directory.
+  ansible.builtin.file:
+    path: "{{ kube_config_dir }}"
+    state: directory
+    mode: '0751'
+    owner: root
+
+- name: Create kubelet config drop-in directory.
+  ansible.builtin.file:
+    path: "{{ kube_config_dir }}/kubelet.conf.d"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Write kubelet systemd init file.
   ansible.builtin.template:
