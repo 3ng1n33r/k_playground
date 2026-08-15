@@ -5,13 +5,13 @@ kube_service_subnets: "10.96.0.0/23"
 kube_pods_subnet: "10.95.0.0/22"
 loadbalancer_apiserver_port: 8443
 loadbalancer_apiserver_address: 'cluster-endpoint'
-kubernetes_pkg_version: '1.34.9-1.1'
-containerd_pkg_version: '2.2.5-1~ubuntu.24.04~noble'
+kubernetes_pkg_version: '1.34.10-1.1'
+containerd_pkg_version: '2.3.3-1~ubuntu.24.04~noble'
 haproxy_pkg_version: '2.8.16-0ubuntu0.24.04.3'
 cri_tools_pkg_version: '1.34.0-1.1'
 sandbox_image: 'registry.k8s.io/pause:3.10.1'
 cilium_version: '1.19.6'
-flux_version: '2.9.3'
+flux_version: '2.9.4'
 kubeseal_version: '0.38.4'
 helm_pkg_version: '4.2.3-1'
 cilium_cli_version: '0.19.6'
@@ -28,14 +28,12 @@ kubelet_config_dir: /var/lib/kubelet
 bin_dir: /usr/local/bin
 cri_socket: "unix:///var/run/containerd/containerd.sock"
 # os
-unattended_upgrades: true
-proxy_address: "socks5h://192.168.1.208:1080"
+unattended_upgrades: false
+#proxy_address: "socks5h://192.168.1.208:1080"
 # irq
 irq_affinity: false
 # sysctl
 sysctl_config:
-#  net.ipv4.conf.all.arp_ignore: 1
-#  net.ipv4.conf.all.arp_announce: 2
   net.core.netdev_max_backlog: 8192
   net.core.somaxconn: 4096
   net.core.rmem_max: 67108864

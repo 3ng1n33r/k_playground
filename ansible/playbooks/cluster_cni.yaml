@@ -1,6 +1,47 @@
 ---
 # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#kubeproxy-free
 # https://docs.cilium.io/en/stable/operations/performance/tuning/
+- name: Playbook to install CNI сli.
+  hosts: master,worker
+  become: true
+  tasks:
+    # Install Cilium CLI
+
+    - name: Check Cilium cli exist.
+      ansible.builtin.stat:
+        path: "{{ bin_dir }}/cilium"
+      register: cilium_check
+
+    - name: Check Cilium cli version.
+      ansible.builtin.command: "{{ bin_dir }}/cilium version"
+      register: cilium_version_cmd
+      changed_when: false
+      when: cilium_check.stat.exists
+
+    - name: Extract Cilium CLI version.
+      ansible.builtin.set_fact:
+        cilium_cli_current_version: >-
+          {{ cilium_version_cmd.stdout
+            | regex_search('cilium-cli:\s*v([0-9]+\.[0-9]+\.[0-9]+)', '\1')
+            | first }}
+      when: cilium_check.stat.exists
+
+    - name: Download Cilium CLI.
+      ansible.builtin.unarchive:
+        src: https://github.com/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}.tar.gz
+        dest: /tmp
+        remote_src: true
+        mode: '0755'
+      when: not cilium_check.stat.exists or cilium_cli_current_version != cilium_cli_version
+
+    - name: Copy Cilium binary to /usr/local/bin.
+      ansible.builtin.copy:
+        src: /tmp/cilium
+        dest: "{{ bin_dir }}/cilium"
+        remote_src: true
+        mode: '0755'
+      when: not cilium_check.stat.exists or cilium_cli_current_version != cilium_cli_version
+
 - name: Playbook to install CNI.
   hosts: master[0]
   become: true
@@ -37,8 +78,6 @@
           bgpControlPlane:
             enabled: true
           rollOutCiliumPods: false
-#          extraConfig:
-#            ipv4-service-range: "{{ kube_service_subnets }}"
           ipam:
             operator:
               clusterPoolIPv4PodCIDRList: ["{{ kube_pods_subnet }}"]
@@ -61,8 +100,3 @@
             enabled: false
           hubble:
             enabled: false
-#          l2announcements:
-#            enabled: true
-#          k8sClientRateLimit:
-#            burst: 100
-#            qps: 50
