@@ -11,6 +11,7 @@ resources:
   - ./prometheus/hardware-temperature-rule.yaml
   - ./prometheus/monitoring-gateway-cert.yaml  
   - ./prometheus/monitoring-gateway.yaml
+  - ./prometheus/grafana-dashboard-haproxy.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml
   - ./kyverno/generate-vpa-resource.yaml
   - ./kyverno/clone-default-secrets.yaml
