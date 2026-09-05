@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-      version: 88.0.1
+      version: 89.2.2
   dependsOn:
     - name: local-path-provisioner
   install:
@@ -197,7 +197,7 @@ spec:
                   - 192.168.31.22:7000
             scheme: http
           - job_name: blackbox-dns-kubernetes
-            scrape_interval: 2m
+            scrape_interval: 1m
             metrics_path: /probe
             kubernetes_sd_configs:
               - role: pod
@@ -221,7 +221,7 @@ spec:
                   - __meta_kubernetes_pod_node_name
                 target_label: node
           - job_name: blackbox-dns-yaru
-            scrape_interval: 2m
+            scrape_interval: 1m
             metrics_path: /probe
             kubernetes_sd_configs:
               - role: pod

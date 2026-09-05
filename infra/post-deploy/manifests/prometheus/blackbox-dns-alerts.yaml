@@ -1,0 +1,156 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: blackbox-dns-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: blackbox-dns
+      interval: 1m
+      rules:
+        - alert: KubernetesDNSResolutionFailed
+          expr: |
+            probe_success{job="blackbox-dns-kubernetes"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Kubernetes DNS resolution failed"
+            description: >-
+              Kubernetes DNS resolution of
+              kubernetes.default.svc.cluster.local
+              is failing from node {{ $labels.node }}.
+              Blackbox exporter target: {{ $labels.instance }}.
+        - alert: ExternalDNSResolutionFailed
+          expr: |
+            probe_success{job="blackbox-dns-yaru"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "External DNS resolution failed"
+            description: >-
+              DNS resolution of ya.ru is failing from node {{ $labels.node }}.
+              Kubernetes DNS target: 10.96.0.10.
+              Blackbox exporter target: {{ $labels.instance }}.
+        - alert: DNSResolutionFailedOnNode
+          expr: |
+            (
+              probe_success{
+                job="blackbox-dns-kubernetes"
+              } == 0
+            )
+            and on (node)
+            (
+              probe_success{
+                job="blackbox-dns-yaru"
+              } == 0
+            )
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "DNS resolution completely failed on node {{ $labels.node }}"
+            description: >-
+              Both Kubernetes internal DNS
+              (kubernetes.default.svc.cluster.local)
+              and external DNS (ya.ru) resolution are failing
+              from node {{ $labels.node }}.
+              This may indicate a problem with CNI/networking,
+              connectivity to CoreDNS or Kubernetes DNS service 10.96.0.10.
+        - alert: ExternalDNSResolutionFailedButClusterDNSWorks
+          expr: |
+            (
+              probe_success{
+                job="blackbox-dns-yaru"
+              } == 0
+            )
+            and on (node)
+            (
+              probe_success{
+                job="blackbox-dns-kubernetes"
+              } == 1
+            )
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "External DNS resolution failed on node {{ $labels.node }}"
+            description: >-
+              Kubernetes internal DNS is working on node {{ $labels.node }},
+              but ya.ru cannot be resolved.
+              This may indicate a problem with CoreDNS upstream DNS,
+              egress connectivity or external DNS servers.
+        - alert: KubernetesInternalDNSResolutionFailed
+          expr: |
+            (
+              probe_success{
+                job="blackbox-dns-kubernetes"
+              } == 0
+            )
+            and on (node)
+            (
+              probe_success{
+                job="blackbox-dns-yaru"
+              } == 1
+            )
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Kubernetes internal DNS resolution failed on node {{ $labels.node }}"
+            description: >-
+              ya.ru resolves successfully from node {{ $labels.node }},
+              but kubernetes.default.svc.cluster.local does not resolve.
+              This may indicate a problem with the Kubernetes DNS zone,
+              CoreDNS configuration or service discovery.
+        - alert: KubernetesDNSMajorityResolutionFailed
+          expr: |
+            avg(
+              probe_success{job="blackbox-dns-kubernetes"}
+            ) < 0.5
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Kubernetes DNS resolution is failing on majority of nodes"
+            description: >-
+              Less than 50% of Kubernetes DNS probes are successful.
+              This indicates a widespread DNS problem in the cluster.
+        - alert: KubernetesDNSCompletelyUnavailable
+          expr: |
+            sum(
+              probe_success{
+                job="blackbox-dns-kubernetes"
+              }
+            ) == 0
+          for: 3m
+          labels:
+            severity: critical
+            component: dns
+            service: kubernetes-dns
+          annotations:
+            summary: "Kubernetes DNS is completely unavailable"
+            description: >-
+              All Kubernetes DNS probes are failing.
+              No blackbox exporter instance can resolve
+              kubernetes.default.svc.cluster.local
+              through Kubernetes DNS service 10.96.0.10.
+        - alert: BlackboxDNSProbeMissing
+          expr: |
+            absent(
+              probe_success{
+                job="blackbox-dns-kubernetes"
+              }
+            )
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Blackbox DNS probes are missing"
+            description: >-
+              Prometheus is not receiving any probe_success metrics
+              from job blackbox-dns-kubernetes.
+              Check blackbox exporter pods, Prometheus scraping
+              and Kubernetes service discovery.
