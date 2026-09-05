@@ -14,6 +14,7 @@ resources:
   - ./prometheus/monitoring-gateway-cert.yaml  
   - ./prometheus/monitoring-gateway.yaml
   - ./prometheus/grafana-dashboard-haproxy.yaml
+  - ./prometheus/grafana-dashboard-node-exporter.yaml
   - ./prometheus/blackbox-dns-alerts.yaml
   - ./system-upgrade-controller/upgrade_plan.yaml
   - ./kyverno/generate-vpa-resource.yaml
