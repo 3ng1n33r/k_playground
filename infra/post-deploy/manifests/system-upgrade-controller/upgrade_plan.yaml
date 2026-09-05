@@ -20,7 +20,7 @@ metadata:
 spec:
   concurrency: 1
   postCompleteDelay: "10m"
-  version: "06.2026"
+  version: "09.2026"
   window:
     days:
      - "6"
